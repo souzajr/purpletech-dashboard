@@ -14,7 +14,7 @@ Você irá precisar do mongoDB
 ```bash
 https://www.mongodb.com/
 ```
-Instação usando npm ou yarn
+Instalação usando npm ou yarn
 ```bash
 $ npm install ou yarn install
 ```

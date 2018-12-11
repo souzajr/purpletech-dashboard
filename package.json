@@ -1,20 +1,45 @@
 {
   "name": "purpletech-dashboard",
   "version": "1.0.0",
-  "description": "",
+  "description": "Dashboard para gerenciamento e solicitação de orçamentos e projetos",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon",
+    "production": "pm2 start index.js --watch --name project"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/souzajr/purpletech-dashboard.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Roberto Souza",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/souzajr/purpletech-dashboard/issues"
   },
-  "homepage": "https://github.com/souzajr/purpletech-dashboard#readme"
+  "homepage": "https://github.com/souzajr/purpletech-dashboard#readme",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.18.3",
+    "consign": "^0.1.6",
+    "cors": "^2.8.5",
+    "dotenv": "^6.2.0",
+    "ejs": "^2.6.1",
+    "email-validator": "^2.0.4",
+    "express": "^4.16.4",
+    "express-session": "^1.15.6",
+    "helmet": "^3.15.0",
+    "jwt-simple": "^0.5.5",
+    "method-override": "^3.0.0",
+    "mongoose": "^5.3.15",
+    "nodemailer": "^4.7.0",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "password-validator": "^4.1.1",
+    "pm2": "^3.2.3"
+  },
+  "devDependencies": {
+    "morgan": "^1.9.1",
+    "nodemon": "^1.18.8"
+  }
 }
