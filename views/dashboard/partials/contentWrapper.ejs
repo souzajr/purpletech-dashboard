@@ -1,0 +1,9 @@
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <% if(page == '/dashboard') { %>
+      <%- include content/dashboard.ejs %>
+    <% } else if(page == '/profile') { %>
+      <%- include content/profile.ejs %>
+    <% } %>
+    <!-- /.content -->
+</div>
