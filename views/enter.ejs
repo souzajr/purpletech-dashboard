@@ -1,5 +1,5 @@
 <!doctype html>
-<html  lang="pt-br">
+<html lang="pt-br">
 
 <head>
     <meta charset="utf-8">
@@ -60,22 +60,6 @@
     <!-- modernizr JS
 		============================================ -->
     <script src="/static/assets/js/vendor/modernizr-2.8.3.min.js"></script>
-    
-    <script>
-      function inputHandler(masks, max, event) {
-        var c = event.target;
-        var v = c.value.replace(/\D/g, '');
-        var m = c.value.length > max ? 1 : 0;
-        VMasker(c).unMask();
-        VMasker(c).maskPattern(masks[m]);
-        c.value = VMasker.toPattern(v, masks[m]);
-      }
-
-      var telMask = ['(99) 9999-99999', '(99) 99999-9999'];
-      var tel = document.querySelector('input[attrname=telephone1]');
-      VMasker(tel).maskPattern(telMask[0]);
-      tel.addEventListener('input', inputHandler.bind(undefined, telMask, 14), false);
-    </script>
 </head>
 
 <body>
@@ -95,13 +79,13 @@
                 <div class="input-group">
                     <span class="input-group-addon nk-ic-st-pro"><i class="notika-icon notika-mail"></i></span>
                     <div class="nk-int-st">
-                        <input type="text" class="form-control" name="email" placeholder="E-mail">
+                        <input type="text" class="form-control" name="email" placeholder="E-mail" required>
                     </div>
                 </div>
                 <div class="input-group mg-t-15">
                     <span class="input-group-addon nk-ic-st-pro"><i class="notika-icon notika-edit"></i></span>
                     <div class="nk-int-st">
-                        <input type="password" class="form-control" name="password" placeholder="Senha">
+                        <input type="password" class="form-control" name="password" placeholder="Senha" required>
                     </div>
                 </div>
                 <div class="fm-checkbox">
@@ -111,8 +95,8 @@
             </div>
 
             <div class="nk-navigation nk-lg-ic">
-                <a href="#" data-ma-action="nk-login-switch" data-ma-block="#l-register"><i class="notika-icon notika-plus-symbol"></i> <span>Register</span></a>
-                <a href="#" data-ma-action="nk-login-switch" data-ma-block="#l-forget-password"><i>?</i> <span>Forgot Password</span></a>
+                <a href="#" data-ma-action="nk-login-switch" data-ma-block="#l-register"><i class="notika-icon notika-plus-symbol"></i> <span>Cadastro</span></a>
+                <a href="#" data-ma-action="nk-login-switch" data-ma-block="#l-forget-password"><i>?</i> <span>Recuperar senha</span></a>
             </div>
           </form>
         </div>
@@ -128,14 +112,14 @@
                 <div class="input-group">
                     <span class="input-group-addon nk-ic-st-pro"><i class="notika-icon notika-support"></i></span>
                     <div class="nk-int-st">
-                        <input type="text" class="form-control" name="name" placeholder="Nome">
+                        <input type="text" class="form-control" name="name" placeholder="Nome" required>
                     </div>
                 </div>
 
                 <div class="input-group mg-t-15">
                     <span class="input-group-addon nk-ic-st-pro"><i class="notika-icon notika-mail"></i></span>
                     <div class="nk-int-st">
-                        <input type="text" class="form-control" name="email" placeholder="E-mail">
+                        <input type="text" class="form-control" name="email" placeholder="E-mail" required>
                     </div>
                 </div>
 
@@ -144,7 +128,7 @@
                     <div class="nk-int-st">
                         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
                         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
-                        <input type="text" class="phone form-control" name="phone" placeholder="Telefone">
+                        <input type="text" class="phone form-control" name="phone" placeholder="Telefone" required>
                         <script>
                           jQuery("input.phone")
                             .mask("(99) 9999-9999?9")
@@ -167,14 +151,14 @@
                 <div class="input-group mg-t-15">
                     <span class="input-group-addon nk-ic-st-pro"><i class="notika-icon notika-edit"></i></span>
                     <div class="nk-int-st">
-                        <input type="password" class="form-control" name="password" placeholder="Senha">
+                        <input type="password" class="form-control" name="password" placeholder="Senha" required>
                     </div>
                 </div>
 
                 <div class="input-group mg-t-15">
                     <span class="input-group-addon nk-ic-st-pro"><i class="notika-icon notika-edit"></i></span>
                     <div class="nk-int-st">
-                        <input type="password" class="form-control" name="confirmPassword" placeholder="Confirmar senha">
+                        <input type="password" class="form-control" name="confirmPassword" placeholder="Confirmar senha" required>
                     </div>
                 </div>
 
@@ -182,26 +166,26 @@
             </div>
 
             <div class="nk-navigation rg-ic-stl">
-                <a href="#" data-ma-action="nk-login-switch" data-ma-block="#l-login"><i class="notika-icon notika-right-arrow"></i> <span>Sign in</span></a>
-                <a href="" data-ma-action="nk-login-switch" data-ma-block="#l-forget-password"><i>?</i> <span>Forgot Password</span></a>
+                <a href="#" data-ma-action="nk-login-switch" data-ma-block="#l-login"><i class="notika-icon notika-right-arrow"></i> <span>Login</span></a>
+                <a href="" data-ma-action="nk-login-switch" data-ma-block="#l-forget-password"><i>?</i> <span>Recuperar senha</span></a>
             </div>
           </form>
         </div>
 
         <!-- Forgot Password -->
-        <% if(page == '/forgotpassword') {%>
+        <% if(page == '/forgotpassword') { %>
         <div class="nk-block toggled" id="l-forget-password">
         <% } else { %>
         <div class="nk-block" id="l-forget-password">
         <% } %>
           <form action="/forgotpassword" method="POST" id="forgotpassword">
             <div class="nk-form">
-                <p class="text-left">Digite o E-mail que você usou para se cadastrar. Enviaremos para você um código para gerar outra senha.</p>
+                <p class="text-left">Digite o E-mail que você usou para se cadastrar. Enviaremos para você um código para gerar uma nova senha.</p>
 
                 <div class="input-group">
                     <span class="input-group-addon nk-ic-st-pro"><i class="notika-icon notika-mail"></i></span>
                     <div class="nk-int-st">
-                        <input type="text" class="form-control" name="email" placeholder="E-mail">
+                        <input type="text" class="form-control" name="email" placeholder="E-mail" required>
                     </div>
                 </div>
 
@@ -209,8 +193,8 @@
             </div>
 
             <div class="nk-navigation nk-lg-ic rg-ic-stl">
-                <a href="" data-ma-action="nk-login-switch" data-ma-block="#l-login"><i class="notika-icon notika-right-arrow"></i> <span>Sign in</span></a>
-                <a href="" data-ma-action="nk-login-switch" data-ma-block="#l-register"><i class="notika-icon notika-plus-symbol"></i> <span>Register</span></a>
+                <a href="" data-ma-action="nk-login-switch" data-ma-block="#l-login"><i class="notika-icon notika-right-arrow"></i> <span>Login</span></a>
+                <a href="" data-ma-action="nk-login-switch" data-ma-block="#l-register"><i class="notika-icon notika-plus-symbol"></i> <span>Cadastro</span></a>
             </div>
           </form>
         </div>
@@ -286,7 +270,7 @@
     <% if(message) { %>
       <script>
           const msg = JSON.parse('<%- message %>')
-          if(msg !== 'Success!')
+          if(msg !== 'Sucesso!')
               alertify.notify(msg, 'error', 5)
           else
               alertify.notify(msg, 'success', 5)

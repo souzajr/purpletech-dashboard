@@ -16,7 +16,7 @@ module.exports = app => {
     app.get('/login', function(req, res) {
         res.render('enter', { page: '/login', message: null })
     })
-    app.post('/login', app.src.api.auth.signin)
+    app.post('/login', app.src.api.auth.login)
 
     /* ============= FORGOT PASSWORD ============= */
     app.get('/forgotpassword', function(req, res) {

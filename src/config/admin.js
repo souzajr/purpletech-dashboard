@@ -5,8 +5,8 @@ module.exports = middleware => {
             middleware(req, res, next)
         } else {
             res.status(401)
-            req.session.destroy(function (err) {
-                res.render('login', { message: JSON.stringify('Something went wrong') })
+            req.session.destroy(function () {
+                res.render('enter', { page: '/login', message: JSON.stringify('Algo deu errado') })
             })
         }
     }

@@ -1,171 +1,89 @@
-<header class="main-header">
-    <!-- Logo -->
-    <a href="/" class="logo">
-      <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>D</b>B</span>
-      <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>Dash</b>Board</span>
-    </a>
-    <!-- Header Navbar: style can be found in header.less -->
-    <nav class="navbar navbar-static-top">
-      <!-- Sidebar toggle button-->
-      <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-        <span class="sr-only">Toggle navigation</span>
-      </a>
-
-      <div class="navbar-custom-menu">
-        <ul class="nav navbar-nav">
-          <!-- Messages: style can be found in dropdown.less-->
-          <li class="dropdown messages-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-envelope-o"></i>
-              <span class="label label-success">4</span>
-            </a>
-            <ul class="dropdown-menu">
-              <li class="header">You have 4 messages</li>
-              <li>
-                <!-- inner menu: contains the actual data -->
-                <ul class="menu">
-                  <li><!-- start message -->
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="</static/assets/dist/img/user2-160x160.jpg>" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Support Team
-                        <small><i class="fa fa-clock-o"></i> 5 mins</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <!-- end message -->
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="/static/assets/dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        AdminLTE Design Team
-                        <small><i class="fa fa-clock-o"></i> 2 hours</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="/static/assets/dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Developers
-                        <small><i class="fa fa-clock-o"></i> Today</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="/static/assets/dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Sales Department
-                        <small><i class="fa fa-clock-o"></i> Yesterday</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="/static/assets/dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Reviewers
-                        <small><i class="fa fa-clock-o"></i> 2 days</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="footer"><a href="#">See All Messages</a></li>
-            </ul>
-          </li>
-          <!-- Notifications: style can be found in dropdown.less -->
-          <li class="dropdown notifications-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-bell-o"></i>
-              <span class="label label-warning">10</span>
-            </a>
-            <ul class="dropdown-menu">
-              <li class="header">You have 10 notifications</li>
-              <li>
-                <!-- inner menu: contains the actual data -->
-                <ul class="menu">
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-users text-aqua"></i> 5 new members joined today
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-warning text-yellow"></i> Very long description here that may not fit into the
-                      page and may cause design problems
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-users text-red"></i> 5 new members joined
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-shopping-cart text-green"></i> 25 sales made
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-user text-red"></i> You changed your username
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="footer"><a href="#">View all</a></li>
-            </ul>
-          </li>
-          <!-- User Account: style can be found in dropdown.less -->
-          <li class="dropdown user user-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="<%= user.avatar %>" class="user-image" alt="User Image">
-              <span class="hidden-xs"><%= user.name %></span>
-            </a>
-            <ul class="dropdown-menu">
-              <!-- User image -->
-              <li class="user-header">
-                <img src="<%= user.avatar %>" class="img-circle" alt="User Image">
-
-                <p>
-                  <% if(!user.description) { %>
-                  <%= user.name %>
-                  <% } else { %>
-                  <%= user.name %> - <%= user.description %>
-                  <% } %>
-                  <small>Member since <%= user.createdAt %></small>
-                </p>
-              </li>
-              <!-- Menu Footer-->
-              <li class="user-footer">
-                <div class="pull-left">
-                  <a href="/profile" class="btn btn-default btn-flat">Profile</a>
+<div class="header-top-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <div class="logo-area">
+                        <a href="/dashboard"><h2 style="color:#fff">PurpleTech</h2></a>
                 </div>
-                <div class="pull-right">
-                  <a href="/logout" class="btn btn-default btn-flat">Sign out</a>
+            </div>
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                <div class="header-top-menu">
+                    <ul class="nav navbar-nav notika-top-nav">
+                        <li class="nav-item dropdown">
+                            <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">
+                                <span><i class="notika-icon notika-alarm"></i></span>
+                            </a>
+                            <div role="menu" class="dropdown-menu message-dd animated zoomIn">
+                                <div class="hd-mg-tt">
+                                    <h2>Avisos</h2>
+                                </div>
+                                <div class="hd-message-info">
+                                    <a href="#">
+                                        <div class="hd-message-sn">
+                                            <div class="hd-mg-ctn">
+                                                <h3>Não há avisos</h3>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div class="hd-mg-va">
+                                        <a href="/notice">Ver tudo</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">
+                                <span><i class="notika-icon notika-mail"></i></span>
+                            </a>
+                            <div role="menu" class="dropdown-menu message-dd animated zoomIn">
+                                <div class="hd-mg-tt">
+                                    <h2>Mensagens</h2>
+                                </div>
+                                <div class="hd-message-info">
+                                    <a href="#">
+                                        <div class="hd-message-sn">
+                                            <div class="hd-mg-ctn">
+                                                <h3>Não há mensagens</h3>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div class="hd-mg-va">
+                                        <a href="/message">Ver tudo</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">
+                                <span><img src="<%= user.avatar %>" class="user-image" alt="User Image"></span
+                            </a>
+                            <div role="menu" class="dropdown-menu message-dd animated zoomIn">
+                                <div class="hd-mg-tt">
+                                    <h2><%= user.name %></h2>
+                                </div>
+                                <div class="hd-message-info">
+                                    <a href="/profile">
+                                        <div class="hd-message-sn">
+                                            <div class="hd-mg-ctn">
+                                                <p>Editar perfil</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="hd-message-info">
+                                    <a href="/logout">
+                                        <div class="hd-message-sn">
+                                            <div class="hd-mg-ctn">
+                                                <p>Sair</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-    </nav>
-  </header>
+            </div>
+        </div>
+    </div>
+</div>

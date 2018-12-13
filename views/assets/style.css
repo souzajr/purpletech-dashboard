@@ -3736,6 +3736,20 @@ textarea.auto-size {
 /*----------------------------------------*/
 /*  39.  Invoice CSS
 /*----------------------------------------*/
+@media (max-width: 767px) {
+    .hidden-xs {
+        display: none!important;
+    }
+}
+.user-image {
+    float: left;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    margin-right: 10px;
+    margin-top: -2px;
+}
+
 .invoice-img{
 	background:#9C27B0;
 	text-align:center;

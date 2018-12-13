@@ -10,7 +10,8 @@ consign()
     .then('./src/config/middlewares.js')
     .then('./src/api/validation.js')
     .then('./src/api')
-    .then('./src/config/routes.js')   
+    .then('./src/config/routes.js')
+    .then('./src/config/mail.js')    
     .into(app)
 
 const port = process.env.PORT || 8080

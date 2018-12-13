@@ -22,7 +22,11 @@ module.exports = app => {
     }
 
     function tooBig(value, msg) {
-        if(value.length > 20) throw msg
+        if(value.length > 25) throw msg
+    }
+
+    function tooBigEmail(value, msg) {
+        if(value.length > 50) throw msg
     }
 
     function equalsOrError(valueA, valueB, msg) {
@@ -67,7 +71,8 @@ module.exports = app => {
         existOrError, 
         notExistOrError,
         tooSmall,
-        tooBig, 
+        tooBig,
+        tooBigEmail,
         equalsOrError, 
         strongOrError, 
         hasDigitOrError,

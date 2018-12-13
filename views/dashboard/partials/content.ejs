@@ -1,0 +1,9 @@
+<% if(page == '/dashboard') { %>
+    <% if(user.admin) { %>
+        <%- include content/dashboardAdmin.ejs %>
+    <% } else { %>
+        <%- include content/dashboardUser.ejs %>
+    <% } %>
+<% } else if(page == '/profile') { %>
+    <%- include content/profile.ejs %>
+<% } %>

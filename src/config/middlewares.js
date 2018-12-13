@@ -1,3 +1,4 @@
+
 const express = require('express')
 const session = require('express-session')
 const passport = require('passport')
@@ -21,13 +22,11 @@ module.exports = app => {
         }
     }))
     app.use(passport.initialize())
-    app.use(passport.session())    
+    app.use(passport.session())  
     app.use('/static', express.static('views'))
     app.set('view engine', 'ejs')
     app.use(morgan('dev'))
-    app.use(bodyParser.urlencoded({
-        extended: true
-    }))    
+    app.use(bodyParser.urlencoded({ extended: true }))    
     app.use(methodOverride(function (req, res) {
         if (req.body && typeof req.body === 'object' && '_method' in req.body) {
           var method = req.body._method

@@ -1,0 +1,5 @@
+<% if(user.admin) { %>
+    <%- include content/menuAdmin.ejs %>
+<% } else { %>
+    <%- include content/menuUser.ejs %>
+<% } %>

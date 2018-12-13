@@ -4,7 +4,7 @@ const jwt = require('jwt-simple')
 const bcrypt = require('bcrypt-nodejs')
 
 module.exports = app => {
-    const signin = async (req, res) => {
+    const login = async (req, res) => {
         if(!req.body.email || !req.body.password) {
             return res.status(400).render('enter', { page: '/login', message: JSON.stringify('Digite o E-mail e a senha') })
         }
@@ -47,9 +47,7 @@ module.exports = app => {
             if(userToken) {
                 const token = jwt.decode(userToken, process.env.AUTH_SECRET)
                 if(new Date(token.exp * 1000) > new Date()) {
-                    const count = await User.countDocuments()                    
-                    .catch(err => res.status(500).render('500'))
-                    return res.status(200).render('./dashboard/index', { user: req.session.user, count, page: req.url, message: null })
+                    return res.status(200).render('./dashboard/index', { user: req.session.user, page: req.url, message: null })
                 }
             }
         } catch (err) {
@@ -57,5 +55,5 @@ module.exports = app => {
         }
     }
 
-    return { signin, validateToken }
+    return { login, validateToken }
 }

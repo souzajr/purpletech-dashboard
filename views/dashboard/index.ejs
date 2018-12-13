@@ -1,89 +1,24 @@
+<!DOCTYPE html>
+<html class="no-js" lang="pt-BR">
 <%- include partials/head.ejs %>
-
-<body class="hold-transition skin-blue sidebar-mini">
-<div class="wrapper">
-
-  <%- include partials/header.ejs %>
-
-  <!-- Left side column. contains the logo and sidebar -->
-  <%- include partials/aside.ejs %>
-
-  <!-- Content Wrapper. Contains page content -->
-  <%- include partials/contentWrapper.ejs %>
-  <!-- /.content-wrapper -->
-  <%- include partials/footer.ejs %>
-
-  
-</div>
-<!-- ./wrapper -->
-
-<!-- jQuery 3 -->
-<script src="/static/assets/bower_components/jquery/dist/jquery.min.js"></script>
-<!-- jQuery UI 1.11.4 -->
-<script src="/static/assets/bower_components/jquery-ui/jquery-ui.min.js"></script>
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<script>
-  $.widget.bridge('uibutton', $.ui.button);
-</script>
-<!-- Bootstrap 3.3.7 -->
-<script src="/static/assets/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<!-- Morris.js charts -->
-<script src="/static/assets/bower_components/raphael/raphael.min.js"></script>
-<script src="/static/assets/bower_components/morris.js/morris.min.js"></script>
-<!-- Sparkline -->
-<script src="/static/assets/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
-<!-- jvectormap -->
-<script src="/static/assets/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
-<script src="/static/assets/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
-<!-- jQuery Knob Chart -->
-<script src="/static/assets/bower_components/jquery-knob/dist/jquery.knob.min.js"></script>
-<!-- daterangepicker -->
-<script src="/static/assets/bower_components/moment/min/moment.min.js"></script>
-<script src="/static/assets/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
-<!-- datepicker -->
-<script src="/static/assets/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
-<!-- Bootstrap WYSIHTML5 -->
-<script src="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
-<!-- Slimscroll -->
-<script src="/static/assets/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-<!-- FastClick -->
-<script src="/static/assets/bower_components/fastclick/lib/fastclick.js"></script>
-<!-- AdminLTE App -->
-<script src="/static/assets/dist/js/adminlte.min.js"></script>
-<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.11.2/build/alertify.min.js"></script>
-<% if(message) { %>
-  <script>
-      const msg = JSON.parse('<%- message %>')
-      if(msg !== 'Success!')
-          alertify.notify(msg, 'error', 5)
-      else
-          alertify.notify(msg, 'success', 5)
-  </script>
-<% } %>
-<script src="/static/assets/bower_components/PACE/pace.min.js"></script>
-<style>
-  .pace {
-    -webkit-pointer-events: none;
-    pointer-events: none;
-  
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    user-select: none;
-  }
-  
-  .pace-inactive {
-    display: none;
-  }
-  
-  .pace .pace-progress {
-    background: #fff;
-    position: fixed;
-    z-index: 2000;
-    top: 0;
-    right: 100%;
-    width: 100%;
-    height: 2px;
-  }
-</style>
+<body>
+    <!--[if lt IE 8]>
+            <p class="browserupgrade">Você está usando um navegador desatualizado. Por favor <a href="http://browsehappy.com/">atualize seu navegador</a> para acessar esse site.</p>
+        <![endif]-->
+    <!-- Start Header Top Area -->
+    <%- include partials/header.ejs %>
+    <!-- End Header Top Area -->
+    <!-- Mobile Menu start -->
+    <%- include partials/headerMobile.ejs %>
+    <!-- Mobile Menu end -->
+    <!-- Main Menu area start-->
+    <%- include partials/mainMenu.ejs %>
+    <!-- Main Menu area End-->
+    <!-- Start Status area -->
+    <%- include partials/content.ejs %>
+    <!-- End Realtime sts area-->
+    <!-- Start Footer area-->
+    <%- include partials/footer.ejs %>
 </body>
 </html>
+    

@@ -2,8 +2,7 @@ const bcrypt = require('bcrypt-nodejs')
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const gravatar = require('gravatar')
-const nodemailer = require('nodemailer')
-const crypto = require('crypto')
+const mail = require('../config/mail')
 
 module.exports = app => {
     const {
@@ -11,6 +10,7 @@ module.exports = app => {
         notExistOrError,
         tooSmall,
         tooBig,
+        tooBigEmail,
         equalsOrError,
         strongOrError,
         hasDigitOrError,
@@ -34,15 +34,17 @@ module.exports = app => {
         if (!req.session || !req.session.admin) user.admin = false
 
         try {
-            existOrError(user.name, 'Digite o nome')
+            existOrError(user.name, 'Digite seu nome')
             tooSmall(user.name, 'Nome muito curto, digite um nome maior')
             tooBig(user.name, 'Nome muito longo, digite um nome menor')
             existOrError(user.email, 'Digite o E-mail')
+            tooBigEmail(user.email, 'Seu E-mail é muito longo')
             validEmailOrError(user.email, 'E-mail inválido')
             const userFromDB = await User.findOne({ email: user.email })
             .catch(err => res.status(500).render('500'))
             notExistOrError(userFromDB, 'Esse E-mail já está registrado')
-            existOrError(user.password, 'Digite a senha')
+            existOrError(user.phone, 'Digite seu telefone')
+            existOrError(user.password, 'Digite sua senha')
             hasDigitOrError(user.password, 'A senha deve ter pelo menos um número')
             hasLowerOrError(user.password, 'A senha deve ter pelo menos uma letra minúscula')
             hasUpperOrError(user.password, 'A senha deve ter pelo menos uma letra maiúscula')
@@ -50,7 +52,7 @@ module.exports = app => {
             hasSpecialOrError(user.password, 'A senha deve ter pelo menos um caractere especial')
             strongOrError(user.password, 'A senha deve conter pelo menos 8 caracteres')
             existOrError(user.confirmPassword, 'Digite a confirmação da senha')
-            equalsOrError(user.password, user.confirmPassword, 'Senha e confirmação da senha não são iguaist match')
+            equalsOrError(user.password, user.confirmPassword, 'A senha e confirmação da senha não são iguais')
         } catch (msg) {
             return res.status(400).render('enter', { 
                 page: '/register',
@@ -78,6 +80,8 @@ module.exports = app => {
     const change = async (req, res) => {
         if (req.body.newDescription) {
             const getNewDescription = req.body.newDescription
+
+
 
             try {
                 tooSmall(getNewDescription, 'Descrição muito curta, digite uma descrição maior')
@@ -159,7 +163,8 @@ module.exports = app => {
         } else if (req.body.newEmail) {
             const getNewEmail = req.body.newEmail
 
-            try {
+            try {                
+                tooBigEmail(getNewEmail, 'Seu E-mail é muito longo')
                 validEmailOrError(getNewEmail, 'E-mail inválido')
                 const emailFromDB = await User.findOne({
                         email: getNewEmail
@@ -223,7 +228,7 @@ module.exports = app => {
                 notSpaceOrError(getNewPassword, 'A senha não deve ter espaços em branco')
                 hasSpecialOrError(getNewPassword, 'A senha deve ter pelo menos um caractere especial')
                 strongOrError(getNewPassword, 'A senha deve conter pelo menos 8 caracteres')
-                equalsOrError(getNewPassword, getConfirmNewPassword, 'Senha e confirmação da senha não são iguaist match')
+                equalsOrError(getNewPassword, getConfirmNewPassword, 'A senha e confirmação da senha não são iguais')
             } catch (msg) {
                 return res.status(400).render('./dashboard/index', {
                     user: req.session.user,
@@ -232,8 +237,6 @@ module.exports = app => {
                     message: JSON.stringify(msg)
                 })
             }
-
-            
 
             await User.findOne({ _id: req.session.user._id })
             .then(async user => {
@@ -314,7 +317,8 @@ module.exports = app => {
         else {
             const user = req.body.emailConfirm
             try {
-                existOrError(user, 'Email not set')
+                existOrError(user, 'Email not set')                
+                tooBigEmail(user, 'Seu E-mail é muito longo')
                 validEmailOrError(user, 'Invalid Email')
                 const userFromDB = await User.findOne({ _id: req.session.user._id, email: user })
                 .catch(err => res.status(500).render('500'))
@@ -332,8 +336,9 @@ module.exports = app => {
                     deletedAt: new Date().toLocaleDateString().split('-').reverse().join('/')
                 }
             }).then(_ => {
-                req.session.destroy()
-                res.render('enter', { page: '/login', message: JSON.stringify('Sucesso!') })
+                req.session.destroy(function () {
+                    res.render('enter', { page: '/login', message: JSON.stringify('Sucesso!') })
+                })
             }).catch(err => res.status(500).render('500'))
         }
     }
@@ -349,7 +354,7 @@ module.exports = app => {
             "admin": 1,
             "createdAt": 1
         }).then(getUser => {
-            req.session.user = getUser,
+            req.session.user = getUser
             res.status(200).render('./dashboard/index', {
                 user: req.session.user,
                 page: req.url,
@@ -361,11 +366,12 @@ module.exports = app => {
 
     const recover = async (req, res) => {
         if(!req.params.token) {
-            const user = req.body.email
+            const email = req.body.email
 
             try {
-                existOrError(user, 'Digite o E-mail')
-                validEmailOrError(user, 'E-mail inválido')
+                existOrError(email, 'Digite o E-mail')                
+                tooBigEmail(email, 'Seu E-mail é muito longo')
+                validEmailOrError(email, 'E-mail inválido')
             } catch (msg) {
                 return res.status(400).render('enter', { 
                     page: '/forgotpassword',
@@ -373,45 +379,14 @@ module.exports = app => {
                 })
             }
 
-            const getUser = await User.findOne({ email: user })
-            .catch(err => res.status(500).render('500'))
-
-            if(!getUser || getUser.deletedAt) return res.status(400).render('enter', { page: '/forgotpassword', message: JSON.stringify('User not found') })
-
-            nodemailer.createTestAccount( async (err, account) => {
-                const transporter = nodemailer.createTransport({
-                    host: process.env.MAIL_HOST,
-                    port: process.env.MAIL_PORT,
-                    secure: process.env.MAIL_SECURE,
-                    auth: {
-                        user: process.env.MAIL_AUTH_USER,
-                        pass: process.env.MAIL_AUTH_PASS
-                    }
-                })
-
-                const token = crypto.randomBytes(64).toString('hex')
-                getUser.resetPasswordToken = token
-                getUser.resetPasswordExpires = Date.now() + 3600000
-                await getUser.save()
-
-                const mailOptions = {
-                    from: process.env.MAIL_AUTH_USER,
-                    to: user,
-                    subject: 'Recovery password',
-                    text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
-                    'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-                    'http://' + req.headers.host + '/reset/' + token + '\n\n' +
-                    'If you did not request this, please ignore this email and your password will remain unchanged.\n'
-                }
-
-                transporter.sendMail(mailOptions, (error, info) => {
-                    if (error) {
-                        return res.status(500).render('500')
-                    }
+            try {
+                mail.recoveryMail(email)
+            } catch (error) {
+                return res.status(400).render('enter', { page: '/forgotpassword', message: JSON.stringify('Algo deu errado') })
+            }
             
-                    res.status(200).render('enter', { page: '/forgotpassword', message: JSON.stringify('Sucesso!') })
-                })
-            })
+            res.status(200).render('enter', { page: '/forgotpassword', message: JSON.stringify('Sucesso!') })
+
         } else {
             const getUser = await User.findOne({ 
                 resetPasswordToken: req.params.token,
@@ -437,7 +412,7 @@ module.exports = app => {
         } else {
             const user = { ...req.body }
             try {
-                existOrError(user.password, 'Digite a senha')
+                existOrError(user.password, 'Digite sua senha')
                 hasDigitOrError(user.password, 'A senha deve ter pelo menos um número')
                 hasLowerOrError(user.password, 'A senha deve ter pelo menos uma letra minúscula')
                 hasUpperOrError(user.password, 'A senha deve ter pelo menos uma letra maiúscula')
@@ -445,7 +420,7 @@ module.exports = app => {
                 hasSpecialOrError(user.password, 'A senha deve ter pelo menos um caractere especial')
                 strongOrError(user.password, 'A senha deve conter pelo menos 8 caracteres')
                 existOrError(user.confirmPassword, 'Digite a confirmação da senha')
-                equalsOrError(user.password, user.confirmPassword, 'Senha e confirmação da senha não são iguaist match')
+                equalsOrError(user.password, user.confirmPassword, 'A senha e confirmação da senha não são iguais')
             } catch (msg) {
                 return res.status(400).render('reset', {
                     user: getUser,
@@ -466,34 +441,13 @@ module.exports = app => {
             getUser.profileChange.push({'dataChange': dataChange, 'dateChange': dateChange, 'dateTodayChange': dateTodayChange})
             await getUser.save()
 
-            nodemailer.createTestAccount((err, account) => {
-                const transporter = nodemailer.createTransport({
-                    host: process.env.MAIL_HOST,
-                    port: process.env.MAIL_PORT,
-                    secure: process.env.MAIL_SECURE,
-                    auth: {
-                        user: process.env.MAIL_AUTH_USER,
-                        pass: process.env.MAIL_AUTH_PASS
-                    }
-                })
-
-                const mailOptions = {
-                    from: process.env.MAIL_AUTH_USER,
-                    to: getUser.email,
-                    subject: 'Your password has been changed',
-                    text: 'Your password has been changed in ' +
-                    'http://' + req.headers.host + '\n\n' +
-                    'If you did not request this, please contact us.\n'
-                }
-
-                transporter.sendMail(mailOptions, (error, info) => {
-                    if (error) {
-                        return res.status(500).render('500')
-                    }
+            try {
+                mail.alertOfChange(getUser.email)
+            } catch (error) {
+                return res.status(400).render('enter', { page: '/login', message: JSON.stringify('Algo deu errado') })
+            }
             
-                    res.status(200).render('enter', { page: '/login', message: JSON.stringify('Sucesso!') })
-                })
-            })
+            res.status(200).render('enter', { page: '/login', message: JSON.stringify('Sucesso!') })
     }
 
 }
