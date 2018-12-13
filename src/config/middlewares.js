@@ -55,6 +55,26 @@ module.exports = app => {
             next()
         }
     })
+    app.use('/project', function (req, res, next) {
+        if (!req.session.user) {
+            res.render('enter', { 
+                page: '/login',
+                message: JSON.stringify('Por favor, faça o login para acessar')
+            })
+        } else {
+            next()
+        }
+    })
+    app.use('/budget', function (req, res, next) {
+        if (!req.session.user) {
+            res.render('enter', { 
+                page: '/login',
+                message: JSON.stringify('Por favor, faça o login para acessar')
+            })
+        } else {
+            next()
+        }
+    })
     app.use('/users', function (req, res, next) {
         if (!req.session.user) {
             res.render('enter', { 

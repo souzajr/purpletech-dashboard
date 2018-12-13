@@ -40,4 +40,4 @@
 		autoclose: true
 	});
 
-})(jQuery); 
+})(jQuery);

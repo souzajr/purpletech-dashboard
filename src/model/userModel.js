@@ -1,6 +1,6 @@
 const moongoose = require('mongoose')
 
-const HistorySchema = new moongoose.Schema({
+const HistoricSchema = new moongoose.Schema({
     dataChange: String,
     dateChange: String,
     dateTodayChange: String
@@ -13,12 +13,13 @@ const UserSchema = new moongoose.Schema({
     phone: { type: String, required: true },
     avatar: { type: String, required: true },
     description: String,
-    profileChange: [HistorySchema],
+    profileChange: [HistoricSchema],
     admin: { type: Boolean, required: true },
     createdAt: { type: String, required: true },
     deletedAt: String,
     resetPasswordToken: String,
-    resetPasswordExpires: Date
+    resetPasswordExpires: Date,
+    _idProject: String
 })
 
 moongoose.model('User', UserSchema)

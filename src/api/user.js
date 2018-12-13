@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt-nodejs')
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
+const Project = mongoose.model('Project')
 const gravatar = require('gravatar')
 const mail = require('../config/mail')
 
@@ -353,12 +354,11 @@ module.exports = app => {
             "profileChange": 1,          
             "admin": 1,
             "createdAt": 1
-        }).then(getUser => {
-            req.session.user = getUser
+        }).then(user => {
+            req.session.user = user
             res.status(200).render('./dashboard/index', {
-                user: req.session.user,
+                user,
                 page: req.url,
-                style: false,
                 message: null
             })
         }).catch((err) => res.status(500).render('500'))
@@ -430,15 +430,15 @@ module.exports = app => {
 
             getUser.password = encryptPassword(req.body.password)
             getUser.resetPasswordToken = undefined
-            getUser.resetPasswordExpires = undefined              
-            let date = new Date()                
-            const currentHour = date.getHours()
-            let currentMin = date.getMinutes()
-            currentMin = (currentMin < 10 ? "0" : "") + currentMin
-            const dateChange = currentHour + ':' + currentMin
+            getUser.resetPasswordExpires = undefined     
+            const date = new Date()
             const dateTodayChange = date.toLocaleDateString().split('-').reverse().join('/')
-            const dataChange = 'PasswordChange' 
-            getUser.profileChange.push({'dataChange': dataChange, 'dateChange': dateChange, 'dateTodayChange': dateTodayChange})
+            const dateChange = date.getHours() + ':' + ((date.getMinutes() < 10 ? "0" : "") + date.getMinutes())
+            getUser.profileChange.push({
+                dataChange: 'PasswordChange',
+                dateChange,
+                dateTodayChange
+            })
             await getUser.save()
 
             try {
@@ -450,7 +450,7 @@ module.exports = app => {
             res.status(200).render('enter', { page: '/login', message: JSON.stringify('Sucesso!') })
     }
 
-}
+    }
 
     return {
         save,

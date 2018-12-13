@@ -45,6 +45,11 @@ module.exports = app => {
         .put(app.src.api.user.change)
         .delete(app.src.api.user.remove)
 
+    app.route('/budget')
+        .all(app.src.config.passport.authenticate())
+        .get(app.src.api.project.get)
+        .post(app.src.api.project.save)
+
     /* ============= LIST OF ALL USSER & ADD NEW USER ============= */
     app.route('/users')
         .all(app.src.config.passport.authenticate())
