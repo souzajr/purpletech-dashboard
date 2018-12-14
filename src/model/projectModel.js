@@ -1,6 +1,6 @@
 const moongoose = require('mongoose')
 
-const HistoricSchema = new moongoose.Schema({
+const ProjectHistorySchema = new moongoose.Schema({
     dataChange: String,
     dateChange: String,
     dateTodayChange: String
@@ -22,7 +22,7 @@ const ProjectSchema = new moongoose.Schema({
     platform: [PlatformSchema],
     _idResponsible: String,
     description: { type: String, required: true },
-    historic: [HistoricSchema],
+    projectHistory: [ProjectHistorySchema],
     createdAt: { type: String, required: true },
     concludedAt: String
 })

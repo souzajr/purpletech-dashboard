@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
+const Project = mongoose.model('Project')
 const jwt = require('jwt-simple')
 const bcrypt = require('bcrypt-nodejs')
 
@@ -32,8 +33,12 @@ module.exports = app => {
             "description": 1,              
             "profileChange": 1,          
             "admin": 1,
-            "createdAt": 1
-        }).then(getUser => {
+            "createdAt": 1,
+            "_idProject": 1
+        }).then(async getUser => {
+            const project = await Project.find({ _id: getUser._idProject })
+            .catch(err => res.status(500).render('500'))
+            req.session.project = project
             req.session.user = getUser
             req.session.token = jwt.encode(payload, process.env.AUTH_SECRET)
             res.redirect('/dashboard')  
@@ -47,7 +52,12 @@ module.exports = app => {
             if(userToken) {
                 const token = jwt.decode(userToken, process.env.AUTH_SECRET)
                 if(new Date(token.exp * 1000) > new Date()) {
-                    return res.status(200).render('./dashboard/index', { user: req.session.user, page: req.url, message: null })
+                    return res.status(200).render('./dashboard/index', {
+                        project: req.session.project, 
+                        user: req.session.user, 
+                        page: req.url, 
+                        message: null 
+                    })
                 }
             }
         } catch (err) {

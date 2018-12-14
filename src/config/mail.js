@@ -63,5 +63,24 @@ module.exports = {
                 }
             })
         })
+    },
+
+    projectCreated(email, name) {
+        nodemailer.createTestAccount((err, account) => {
+            const mailOptions = {
+                from: process.env.MAIL_AUTH_USER,
+                to: email,
+                subject: 'Projeto criado com sucesso!',
+                html: '<b>Parabéns ' + name + ', você deu o primeiro passo para o sucesso da sua ideia!</b><br/>'+
+                'Seu projeto está em fase de análise, entraremos em contato embreve.<br/><br/>' +
+                '<b>PurpleTech</b><br/>https://purpletech.com.br'
+            }
+
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    throw error
+                }
+            })
+        })
     }
 }

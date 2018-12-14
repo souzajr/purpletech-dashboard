@@ -3,7 +3,7 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <ul class="nav nav-tabs notika-menu-wrap menu-it-icon-pro">
-                        <% if(page == '/dashboard') { %>
+                        <% if(page == '/dashboard' || page == '/budget' || page == '/project') { %>
                         <li class="active"><a data-toggle="tab" href="#Home"><i class="notika-icon notika-house"></i> Home</a></li>
                         <% } else { %>
                         <li><a data-toggle="tab" href="#Home"><i class="notika-icon notika-house"></i> Home</a></li>
@@ -25,7 +25,7 @@
                         <li class="active"><a data-toggle="tab" href="#Support"><i class="notika-icon notika-support"></i> Suporte</a></li>
                         <% } else { %>
                         <li><a href="/support"><i class="notika-icon notika-support"></i> Suporte</a></li>
-                        <% } %>
+                        <% } %>        
                     </ul>
                     <div class="tab-content custom-menu-content">
                         <% if(page == '/dashboard') { %>
@@ -49,6 +49,22 @@
                             <ul class="notika-main-menu-dropdown">
                                 <li><a href="/dashboard">Projetos</a>
                                 <li><a href="#">Solicitar novo orçamento</a>
+                            </ul>
+                        </div>
+                        <% } else { %>
+                        <div id="Home" class="tab-pane notika-tab-menu-bg animated flipInX">
+                            <ul class="notika-main-menu-dropdown">
+                                <li><a href="/dashboard">Projetos</a>
+                                <li><a href="/budget">Solicitar novo orçamento</a>
+                            </ul>
+                        </div>
+                        <% } %>
+
+                        <% if(page == '/project') { %>
+                        <div id="Home" class="tab-pane in active notika-tab-menu-bg animated flipInX">
+                            <ul class="notika-main-menu-dropdown">
+                                <li><a href="/dashboard">Projetos</a>
+                                <li><a href="/budget">Solicitar novo orçamento</a>
                             </ul>
                         </div>
                         <% } else { %>

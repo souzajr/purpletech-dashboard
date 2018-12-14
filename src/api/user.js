@@ -1,7 +1,6 @@
 const bcrypt = require('bcrypt-nodejs')
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
-const Project = mongoose.model('Project')
 const gravatar = require('gravatar')
 const mail = require('../config/mail')
 
@@ -354,14 +353,14 @@ module.exports = app => {
             "profileChange": 1,          
             "admin": 1,
             "createdAt": 1
-        }).then(user => {
+        }).then(async user => {
             req.session.user = user
             res.status(200).render('./dashboard/index', {
                 user,
                 page: req.url,
                 message: null
             })
-        }).catch((err) => res.status(500).render('500'))
+        }).catch(err => res.status(500).render('500'))
     }
 
     const recover = async (req, res) => {

@@ -45,9 +45,21 @@ module.exports = app => {
         .put(app.src.api.user.change)
         .delete(app.src.api.user.remove)
 
-    app.route('/budget')
+
+    /* ============= LIST OF ALL USERS PROJECT ============= */
+    app.route('/project')
+        .all(app.src.config.passport.authenticate())
+        .get(app.src.api.project.getAll)
+
+    /* ============= VIEW OF PROJECT ============= */
+    app.route('/project/:id')
         .all(app.src.config.passport.authenticate())
         .get(app.src.api.project.get)
+        
+    /* ============= CREATE BUDGET ============= */
+    app.route('/budget')
+        .all(app.src.config.passport.authenticate())
+        .get(app.src.api.project.getBudget)
         .post(app.src.api.project.save)
 
     /* ============= LIST OF ALL USSER & ADD NEW USER ============= */
@@ -58,9 +70,9 @@ module.exports = app => {
         .delete(admin(app.src.api.user.remove))
 
     /* ============= HANDLE ERROR  ============= */ 
-    app.use(function(err, req, res, next) {
-        res.status(500).render('500')
-    })
+    //app.use(function(err, req, res, next) {
+    //    res.status(500).render('500')
+    //})
     app.use(function(req, res) {
         res.status(404).render('404');
     })

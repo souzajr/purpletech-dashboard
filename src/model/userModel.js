@@ -19,7 +19,7 @@ const UserSchema = new moongoose.Schema({
     deletedAt: String,
     resetPasswordToken: String,
     resetPasswordExpires: Date,
-    _idProject: String
+    _idProject: Array
 })
 
 moongoose.model('User', UserSchema)

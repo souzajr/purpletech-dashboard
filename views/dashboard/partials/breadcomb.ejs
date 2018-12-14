@@ -1,4 +1,3 @@
-<% if(page == '/dashboard' || page == '/project' || page == '/budget') { %>
 <div class="breadcomb-area">
     <div class="container">
         <div class="row">
@@ -7,6 +6,7 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                             <div class="breadcomb-wp">
+                                <% if(page == '/dashboard' || page == '/budget' || page == '/project') { %>
                                 <div class="breadcomb-icon">
                                     <i class="notika-icon notika-finance"></i>
                                 </div>
@@ -14,6 +14,7 @@
                                     <h2>Projetos</h2>
                                     <p>Acompanhe o andamento dos seus projetos ou peça um novo orçamento</p>
                                 </div>
+                                <% } %>
                             </div>
                         </div>
                     </div>
@@ -22,4 +23,3 @@
         </div>
     </div>
 </div>
-<% } %>
