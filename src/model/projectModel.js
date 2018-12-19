@@ -1,15 +1,24 @@
 const moongoose = require('mongoose')
 
+const PlatformSchema = new moongoose.Schema({
+    app: Boolean,
+    web: Boolean,
+    desktop: Boolean
+})
+
 const ProjectHistorySchema = new moongoose.Schema({
     dataChange: String,
     dateChange: String,
     dateTodayChange: String
 })
 
-const PlatformSchema = new moongoose.Schema({
-    app: Boolean,
-    web: Boolean,
-    desktop: Boolean
+const TaskSchema = new moongoose.Schema({
+    status: Boolean,
+    description: String,
+})
+
+const FileSchema = new moongoose.Schema({
+    fileName: String
 })
 
 const ProjectSchema = new moongoose.Schema({
@@ -24,7 +33,11 @@ const ProjectSchema = new moongoose.Schema({
     description: { type: String, required: true },
     projectHistory: [ProjectHistorySchema],
     createdAt: { type: String, required: true },
-    concludedAt: String
+    concludedAt: String,
+    startAt: String,
+    endAt: String,
+    task: [TaskSchema],
+    file: [FileSchema]
 })
 
 moongoose.model('Project', ProjectSchema)

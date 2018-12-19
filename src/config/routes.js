@@ -8,19 +8,19 @@ module.exports = app => {
 
     /* ============= REGISTER ============= */
     app.get('/register', function(req, res) {
-        res.render('enter', { page: '/register', message: null })
+        res.render('enter', { page: '/register', refresh: null, message: null })
     })
     app.post('/register', app.src.api.user.save)
 
     /* ============= LOGIN ============= */
     app.get('/login', function(req, res) {
-        res.render('enter', { page: '/login', message: null })
+        res.render('enter', { page: '/login', refresh: null, message: null })
     })
     app.post('/login', app.src.api.auth.login)
 
     /* ============= FORGOT PASSWORD ============= */
     app.get('/forgotpassword', function(req, res) {
-        res.render('enter', { page: '/forgotpassword', message: null })
+        res.render('enter', { page: '/forgotpassword', refresh: null, message: null })
     })
     app.post('/forgotpassword', app.src.api.user.recover)
     app.get('/reset/:token', app.src.api.user.recover)
@@ -45,7 +45,6 @@ module.exports = app => {
         .put(app.src.api.user.change)
         .delete(app.src.api.user.remove)
 
-
     /* ============= LIST OF ALL USERS PROJECT ============= */
     app.route('/project')
         .all(app.src.config.passport.authenticate())
@@ -55,7 +54,15 @@ module.exports = app => {
     app.route('/project/:id')
         .all(app.src.config.passport.authenticate())
         .get(app.src.api.project.get)
-        
+
+    /* ============= UPLOAD FILE ============= */
+    app.route('/upload/:id')
+        .all(app.src.config.passport.authenticate())
+        .post(app.src.api.project.uploadFile)
+    app.route('/get/:id/:filename')
+        .all(app.src.config.passport.authenticate())
+        .get(app.src.api.project.sendFile)        
+            
     /* ============= CREATE BUDGET ============= */
     app.route('/budget')
         .all(app.src.config.passport.authenticate())

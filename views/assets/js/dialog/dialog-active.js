@@ -17,7 +17,12 @@
 
 	//Success Message
 	$('#sa-success').on('click', function(){
-		swal("Good job!", "Lorem ipsum dolor cry sit amet, consectetur adipiscing elit. Sed lorem erat, tincidunt vitae ipsum et, Spensaduran pellentesque maximus eniman. Mauriseleifend ex semper, lobortis purus.", "success")
+			swal({   
+				title: "Auto close alert!",   
+				text: "I will close in 2 seconds.", 
+				type: "success",  
+				timer: 1000
+			})
 	});
 
 	//Warning Message

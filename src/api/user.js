@@ -41,7 +41,7 @@ module.exports = app => {
             tooBigEmail(user.email, 'Seu E-mail é muito longo')
             validEmailOrError(user.email, 'E-mail inválido')
             const userFromDB = await User.findOne({ email: user.email })
-            .catch(err => res.status(500).render('500'))
+            .catch(_ => res.status(500).render('500'))
             notExistOrError(userFromDB, 'Esse E-mail já está registrado')
             existOrError(user.phone, 'Digite seu telefone')
             existOrError(user.password, 'Digite sua senha')
@@ -54,16 +54,15 @@ module.exports = app => {
             existOrError(user.confirmPassword, 'Digite a confirmação da senha')
             equalsOrError(user.password, user.confirmPassword, 'A senha e confirmação da senha não são iguais')
         } catch (msg) {
-            return res.status(400).render('enter', { 
+            return res.status(400).render('enter', {
+                refresh: req.body,
                 page: '/register',
                 message: JSON.stringify(msg)
             })
         }
 
-        user.password = encryptPassword(req.body.password)
         delete user.confirmPassword
-        delete user.check
-
+        user.password = encryptPassword(req.body.password)
         user.avatar = gravatar.url(user.email, {
             s: '160',
             r: 'x',
@@ -71,10 +70,11 @@ module.exports = app => {
         }, true)
         user.createdAt = new Date().toLocaleDateString().split('-').reverse().join('/')
 
-        await User.create(user).then(_ => res.status(200).render('enter', { 
-            page: '/login',
+        await User.create(user).then(_ => res.status(200).render('enter', {
+            page: '/login', 
+            refresh: null,
             message: JSON.stringify('Sucesso!')
-        })).catch(err => res.status(500).render('500'))
+        })).catch(_ => res.status(500).render('500'))
     }
 
     const change = async (req, res) => {
@@ -95,34 +95,36 @@ module.exports = app => {
                 })
             }
 
-            await User.findOne({ _id: req.session.user._id })
-            .then(async user => {
-                const date = new Date()
-                const dateTodayChange = date.toLocaleDateString().split('-').reverse().join('/')
-                const dateChange = date.getHours() + ':' + ((date.getMinutes() < 10 ? "0" : "") + date.getMinutes())
-        
-                user.description = getNewDescription
-                user.profileChange.push({
-                    dataChange: 'DescriptionChange',
-                    dateChange,
-                    dateTodayChange
+            await User.findOne({
+                    _id: req.session.user._id
                 })
+                .then(async user => {
+                    const date = new Date()
+                    const dateTodayChange = date.toLocaleDateString().split('-').reverse().join('/')
+                    const dateChange = date.getHours() + ':' + ((date.getMinutes() < 10 ? "0" : "") + date.getMinutes())
 
-                await user.save()
-                .then(user => {
-                    req.session.user = user
-                    res.status(200).render('./dashboard/index', {
-                        user,
-                        page: '/profile',
-                        style: false,
-                        message: JSON.stringify('Sucesso!')
+                    user.description = getNewDescription
+                    user.profileChange.push({
+                        dataChange: 'DescriptionChange',
+                        dateChange,
+                        dateTodayChange
                     })
-                }).catch(err => res.status(500).render('500'))
-            }).catch(err => res.status(500).render('500'))
+
+                    await user.save()
+                        .then(user => {
+                            req.session.user = user
+                            res.status(200).render('./dashboard/index', {
+                                user,
+                                page: '/profile',
+                                style: false,
+                                message: JSON.stringify('Sucesso!')
+                            })
+                        }).catch(_ => res.status(500).render('500'))
+                }).catch(_ => res.status(500).render('500'))
 
         } else if (req.body.newName) {
             const getNewName = req.body.newName
-            
+
             try {
                 tooSmall(getNewName, 'Nome muito curto, digite um nome maior')
                 tooBig(getNewName, 'Nome muito longo, digite um nome menor')
@@ -135,40 +137,42 @@ module.exports = app => {
                 })
             }
 
-            await User.findOne({ _id: req.session.user._id })
-            .then(async user => {
-                const date = new Date()
-                const dateTodayChange = date.toLocaleDateString().split('-').reverse().join('/')
-                const dateChange = date.getHours() + ':' + ((date.getMinutes() < 10 ? "0" : "") + date.getMinutes())
-        
-                user.name = getNewName
-                user.profileChange.push({
-                    dataChange: 'NameChange',
-                    dateChange,
-                    dateTodayChange
+            await User.findOne({
+                    _id: req.session.user._id
                 })
+                .then(async user => {
+                    const date = new Date()
+                    const dateTodayChange = date.toLocaleDateString().split('-').reverse().join('/')
+                    const dateChange = date.getHours() + ':' + ((date.getMinutes() < 10 ? "0" : "") + date.getMinutes())
 
-                await user.save()
-                .then(user => {
-                    req.session.user = user
-                    res.status(200).render('./dashboard/index', {
-                        user,
-                        page: '/profile',
-                        style: false,
-                        message: JSON.stringify('Sucesso!')
+                    user.name = getNewName
+                    user.profileChange.push({
+                        dataChange: 'NameChange',
+                        dateChange,
+                        dateTodayChange
                     })
-                }).catch(err => res.status(500).render('500'))
-            }).catch(err => res.status(500).render('500'))
+
+                    await user.save()
+                        .then(user => {
+                            req.session.user = user
+                            res.status(200).render('./dashboard/index', {
+                                user,
+                                page: '/profile',
+                                style: false,
+                                message: JSON.stringify('Sucesso!')
+                            })
+                        }).catch(_ => res.status(500).render('500'))
+                }).catch(_ => res.status(500).render('500'))
 
         } else if (req.body.newEmail) {
             const getNewEmail = req.body.newEmail
 
-            try {                
+            try {
                 tooBigEmail(getNewEmail, 'Seu E-mail é muito longo')
                 validEmailOrError(getNewEmail, 'E-mail inválido')
                 const emailFromDB = await User.findOne({
-                        email: getNewEmail
-                    }).catch(err => res.status(500).render('500'))
+                    email: getNewEmail
+                }).catch(_ => res.status(500).render('500'))
                 notExistOrError(emailFromDB, 'Esse E-mail já está registrado')
             } catch (msg) {
                 return res.status(400).render('./dashboard/index', {
@@ -179,30 +183,32 @@ module.exports = app => {
                 })
             }
 
-            await User.findOne({ _id: req.session.user._id })
-            .then(async user => {
-                const date = new Date()
-                const dateTodayChange = date.toLocaleDateString().split('-').reverse().join('/')
-                const dateChange = date.getHours() + ':' + ((date.getMinutes() < 10 ? "0" : "") + date.getMinutes())
-        
-                user.email = getNewEmail
-                user.profileChange.push({
-                    dataChange: 'EmailChange',
-                    dateChange,
-                    dateTodayChange
+            await User.findOne({
+                    _id: req.session.user._id
                 })
+                .then(async user => {
+                    const date = new Date()
+                    const dateTodayChange = date.toLocaleDateString().split('-').reverse().join('/')
+                    const dateChange = date.getHours() + ':' + ((date.getMinutes() < 10 ? "0" : "") + date.getMinutes())
 
-                await user.save()
-                .then(user => {
-                    req.session.user = user
-                    res.status(200).render('./dashboard/index', {
-                        user,
-                        page: '/profile',
-                        style: false,
-                        message: JSON.stringify('Sucesso!')
+                    user.email = getNewEmail
+                    user.profileChange.push({
+                        dataChange: 'EmailChange',
+                        dateChange,
+                        dateTodayChange
                     })
-                }).catch(err => res.status(500).render('500'))
-            }).catch(err => res.status(500).render('500'))
+
+                    await user.save()
+                        .then(user => {
+                            req.session.user = user
+                            res.status(200).render('./dashboard/index', {
+                                user,
+                                page: '/profile',
+                                style: false,
+                                message: JSON.stringify('Sucesso!')
+                            })
+                        }).catch(_ => res.status(500).render('500'))
+                }).catch(_ => res.status(500).render('500'))
 
         } else if (req.body.currentPassword || req.body.newPassword || req.body.confirmNewPassword) {
             const getCurrentPassword = req.body.currentPassword
@@ -214,7 +220,7 @@ module.exports = app => {
                 existOrError(getNewPassword, 'Digite sua nova senha')
                 existOrError(getConfirmNewPassword, 'Digite a confirmação da sua nova senha')
                 const user = await User.findOne({ _id: req.session.user._id })
-                .catch(err => res.status(500).render('500'))
+                .catch(_ => res.status(500).render('500'))
                 const isMatch = bcrypt.compareSync(getCurrentPassword, user.password)
                 if (!isMatch) return res.status(401).render('./dashboard/index', {
                     user: req.session.user,
@@ -238,32 +244,34 @@ module.exports = app => {
                 })
             }
 
-            await User.findOne({ _id: req.session.user._id })
-            .then(async user => {
-                const date = new Date()
-                const dateTodayChange = date.toLocaleDateString().split('-').reverse().join('/')
-                const dateChange = date.getHours() + ':' + ((date.getMinutes() < 10 ? "0" : "") + date.getMinutes())
-        
-                user.password = encryptPassword(getNewPassword)
-                user.profileChange.push({
-                    dataChange: 'PasswordChange',
-                    dateChange,
-                    dateTodayChange
+            await User.findOne({
+                    _id: req.session.user._id
                 })
-                
-                delete getCurrentPassword, getNewPassword, getConfirmNewPassword
+                .then(async user => {
+                    const date = new Date()
+                    const dateTodayChange = date.toLocaleDateString().split('-').reverse().join('/')
+                    const dateChange = date.getHours() + ':' + ((date.getMinutes() < 10 ? "0" : "") + date.getMinutes())
 
-                await user.save()
-                .then(user => {
-                    req.session.user = user
-                    res.status(200).render('./dashboard/index', {
-                        user,
-                        page: '/profile',
-                        style: false,
-                        message: JSON.stringify('Sucesso!')
+                    user.password = encryptPassword(getNewPassword)
+                    user.profileChange.push({
+                        dataChange: 'PasswordChange',
+                        dateChange,
+                        dateTodayChange
                     })
-                }).catch(err => res.status(500).render('500'))
-            }).catch(err => res.status(500).render('500'))
+
+                    delete getCurrentPassword, getNewPassword, getConfirmNewPassword
+
+                    await user.save()
+                        .then(user => {
+                            req.session.user = user
+                            res.status(200).render('./dashboard/index', {
+                                user,
+                                page: '/profile',
+                                style: false,
+                                message: JSON.stringify('Sucesso!')
+                            })
+                        }).catch(_ => res.status(500).render('500'))
+                }).catch(_ => res.status(500).render('500'))
 
         } else {
             res.status(400).render('./dashboard/index', {
@@ -276,31 +284,34 @@ module.exports = app => {
     }
 
     const getAll = async (req, res) => {
-        await User.find({
-                deletedAt: { $exists: false }
-            }, {
+        await User.find({ deletedAt: { $exists: false }},
+            {
                 "_id": 1,
                 "name": 1,
                 "email": 1,
                 "admin": 1,
                 "createdAt": 1
             }).then(users => res.render('all', { users }))
-            .catch(err => res.status(500).render('500'))
+            .catch(_ => res.status(500).render('500'))
     }
 
     const remove = async (req, res) => {
-        if(req.body.deleteHistory) { 
+        if (req.body.deleteHistory) {
             const history = req.body.deleteHistory
-            await User.updateOne({ _id: req.session.user._id, }, {
-                $pull: { 'profileChange': { _id: history }}
+            await User.updateOne({ _id: req.session.user._id, },
+            {
+                $pull: {
+                    'profileChange': { _id: history }
+                }
             }).then(async _ => {
-                await User.findOne({ _id: req.session.user._id }, {
+                await User.findOne({ _id: req.session.user._id },
+                {
                     "_id": 1,
                     "name": 1,
                     "email": 1,
                     "avatar": 1,
-                    "description": 1,              
-                    "profileChange": 1,          
+                    "description": 1,
+                    "profileChange": 1,
                     "admin": 1,
                     "createdAt": 1
                 }).then(getUser => {
@@ -311,46 +322,55 @@ module.exports = app => {
                         style: true,
                         message: JSON.stringify('Sucesso!')
                     })
-                }).catch(err => res.status(500).render('500'))
-            }).catch(err => res.status(500).render('500'))
-        }
-        else {
+                }).catch(_ => res.status(500).render('500'))
+            }).catch(_ => res.status(500).render('500'))
+        } else {
             const user = req.body.emailConfirm
             try {
-                existOrError(user, 'Email not set')                
+                existOrError(user, 'Email not set')
                 tooBigEmail(user, 'Seu E-mail é muito longo')
                 validEmailOrError(user, 'Invalid Email')
-                const userFromDB = await User.findOne({ _id: req.session.user._id, email: user })
-                .catch(err => res.status(500).render('500'))
+                const userFromDB = await User.findOne({
+                        _id: req.session.user._id,
+                        email: user
+                    })
+                    .catch(_ => res.status(500).render('500'))
                 existOrError(userFromDB, 'Error verifying Email')
             } catch (msg) {
-                return res.status(400).render('./dashboard/index', { 
+                return res.status(400).render('./dashboard/index', {
                     user: req.session.user,
                     page: '/profile',
                     style: false,
-                    message: JSON.stringify(msg) })
+                    message: JSON.stringify(msg)
+                })
             }
 
-            await User.findOneAndUpdate({ _id: req.session.user._id }, {
+            await User.findOneAndUpdate({ _id: req.session.user._id },
+            {
                 $set: {
                     deletedAt: new Date().toLocaleDateString().split('-').reverse().join('/')
                 }
             }).then(_ => {
                 req.session.destroy(function () {
-                    res.render('enter', { page: '/login', message: JSON.stringify('Sucesso!') })
+                    res.render('enter', {
+                        refresh: null,
+                        page: '/login',
+                        message: JSON.stringify('Sucesso!')
+                    })
                 })
-            }).catch(err => res.status(500).render('500'))
+            }).catch(_ => res.status(500).render('500'))
         }
     }
 
     const get = async (req, res) => {
-        await User.findOne({ _id: req.session.user._id }, {
+        await User.findOne({ _id: req.session.user._id },
+        {
             "_id": 1,
             "name": 1,
             "email": 1,
             "avatar": 1,
-            "description": 1,              
-            "profileChange": 1,          
+            "description": 1,
+            "profileChange": 1,
             "admin": 1,
             "createdAt": 1
         }).then(async user => {
@@ -360,19 +380,20 @@ module.exports = app => {
                 page: req.url,
                 message: null
             })
-        }).catch(err => res.status(500).render('500'))
+        }).catch(_ => res.status(500).render('500'))
     }
 
     const recover = async (req, res) => {
-        if(!req.params.token) {
+        if (!req.params.token) {
             const email = req.body.email
 
             try {
-                existOrError(email, 'Digite o E-mail')                
+                existOrError(email, 'Digite o E-mail')
                 tooBigEmail(email, 'Seu E-mail é muito longo')
                 validEmailOrError(email, 'E-mail inválido')
             } catch (msg) {
-                return res.status(400).render('enter', { 
+                return res.status(400).render('enter', {
+                    refresh: null,
                     page: '/forgotpassword',
                     message: JSON.stringify(msg)
                 })
@@ -381,33 +402,53 @@ module.exports = app => {
             try {
                 mail.recoveryMail(email)
             } catch (error) {
-                return res.status(400).render('enter', { page: '/forgotpassword', message: JSON.stringify('Algo deu errado') })
+                return res.status(400).render('enter', {
+                    refresh: null,
+                    page: '/forgotpassword',
+                    message: JSON.stringify('Algo deu errado')
+                })
             }
-            
-            res.status(200).render('enter', { page: '/forgotpassword', message: JSON.stringify('Sucesso!') })
+
+            res.status(200).render('enter', {
+                refresh: null,
+                page: '/forgotpassword',
+                message: JSON.stringify('Sucesso!')
+            })
 
         } else {
-            const getUser = await User.findOne({ 
+            const getUser = await User.findOne({
                 resetPasswordToken: req.params.token,
                 resetPasswordExpires: { $gt: Date.now() }
-            }).catch(err => res.status(500).render('500'))
+            }).catch(_ => res.status(500).render('500'))
 
-            if(!getUser || getUser.deletedAt) {
-                res.status(401).render('enter', { page: '/forgotpassword', message: JSON.stringify('Password reset token is invalid or has expired') })
+            if (!getUser || getUser.deletedAt) {
+                res.status(401).render('enter', {
+                    refresh: null,
+                    page: '/forgotpassword',
+                    message: JSON.stringify('O token de redefinição de senha é inválido ou expirou')
+                })
             } else {
-                res.status(200).render('reset', { user: getUser, message: null })
+                res.status(200).render('reset', {
+                    refresh: null,
+                    user: getUser,
+                    message: null
+                })
             }
-        } 
+        }
     }
 
     const reset = async (req, res) => {
-        const getUser = await User.findOne({ 
+        const getUser = await User.findOne({
             resetPasswordToken: req.params.token,
             resetPasswordExpires: { $gt: Date.now() }
-        }).catch(err => res.status(500).render('500'))
+        }).catch(_ => res.status(500).render('500'))
 
-        if(!getUser || getUser.deletedAt) {
-            res.status(401).render('enter', { page: '/forgotpassword', message: JSON.stringify('Password reset token is invalid or has expired') })
+        if (!getUser || getUser.deletedAt) {
+            res.status(401).render('enter', {
+                refresh: null,
+                page: '/forgotpassword',
+                message: JSON.stringify('O token de redefinição de senha é inválido ou expirou')
+            })
         } else {
             const user = { ...req.body }
             try {
@@ -422,6 +463,7 @@ module.exports = app => {
                 equalsOrError(user.password, user.confirmPassword, 'A senha e confirmação da senha não são iguais')
             } catch (msg) {
                 return res.status(400).render('reset', {
+                    refresh: null,
                     user: getUser,
                     message: JSON.stringify(msg)
                 })
@@ -429,7 +471,7 @@ module.exports = app => {
 
             getUser.password = encryptPassword(req.body.password)
             getUser.resetPasswordToken = undefined
-            getUser.resetPasswordExpires = undefined     
+            getUser.resetPasswordExpires = undefined
             const date = new Date()
             const dateTodayChange = date.toLocaleDateString().split('-').reverse().join('/')
             const dateChange = date.getHours() + ':' + ((date.getMinutes() < 10 ? "0" : "") + date.getMinutes())
@@ -443,11 +485,19 @@ module.exports = app => {
             try {
                 mail.alertOfChange(getUser.email)
             } catch (error) {
-                return res.status(400).render('enter', { page: '/login', message: JSON.stringify('Algo deu errado') })
+                return res.status(400).render('enter', {
+                    refresh: null,
+                    page: '/login',
+                    message: JSON.stringify('Algo deu errado')
+                })
             }
-            
-            res.status(200).render('enter', { page: '/login', message: JSON.stringify('Sucesso!') })
-    }
+
+            res.status(200).render('enter', {
+                refresh: null,
+                page: '/login',
+                message: JSON.stringify('Sucesso!')
+            })
+        }
 
     }
 

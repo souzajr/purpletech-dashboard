@@ -2,8 +2,31 @@ const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const Project = mongoose.model('Project')
 const mail = require('../config/mail')
+const path = require('path')
+const multer = require('multer')
+const crypto = require('crypto')
 
 module.exports = app => {
+    const storage = multer.diskStorage({
+        destination: (req, file, cb) => {
+            cb(null, './public/upload')
+        },
+        filename: (req, file, cb) => {
+            cb(null, crypto.randomBytes(10).toString('hex') + Date.now() + path.extname(file.originalname).toLowerCase())
+        }
+    })
+
+    const upload = multer({ storage, fileFilter: function (req, file, callback) {
+        var ext = path.extname(file.originalname).toLowerCase()
+        if(ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
+            return callback(new Error())
+        }
+        callback(null, true)
+    },
+    limits: {
+        fileSize: 1024 * 2048
+    }}).any()
+    
     const {
         existOrError,
         tooSmall,
@@ -24,7 +47,7 @@ module.exports = app => {
             tooSmall(project.description, 'Digite uma descrição de projeto maior')
         } catch (msg) {
             return res.status(400).render('./dashboard/index', { 
-                project: req.session. project,
+                project: req.session.project,
                 user: req.session.user, 
                 page: '/budget', 
                 message: JSON.stringify(msg) 
@@ -56,11 +79,11 @@ module.exports = app => {
 
         await Project.create(project).then(async createdProject => {
             const user = await User.findOne({ _id: req.session.user._id })
-            .catch(err => res.status(500).render('500'))
+            .catch(_ => res.status(500).render('500'))
             user._idProject.push(createdProject._id) 
             await user.save()
             const getProject = await Project.find({ _id: user._idProject })
-            .catch(err => res.status(500).render('500'))
+            .catch(_ => res.status(500).render('500'))
             req.session.project = getProject
 
             try {
@@ -80,7 +103,7 @@ module.exports = app => {
                 page: '/dashboard',
                 message: JSON.stringify('Sucesso!')
             })
-        }).catch(err => res.status(500).render('500'))
+        }).catch(_ => res.status(500).render('500'))
     }
 
     const getAll = async (req, res) => {
@@ -96,7 +119,7 @@ module.exports = app => {
             "_idProject": 1
         }).then(async user => {
             const project = await Project.find({ _id: user._idProject })
-            .catch(err => res.status(500).render('500'))
+            .catch(_ => res.status(500).render('500'))
             req.session.user = user
             res.status(200).render('./dashboard/index', {
                 project,
@@ -104,7 +127,7 @@ module.exports = app => {
                 page: req.url,
                 message: null
             })
-        }).catch(err => res.status(500).render('500'))
+        }).catch(_ => res.status(500).render('500'))
     }
 
     const getBudget = async (req, res) => {
@@ -124,7 +147,7 @@ module.exports = app => {
                 page: req.url,
                 message: null
             })
-        }).catch(err => res.status(500).render('500'))
+        }).catch(_ => res.status(500).render('500'))
     }
 
     const get = async (req, res) => {
@@ -133,10 +156,51 @@ module.exports = app => {
                 project,
                 user: req.session.user, 
                 page: '/project',
+                style: 'details',
                 message: null
             })
-        }).catch(err => res.status(500).render('500'))
+        }).catch(_ => res.status(500).render('500'))
     }
 
-    return { save, getAll, getBudget, get }
+    const uploadFile = (req, res) => {
+        upload(req, res, async function(err) {
+            if (err instanceof multer.MulterError) {
+                return res.status(500).render('500')
+            } else if (err) {
+                return res.status(500).render('500')
+            } else if (!req.files.length) {
+                await Project.findOne({ _id: req.params.id }).then(project => {
+                    return res.status(400).render('./dashboard/index', {
+                        project,
+                        user: req.session.user, 
+                        page: '/project',
+                        style: 'archive',
+                        message: JSON.stringify('Você deve selecionar ao menos uma imagem')
+                    })
+                }).catch(_ => res.status(500).render('500'))
+            }
+
+            await Project.findOne({ _id: req.params.id }).then(async project => {
+                for (let i = 0; i < (req.files).length; i++) {
+                    project.file.push({ fileName: req.files[i].filename })
+                }
+                await project.save()
+                res.status(200).render('./dashboard/index', {
+                    project,
+                    user: req.session.user, 
+                    page: '/project',
+                    style: 'archive',
+                    message: JSON.stringify('Sucesso!')
+                })
+            }).catch(_ => res.status(500).render('500'))
+        })
+    }
+
+    const sendFile = async (req, res) => {
+        await Project.findOne({ _id: req.params.id }).then(_ => {
+            res.sendFile(req.params.filename, { root: './public/upload/' })
+        }).catch(_ => res.status(500).render('500'))
+    }
+
+    return { save, getAll, getBudget, get, uploadFile, sendFile }
 }
