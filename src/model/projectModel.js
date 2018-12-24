@@ -28,7 +28,7 @@ const ProjectSchema = new moongoose.Schema({
     status: { type: String, required: true },
     deadline: { type: String, required: true },
     category: { type: String, required: true },
-    platform: [PlatformSchema],
+    platform: { app: Boolean, web: Boolean, desktop: Boolean },
     _idResponsible: String,
     description: { type: String, required: true },
     projectHistory: [ProjectHistorySchema],

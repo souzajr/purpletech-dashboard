@@ -7,27 +7,15 @@ const bcrypt = require('bcrypt-nodejs')
 module.exports = app => {
     const login = async (req, res) => {
         if (!req.body.email || !req.body.password) {
-            return res.status(400).render('enter', { 
-                refresh: null,
-                page: '/login',
-                message: JSON.stringify('Digite o E-mail e a senha')
-            })
+            return res.status(400).render('login', { message: JSON.stringify('Digite o E-mail e a senha') })
         }
 
         const user = await User.findOne({ email: req.body.email })
         .catch(_ => res.status(500).render('500'))
 
-        if (!user || user.deletedAt) return res.status(400).render('enter', { 
-            refresh: null,
-            page: '/login',
-            message: JSON.stringify('Usuário não encontrado') 
-        })
+        if (!user || user.deletedAt) return res.status(400).render('login', { message: JSON.stringify('Usuário não encontrado') })
         const isMatch = bcrypt.compareSync(req.body.password, user.password)
-        if (!isMatch) return res.status(401).render('enter', { 
-            refresh: null,
-            page: '/login',
-            message: JSON.stringify('E-mail ou senha inválidos') 
-        })
+        if (!isMatch) return res.status(401).render('login', { message: JSON.stringify('E-mail ou senha inválidos') })
         
         const now = Math.floor(Date.now() / 1000)
         const payload = {
@@ -45,8 +33,10 @@ module.exports = app => {
             "description": 1,
             "profileChange": 1,
             "admin": 1,
+            "phone": 1,
             "createdAt": 1,
-            "_idProject": 1
+            "_idProject": 1,
+            "profilePicture": 1
         }).then(async getUser => {
             const project = await Project.find({ _id: getUser._idProject })
             .catch(_ => res.status(500).render('500'))
@@ -63,19 +53,33 @@ module.exports = app => {
             if (userToken) {
                 const token = jwt.decode(userToken, process.env.AUTH_SECRET)
                 if (new Date(token.exp * 1000) > new Date()) {
-                    return res.status(200).render('./dashboard/index', {
-                        project: req.session.project,
-                        user: req.session.user,
-                        page: req.url,
-                        message: null
-                    })
+                    await User.findOne({ _id: req.session.user._id }, {
+                        "_id": 1,
+                        "name": 1,
+                        "email": 1,
+                        "avatar": 1,
+                        "profileChange": 1,
+                        "admin": 1,
+                        "phone": 1,
+                        "createdAt": 1,
+                        "_idProject": 1,
+                        "profilePicture": 1
+                    }).then(async user => {
+                        await Project.find({ _id: user._idProject }).then(project => { 
+                            req.session.project = project
+                            req.session.user = user
+                            return res.status(200).render('./dashboard/index', {
+                                project,
+                                user,
+                                page: req.url,
+                                message: null
+                            })
+                        }).catch(_ => res.status(500).render('500'))
+                    }).catch(_ => res.status(500).render('500'))
                 }
             }
         } catch (err) {
-            return res.status(400).render('enter', { 
-                refresh: null,
-                page: '/login',
-                message: JSON.stringify('Algo deu errado') })
+            return res.status(400).render('login', { message: JSON.stringify('Algo deu errado') })
         }
     }
 

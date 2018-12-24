@@ -1,127 +1,52 @@
-<div class="tabs-info-area">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="widget-tabs-int">
-                    <div class="tab-hd">
-                        <% if(project.endAt) { %>
-                        <h2><%= project.name %> - Projeto finalizado em <%= project.endAt %></h2>
-                        <% } else { %>
-                        <h2><%= project.name %></h2>
-                        <% } %>
-                        <p><%= project.description %></p>
-                    </div>
-                    <div class="widget-tabs-list">
-                        <ul class="nav nav-tabs">
-                            <li class="active"><a data-toggle="tab" href="#details" aria-expanded="true">Detalhes do
-                                    projeto</a></li>
-                            <li class=""><a data-toggle="tab" href="#task" aria-expanded="false">Tarefas</a></li>
-                            <li class=""><a data-toggle="tab" href="#archive" aria-expanded="false">Arquivos</a></li>
-                            <li class=""><a data-toggle="tab" href="#invoice" aria-expanded="false">Faturas</a></li>
+<div class="container-fluid mt--7">
+    <!-- Table -->
+    <div class="row justify-content-center">
+        <div class="col">
+            <div class="card shadow">
+                <div class="card-header border-0">
+                    <h3 class="mb-0">Seus projetos</h3>
+                </div>
+                <div class="card-body">
+                    <div class="nav-wrapper">
+                        <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab"
+                                    href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1"
+                                    aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i>Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#tabs-icons-text-2"
+                                    role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Profile</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-3-tab" data-toggle="tab" href="#tabs-icons-text-3"
+                                    role="tab" aria-controls="tabs-icons-text-3" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Messages</a>
+                            </li>
                         </ul>
                     </div>
-                </div>
-            </div>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="widget-tabs-int mg-t-30">
-                    <div class="tab-content tab-custom-st">
-                        <% if(style == 'details') { %>
-                        <div id="details" class="tab-pane fade active in">
-                        <% } else { %>
-                        <div id="details" class="tab-pane fade">
-                        <% } %>
-                            <div class="row">
-                                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                                    <div class="tab-ctn">
-                                        <h4>ID do projeto:</h2>
-                                        <p><%= project._id %></p>
-                                        <h4>Categorias do projeto:</h2>
-                                        <p><%= project.category %></p>
-                                        <h4>Responsável pelo projeto:</h2>
-                                        <% if(!project._idResponsible) { %>
-                                        <p>Não definido</p>
-                                        <% } %>
-                                    </div>
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel"
+                                    aria-labelledby="tabs-icons-text-1-tab">
+                                    <p class="description">Raw denim you probably haven't heard of them jean shorts
+                                        Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache
+                                        cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro
+                                        keffiyeh dreamcatcher synth.</p>
+                                    <p class="description">Raw denim you probably haven't heard of them jean shorts
+                                        Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse.</p>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                                    <div class="tab-ctn">
-                                        <h4>Projeto criado em:</h4>
-                                        <p><%= project.createdAt %></p>
-                                        <h4>Projeto iniciado em:</h4>
-                                        <% if(project.startAt) { %>
-                                        <p><%= project.startAt %></p>
-                                        <% } else { %>
-                                        <p>O projeto ainda não foi iniciado</p>
-                                        <% } %>
-                                        <h4>Prazo do projeto:</h4>
-                                        <p><%= project.deadline %></p>
-                                    </div>
+                                <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
+                                    <p class="description">Cosby sweater eu banh mi, qui irure terry richardson ex
+                                        squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan
+                                        american apparel, butcher voluptate nisi qui.</p>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                                    <div class="tab-ctn">
-                                        <h4>Últimas atividades</h4>
-                                        <div class="tab-ctn" id="section">
-                                            <ul>
-                                                <% for(let i = 0; i < (project.projectHistory).length; i++) { %>
-                                                    <% if(project.projectHistory[i].dataChange == 'Created') { %>
-                                                    <li><p style="color:green"><i class="notika-icon notika-star"></i> <b><%= project.projectHistory[i].dateTodayChange %></b> (<%= project.projectHistory[i].dateChange %>) - Projeto criado!</p></li>
-                                                    <% } else { %>
-                                                    <li><p><b><%= project.projectHistory[i].dateTodayChange %></b> (<%= project.projectHistory[i].dateChange %>) - <%= project.projectHistory[i].dataChange %></p></li>
-                                                    <% } %>
-                                                <% } %>
-                                            </ul>
-                                        </div>
-                                    </div>
+                                <div class="tab-pane fade" id="tabs-icons-text-3" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
+                                    <p class="description">Raw denim you probably haven't heard of them jean shorts
+                                        Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache
+                                        cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro
+                                        keffiyeh dreamcatcher synth.</p>
                                 </div>
-                            </div>
-                        </div>
-                        <% if(style == 'task') { %>
-                        <div id="task" class="tab-pane fade active in">
-                        <% } else { %>
-                        <div id="task" class="tab-pane fade">
-                        <% } %>
-                            <div class="tab-ctn">
-                                <% if(project.task.length) { %>
-                                    tarefas..
-                                <% } else { %>
-                                    <p>O projeto ainda não possui tarefas</p>
-                                <% } %>
-                            </div>
-                        </div>
-                        <% if(style == 'archive') { %>
-                        <div id="archive" class="tab-pane fade active in">
-                        <% } else { %>
-                        <div id="archive" class="tab-pane fade">
-                        <% } %>
-                            <div class="tab-ctn">
-                                <h4>Clique em Upload para enviar os arquivos do projeto</h2>                                   
-                                <div class="tz-gallery">
-                                    <div class="row">
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 mg-t-30">
-                                            <a class="lightbox" data-toggle="modal" data-target="#uploadModal">
-                                                <img src="/views/assets/img/uploadBG.jpg">
-                                            </a>
-                                        </div>
-                                        <% if(project.file.length) { %>
-                                            <% for(let i = project.file.length - 1; i >= 0; i--) { %>
-                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 mg-t-30">
-                                                <a class="lightbox" href="/get/<%= project.id %>/<%= project.file[i].fileName %>">
-                                                    <img src="/get/<%= project.id %>/<%= project.file[i].fileName %>">
-                                                </a>
-                                            </div>
-                                            <% } %>
-                                        <% } %>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <% if(style == 'invoice') { %>
-                        <div id="invoice" class="tab-pane fade active in">
-                        <% } else { %>
-                        <div id="invoice" class="tab-pane fade">
-                        <% } %>
-                            <div class="tab-ctn">
-                                Conteudo...
                             </div>
                         </div>
                     </div>
@@ -129,38 +54,3 @@
             </div>
         </div>
     </div>
-</div>
-<div class="modal fade" id="uploadModal" role="dialog">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <style>
-                    .custom-file-upload {
-                        border: 1px solid #ccc;
-                        display: inline-block;
-                        padding: 6px 12px;
-                        cursor: pointer;
-                    }
-                </style>
-                <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-                <form method="POST" enctype="multipart/form-data" action="/upload/<%= project.id %>" class="controls-stacked">
-                <label for="file-upload" class="custom-file-upload">
-                    <i class="fa fa-cloud-upload"></i> Escolher arquivos...
-                </label>
-                <input id="file-upload" name="file" type="file" style="display:none;" accept=".jpg,.jpeg,.png,.gif" multiple>
-                <button type="submit" class="btn notika-btn-purple btn-reco-mg btn-button-mg waves-effect" style="color:#fff"> Enviar fotos</button>
-                </form>
-                <script>
-                    $('#file-upload').change(function() {
-                        var i = $(this).prev('label').clone();
-                        var file = $('#file-upload')[0].files[0].name;
-                        $(this).prev('label').text(file);
-                    })
-                </script>
-            </div>
-        </div>
-    </div>
-</div

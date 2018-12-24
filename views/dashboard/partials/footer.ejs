@@ -1,111 +1,53 @@
-<div class="footer-copyright-area">
-  <div class="container">
-      <div class="row">
-          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-              <div class="footer-copy-right">
-                  <p>© 2018 <a href="https://purpletech.com.br">PurpleTech</a></p>
-              </div>
-          </div>
-      </div>
-  </div>
+<%- include content/budget-modal.ejs %>
+
+<footer class="footer">
+    <div class="row align-items-center justify-content-xl-between">
+        <div class="col-xl-6">
+            <div class="copyright text-center text-xl-left text-muted">
+                &copy; <script>document.write(new Date().getFullYear())</script> <a href="https://purpletech.com.br" class="font-weight-bold ml-1" target="_blank">PurpleTech</a>
+            </div>
+        </div>
+        <div class="col-xl-6">
+            <ul class="nav nav-footer justify-content-center justify-content-xl-end">
+                <li class="nav-item">
+                    <a href="https://github.com/souzajr" class="nav-link" target="_blank"> GitHub</a>
+                </li>
+                <li class="nav-item">
+                    <a href="https://www.behance.net/purpletech" class="nav-link" target="_blank"> Behance</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</footer>
 </div>
-<!-- End Footer area-->
-<!-- jquery
-============================================ -->
-<script src="/views/assets/js/vendor/jquery-1.12.4.min.js"></script>
-<!-- bootstrap JS
-============================================ -->
-<script src="/views/assets/js/bootstrap.min.js"></script>
-<!-- wow JS
-============================================ -->
-<script src="/views/assets/js/wow.min.js"></script>
-<!-- price-slider JS
-============================================ -->
-<script src="/views/assets/js/jquery-price-slider.js"></script>
-<!-- owl.carousel JS
-============================================ -->
-<script src="/views/assets/js/owl.carousel.min.js"></script>
-<!-- scrollUp JS
-============================================ -->
-<script src="/views/assets/js/jquery.scrollUp.min.js"></script>
-<!-- meanmenu JS
-============================================ -->
-<script src="/views/assets/js/meanmenu/jquery.meanmenu.js"></script>
-<!-- counterup JS
-============================================ -->
-<script src="/views/assets/js/counterup/jquery.counterup.min.js"></script>
-<script src="/views/assets/js/counterup/waypoints.min.js"></script>
-<script src="/views/assets/js/counterup/counterup-active.js"></script>
-
-<script src="/views/assets/js/data-table/jquery.dataTables.min.js"></script>
-<script src="/views/assets/js/data-table/data-table-act.js"></script>
-<!-- mCustomScrollbar JS
-============================================ -->
-<script src="/views/assets/js/scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
-<!-- icheck JS
-============================================ -->
-<script src="/views/assets/js/icheck/icheck.min.js"></script>
-<script src="/views/assets/js/icheck/icheck-active.js"></script>
-
-<!-- sparkline JS
-============================================ -->
-<script src="/views/assets/js/sparkline/jquery.sparkline.min.js"></script>
-<script src="/views/assets/js/sparkline/sparkline-active.js"></script>
-<!-- sparkline JS
-============================================ -->
-<script src="/views/assets/js/flot/jquery.flot.js"></script>
-<script src="/views/assets/js/flot/jquery.flot.resize.js"></script>
-<script src="/views/assets/js/flot/curvedLines.js"></script>
-<script src="/views/assets/js/flot/flot-active.js"></script>
-<!-- flot JS
-    ============================================ -->
-<script src="/views/assets/js/flot/jquery.flot.js"></script>
-<script src="/views/assets/js/flot/jquery.flot.resize.js"></script>
-<script src="/views/assets/js/flot/flot-active.js"></script>
-<!-- knob JS
-============================================ -->
-<script src="/views/assets/js/knob/jquery.knob.js"></script>
-<script src="/views/assets/js/knob/jquery.appear.js"></script>
-<script src="/views/assets/js/knob/knob-active.js"></script>
-<!--  wave JS
-============================================ -->
-<script src="/views/assets/js/wave/waves.min.js"></script>
-<script src="/views/assets/js/wave/wave-active.js"></script>
-<!-- plugins JS
-============================================ -->
-<script src="/views/assets/js/plugins.js"></script>
-<!--  Chat JS
-============================================ -->
-<script src="/views/assets/js/chat/moment.min.js"></script>
-<script src="/views/assets/js/chat/jquery.chat.js"></script>
-<!-- main JS
-============================================ -->
-<script src="/views/assets/js/main.js"></script>
-<!-- bootstrap select JS
-============================================ -->
-<script src="/views/assets/js/bootstrap-select/bootstrap-select.js"></script>
-<!-- Input Mask JS
-============================================ -->
-<script src="/views/assets/js/jasny-bootstrap.min.js"></script>
+</div>
+<!-- Argon Scripts -->
+<!-- Core -->
+<script src="/views/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/views/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="/views/assets/vendor/bootstrap-datepicker/dist/locales/bootstrap-datepicker.pt-BR.min.js"></script>
+<script>
+    $('#data').datepicker({
+        format: 'dd/mm/yy',
+        language: 'pt-BR',
+        startDate: '+0'
+    })
+</script>
+<script src="/views/assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js"></script>
+<script src="/views/assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
+<!-- Argon JS -->
+<script src="/views/assets/js/argon.js?v=1.0.0"></script>
 
 <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.11.2/build/alertify.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.8.1/baguetteBox.min.js"></script>
-<script>
-    baguetteBox.run('.tz-gallery');
-</script>
-
-<!--  Chat JS
-============================================ -->
-<script src="/views/assets/js/dialog/sweetalert2.min.js"></script>
-<script src="/views/assets/js/dialog/dialog-active.js"></script>
-    
 <% if(message) { %>
 <script>
     const msg = JSON.parse('<%- message %>')
-    if(msg !== 'Sucesso!')
+    if (msg !== 'Sucesso!')
         alertify.notify(msg, 'error', 5)
     else
         alertify.notify(msg, 'success', 5)
 </script>
 <% } %>
+</body>
+
+</html>

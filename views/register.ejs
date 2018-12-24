@@ -1,0 +1,119 @@
+<%- include dashboard/headEnter.ejs %>
+<div class="main-content">
+    <!-- Header -->
+    <div class="header bg-gradient-primary py-7 py-lg-6">
+        <div class="container">
+            <div class="header-body text-center mb-7">
+                <div class="row justify-content-center">
+                    <a class="navbar-brand" href="/">
+                        <img src="/views/assets/img/brand/logo-white.svg" width="100%" height="60">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="separator separator-bottom separator-skew zindex-100">
+            <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
+            </svg>
+        </div>
+    </div>
+    <!-- Page content -->
+    <div class="container mt--8 pb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-7">
+                <div class="card bg-secondary shadow border-0">
+                    <div class="card-header bg-transparent pb-5">
+                        <div class="text-muted text-center mt-2 mb-3"><small>Registre-se com</small></div>
+                        <div class="btn-wrapper text-center">
+                          <button type="button" class="btn btn-facebook btn-icon">
+                            <span class="btn-inner--icon"><i class="fab fa-facebook"></i></span>
+                            <span class="btn-inner--text">Facebook</span>
+                          </button>
+                          <button type="button" class="btn btn-google-plus btn-icon">
+                            <span class="btn-inner--icon"><i class="fab fa-google"></i></span>
+                            <span class="btn-inner--text">Google</span>
+                          </button>
+                        </div>
+                    </div>
+                    <div class="card-body px-lg-5 py-lg-5">
+                        <div class="text-center text-muted mb-4">
+                            <small>Ou registre-se com seu Email</small>
+                        </div>
+                        <form action="/register" method="POST" role="form">
+                            <div class="form-group">
+                                <div class="input-group input-group-alternative mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="far fa-user"></i></span>
+                                    </div>
+                                    <input class="form-control" name="name" placeholder="Nome" type="text" <% if(refresh) { %>value="<%= refresh.name %>"<% } %>>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-alternative mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                                    </div>
+                                    <input class="form-control" name="email" placeholder="Email" type="email" <% if(refresh) { %>value="<%= refresh.email %>"<% } %>>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-alternative mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    </div>
+                                    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+                                    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
+                                    <input class="phone form-control" name="phone" placeholder="Telefone" type="text" <% if(refresh) { %>value="<%= refresh.phone %>"<% } %>>
+                                    <script>
+                                      jQuery("input.phone")
+                                        .mask("(99) 9999-9999?9")
+                                        .focusout(function (event) {  
+                                            var target, phone, element;  
+                                            target = (event.currentTarget) ? event.currentTarget : event.srcElement;  
+                                            phone = target.value.replace(/\D/g, '');
+                                            element = $(target);  
+                                            element.unmask();  
+                                            if(phone.length > 10) {  
+                                                element.mask("(99) 99999-999?9");  
+                                            } else {  
+                                                element.mask("(99) 9999-9999?9");  
+                                            }  
+                                      })
+                                    </script>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-alternative">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                                    </div>
+                                    <input class="form-control" name="password" placeholder="Senha" type="password">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-alternative">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                                    </div>
+                                    <input class="form-control" name="confirmPassword" placeholder="Confirmar senha" type="password">
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary mt-4">Criar conta</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-6">
+                        <a href="/forgotpassword" class="text-light"><small>Esqueceu sua senha?</small></a>
+                    </div>
+                    <div class="col-6 text-right">
+                        <a href="/login" class="text-light"><small>Entrar</small></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include dashboard/footerEnter.ejs %>

@@ -46,12 +46,7 @@ module.exports = app => {
             tooBig(project.name, 'Digite um nome de projeto menor')
             tooSmall(project.description, 'Digite uma descrição de projeto maior')
         } catch (msg) {
-            return res.status(400).render('./dashboard/index', { 
-                project: req.session.project,
-                user: req.session.user, 
-                page: '/budget', 
-                message: JSON.stringify(msg) 
-            })
+            return res.status(400).json(msg)
         }
 
         const date = new Date()
@@ -86,17 +81,7 @@ module.exports = app => {
             .catch(_ => res.status(500).render('500'))
             req.session.project = getProject
 
-            try {
-                mail.projectCreated(user.email, user.name, 'Algo deu erraado')
-            } catch (msg) {
-                return res.status(400).render('./dashboard/index', { 
-                    project: req.session. project,
-                    user: req.session.user, 
-                    page: '/budget', 
-                    message: JSON.stringify(msg) 
-                })
-            }
-
+            mail.projectCreated(user.email, user.name)
             res.status(200).render('./dashboard/index', {
                 user,
                 project: req.session.project, 

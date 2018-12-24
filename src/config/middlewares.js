@@ -35,66 +35,49 @@ module.exports = app => {
     app.use(cors())
     app.use('/dashboard', function (req, res, next) {
         if (!req.session.user) {
-            res.render('enter', {
-                refresh: null, 
-                page: '/login',
-                message: JSON.stringify('Por favor, faça o login para acessar')
-            })
+            res.render('login', { message: JSON.stringify('Por favor, faça o login para acessar') })
         } else {
             next()
         }
     })
     app.use('/profile', function (req, res, next) {
         if (!req.session.user) {
-            res.render('enter', { 
-                refresh: null, 
-                page: '/login',
-                message: JSON.stringify('Por favor, faça o login para acessar')
-            })
+            res.render('login', { message: JSON.stringify('Por favor, faça o login para acessar') })
+        } else {
+            next()
+        }
+    })
+    app.use('/profilePicture', function (req, res, next) {
+        if (!req.session.user) {
+            res.render('login', { message: JSON.stringify('Por favor, faça o login para acessar') })
         } else {
             next()
         }
     })
     app.use('/project', function (req, res, next) {
         if (!req.session.user) {
-            res.render('enter', { 
-                refresh: null, 
-                page: '/login',
-                message: JSON.stringify('Por favor, faça o login para acessar')
-            })
+            res.render('login', { message: JSON.stringify('Por favor, faça o login para acessar') })
         } else {
             next()
         }
     })
     app.use('/upload', function (req, res, next) {
         if (!req.session.user) {
-            res.render('enter', { 
-                refresh: null, 
-                page: '/login',
-                message: JSON.stringify('Por favor, faça o login para acessar')
-            })
+            res.render('login', { message: JSON.stringify('Por favor, faça o login para acessar') })
         } else {
             next()
         }
     })
     app.use('/budget', function (req, res, next) {
         if (!req.session.user) {
-            res.render('enter', {
-                refresh: null,  
-                page: '/login',
-                message: JSON.stringify('Por favor, faça o login para acessar')
-            })
+            res.render('login', { message: JSON.stringify('Por favor, faça o login para acessar') })
         } else {
             next()
         }
     })
     app.use('/users', function (req, res, next) {
         if (!req.session.user) {
-            res.render('enter', { 
-                refresh: null, 
-                page: '/login',
-                message: JSON.stringify('Por favor, faça o login para acessar')
-            })
+            res.render('login', { message: JSON.stringify('Por favor, faça o login para acessar') })
         } else {
             next()
         }

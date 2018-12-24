@@ -3,6 +3,11 @@ const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const gravatar = require('gravatar')
 const mail = require('../config/mail')
+const path = require('path')
+const multer = require('multer')
+const crypto = require('crypto')
+const fs = require('fs')
+const sharp = require('sharp')
 
 module.exports = app => {
     const {
@@ -25,6 +30,28 @@ module.exports = app => {
         const salt = bcrypt.genSaltSync(10)
         return bcrypt.hashSync(password, salt)
     }
+
+    const storage = multer.diskStorage({
+        destination: (req, file, cb) => {
+            cb(null, './public/upload')
+        },
+        filename: (req, file, cb) => {
+            cb(null, crypto.randomBytes(10).toString('hex') + Date.now() + path.extname(file.originalname).toLowerCase())
+        }
+    })
+
+    const upload = multer({ storage, fileFilter: function (req, file, callback) {
+        var ext = path.extname(file.originalname).toLowerCase()
+        if(ext !== '.png' && ext !== '.jpg' && ext !== '.jpeg' && ext !== '.bmp') {
+            return callback(new Error())
+        }
+
+        callback(null, true)
+    },
+    limits: {
+        limits: 1,
+        fileSize: 1024 * 2048
+    }}).single('file')
 
     const save = async (req, res) => {
         const user = { ...req.body }
@@ -54,9 +81,8 @@ module.exports = app => {
             existOrError(user.confirmPassword, 'Digite a confirmação da senha')
             equalsOrError(user.password, user.confirmPassword, 'A senha e confirmação da senha não são iguais')
         } catch (msg) {
-            return res.status(400).render('enter', {
+            return res.status(400).render('register', {
                 refresh: req.body,
-                page: '/register',
                 message: JSON.stringify(msg)
             })
         }
@@ -70,59 +96,12 @@ module.exports = app => {
         }, true)
         user.createdAt = new Date().toLocaleDateString().split('-').reverse().join('/')
 
-        await User.create(user).then(_ => res.status(200).render('enter', {
-            page: '/login', 
-            refresh: null,
-            message: JSON.stringify('Sucesso!')
-        })).catch(_ => res.status(500).render('500'))
+        await User.create(user).then(_ => res.status(200).render('login', { message: JSON.stringify('Sucesso!') }))
+        .catch(_ => res.status(500).render('500'))
     }
 
     const change = async (req, res) => {
-        if (req.body.newDescription) {
-            const getNewDescription = req.body.newDescription
-
-
-
-            try {
-                tooSmall(getNewDescription, 'Descrição muito curta, digite uma descrição maior')
-                tooBig(getNewDescription, 'Descrição muito longa, digite uma descrição menor')
-            } catch (msg) {
-                return res.status(400).render('./dashboard/index', {
-                    user: req.session.user,
-                    page: '/profile',
-                    style: false,
-                    message: JSON.stringify(msg)
-                })
-            }
-
-            await User.findOne({
-                    _id: req.session.user._id
-                })
-                .then(async user => {
-                    const date = new Date()
-                    const dateTodayChange = date.toLocaleDateString().split('-').reverse().join('/')
-                    const dateChange = date.getHours() + ':' + ((date.getMinutes() < 10 ? "0" : "") + date.getMinutes())
-
-                    user.description = getNewDescription
-                    user.profileChange.push({
-                        dataChange: 'DescriptionChange',
-                        dateChange,
-                        dateTodayChange
-                    })
-
-                    await user.save()
-                        .then(user => {
-                            req.session.user = user
-                            res.status(200).render('./dashboard/index', {
-                                user,
-                                page: '/profile',
-                                style: false,
-                                message: JSON.stringify('Sucesso!')
-                            })
-                        }).catch(_ => res.status(500).render('500'))
-                }).catch(_ => res.status(500).render('500'))
-
-        } else if (req.body.newName) {
+        if (req.body.newName) {
             const getNewName = req.body.newName
 
             try {
@@ -164,7 +143,8 @@ module.exports = app => {
                         }).catch(_ => res.status(500).render('500'))
                 }).catch(_ => res.status(500).render('500'))
 
-        } else if (req.body.newEmail) {
+        } 
+        if (req.body.newEmail) {
             const getNewEmail = req.body.newEmail
 
             try {
@@ -210,7 +190,8 @@ module.exports = app => {
                         }).catch(_ => res.status(500).render('500'))
                 }).catch(_ => res.status(500).render('500'))
 
-        } else if (req.body.currentPassword || req.body.newPassword || req.body.confirmNewPassword) {
+        } 
+        if (req.body.currentPassword || req.body.newPassword || req.body.confirmNewPassword) {
             const getCurrentPassword = req.body.currentPassword
             const getNewPassword = req.body.newPassword
             const getConfirmNewPassword = req.body.confirmNewPassword
@@ -273,7 +254,8 @@ module.exports = app => {
                         }).catch(_ => res.status(500).render('500'))
                 }).catch(_ => res.status(500).render('500'))
 
-        } else {
+        } 
+        if (!req.body.newName && !req.body.newEmail && !req.body.currentPassword && !req.body.newPassword && !req.body.confirmNewPassword) {
             res.status(400).render('./dashboard/index', {
                 user: req.session.user,
                 page: '/profile',
@@ -352,11 +334,7 @@ module.exports = app => {
                 }
             }).then(_ => {
                 req.session.destroy(function () {
-                    res.render('enter', {
-                        refresh: null,
-                        page: '/login',
-                        message: JSON.stringify('Sucesso!')
-                    })
+                    res.render('login', { message: JSON.stringify('Sucesso!') })
                 })
             }).catch(_ => res.status(500).render('500'))
         }
@@ -369,15 +347,18 @@ module.exports = app => {
             "name": 1,
             "email": 1,
             "avatar": 1,
-            "description": 1,
             "profileChange": 1,
             "admin": 1,
-            "createdAt": 1
+            "createdAt": 1,
+            "phone": 1,
+            "_idProject": 1,
+            "profilePicture": 1
         }).then(async user => {
             req.session.user = user
             res.status(200).render('./dashboard/index', {
                 user,
                 page: req.url,
+                style: null,
                 message: null
             })
         }).catch(_ => res.status(500).render('500'))
@@ -392,29 +373,19 @@ module.exports = app => {
                 tooBigEmail(email, 'Seu E-mail é muito longo')
                 validEmailOrError(email, 'E-mail inválido')
             } catch (msg) {
-                return res.status(400).render('enter', {
-                    refresh: null,
-                    page: '/forgotpassword',
-                    message: JSON.stringify(msg)
-                })
+                return res.status(400).render('forgotpassword', { message: JSON.stringify(msg) })
             }
 
-            try {
-                mail.recoveryMail(email)
-            } catch (error) {
-                return res.status(400).render('enter', {
-                    refresh: null,
-                    page: '/forgotpassword',
-                    message: JSON.stringify('Algo deu errado')
-                })
-            }
-
-            res.status(200).render('enter', {
-                refresh: null,
-                page: '/forgotpassword',
-                message: JSON.stringify('Sucesso!')
-            })
-
+            const user = await User.findOne({ email })
+            .catch(_ => res.status(400).render('forgotpassword', { message: JSON.stringify('Algo deu errado') }))
+            if(!user || user.deletedAt) return res.status(400).render('forgotpassword', { message: JSON.stringify('Algo deu errado') })
+            
+            const token = crypto.randomBytes(64).toString('hex')
+            user.resetPasswordToken = token
+            user.resetPasswordExpires = Date.now() + 3600000
+            await user.save()
+            mail.recoveryMail(user.email, token)
+            res.status(200).render('forgotpassword', { message: JSON.stringify('Sucesso!') }) 
         } else {
             const getUser = await User.findOne({
                 resetPasswordToken: req.params.token,
@@ -422,17 +393,11 @@ module.exports = app => {
             }).catch(_ => res.status(500).render('500'))
 
             if (!getUser || getUser.deletedAt) {
-                res.status(401).render('enter', {
-                    refresh: null,
-                    page: '/forgotpassword',
+                res.status(401).render('forgotpassword', { 
                     message: JSON.stringify('O token de redefinição de senha é inválido ou expirou')
                 })
             } else {
-                res.status(200).render('reset', {
-                    refresh: null,
-                    user: getUser,
-                    message: null
-                })
+                res.status(200).render('reset', { user: getUser, message: null })
             }
         }
     }
@@ -444,11 +409,7 @@ module.exports = app => {
         }).catch(_ => res.status(500).render('500'))
 
         if (!getUser || getUser.deletedAt) {
-            res.status(401).render('enter', {
-                refresh: null,
-                page: '/forgotpassword',
-                message: JSON.stringify('O token de redefinição de senha é inválido ou expirou')
-            })
+            res.status(401).render('forgotpassword', {  message: JSON.stringify('O token de redefinição de senha é inválido ou expirou') })
         } else {
             const user = { ...req.body }
             try {
@@ -482,23 +443,59 @@ module.exports = app => {
             })
             await getUser.save()
 
-            try {
-                mail.alertOfChange(getUser.email)
-            } catch (error) {
-                return res.status(400).render('enter', {
-                    refresh: null,
-                    page: '/login',
-                    message: JSON.stringify('Algo deu errado')
+            mail.alertOfChange(getUser.email)
+            res.status(200).render('login', { message: JSON.stringify('Sucesso!') })
+        }
+
+    }
+
+    const profilePicture = async (req, res) => {
+        upload(req, res, async function(err) {
+            if (err instanceof multer.MulterError) {
+                return res.status(500).render('500')
+            } else if (err) {
+                return res.status(500).render('500')
+            } else if (!req.file) {
+                return res.status(400).render('./dashboard/index', {
+                    user: req.session.user, 
+                    page: '/profile',
+                    message: JSON.stringify('Você deve selecionar uma imagem')
                 })
             }
 
-            res.status(200).render('enter', {
-                refresh: null,
-                page: '/login',
-                message: JSON.stringify('Sucesso!')
+            sharp.cache(false)
+            sharp('./public/upload/' + req.file.filename)
+            .resize({
+                width: 200,
+                height: 200,
+                fit: sharp.fit.cover,
+                position: sharp.strategy.entropy
             })
-        }
+            .toFile('./public/upload/profile/' + req.file.filename)
+            .catch(_ => { return res.status(500).render('500') })
 
+            await User.findOne({ _id: req.params.id }).then(async user => {
+                user.profilePicture = req.file.filename
+                user.avatar = undefined
+                await user.save()
+                fs.unlinkSync('./public/upload/' + req.file.filename)
+                res.status(200).render('./dashboard/index', {
+                    user, 
+                    page: '/profile',
+                    message: JSON.stringify('Sucesso!')
+                })
+            }).catch(_ => res.status(500).render('500'))
+        })
+    }
+
+    const getProfilePicture = async (req, res) => {
+        const user = await User.findOne({ _id: req.params.id })
+        .catch(_ => res.status(500).render('500'))
+        if(!user.avatar) {
+            res.sendFile(user.profilePicture, { root: './public/upload/profile/' })
+        } else {
+            res.end()
+        }
     }
 
     return {
@@ -508,6 +505,8 @@ module.exports = app => {
         remove,
         get,
         recover,
-        reset
+        reset,
+        profilePicture,
+        getProfilePicture
     }
 }

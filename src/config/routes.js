@@ -8,19 +8,19 @@ module.exports = app => {
 
     /* ============= REGISTER ============= */
     app.get('/register', function(req, res) {
-        res.render('enter', { page: '/register', refresh: null, message: null })
+        res.render('register', { refresh: null, message: null })
     })
     app.post('/register', app.src.api.user.save)
 
     /* ============= LOGIN ============= */
     app.get('/login', function(req, res) {
-        res.render('enter', { page: '/login', refresh: null, message: null })
+        res.render('login', { message: null })
     })
     app.post('/login', app.src.api.auth.login)
 
     /* ============= FORGOT PASSWORD ============= */
     app.get('/forgotpassword', function(req, res) {
-        res.render('enter', { page: '/forgotpassword', refresh: null, message: null })
+        res.render('forgotpassword', { message: null })
     })
     app.post('/forgotpassword', app.src.api.user.recover)
     app.get('/reset/:token', app.src.api.user.recover)
@@ -28,7 +28,7 @@ module.exports = app => {
 
     /* ============= LOGOUT ============= */
     app.get('/logout', function(req, res) {
-        req.session.destroy(function (err) {
+        req.session.destroy(function () {
             res.redirect('/')
         })
     })
@@ -38,14 +38,20 @@ module.exports = app => {
         .all(app.src.config.passport.authenticate())
         .get(app.src.api.auth.validateToken)
 
-    /* ============= PROFILE ============= */
+    /* ============= USER PROFILE ============= */
     app.route('/profile')
         .all(app.src.config.passport.authenticate())        
         .get(app.src.api.user.get)
         .put(app.src.api.user.change)
         .delete(app.src.api.user.remove)
+    
+    /* ============= UPLOAD NEW/GET PROFILE PIC ============= */
+    app.route('/profilePicture/:id')
+        .all(app.src.config.passport.authenticate())        
+        .get(app.src.api.user.getProfilePicture)
+        .post(app.src.api.user.profilePicture)
 
-    /* ============= LIST OF ALL USERS PROJECT ============= */
+    /* ============= GET ALL USER PROJECTS ============= */
     app.route('/project')
         .all(app.src.config.passport.authenticate())
         .get(app.src.api.project.getAll)
@@ -55,7 +61,7 @@ module.exports = app => {
         .all(app.src.config.passport.authenticate())
         .get(app.src.api.project.get)
 
-    /* ============= UPLOAD FILE ============= */
+    /* ============= UPLOAD/GET PROJECT FILES ============= */
     app.route('/upload/:id')
         .all(app.src.config.passport.authenticate())
         .post(app.src.api.project.uploadFile)
@@ -63,7 +69,7 @@ module.exports = app => {
         .all(app.src.config.passport.authenticate())
         .get(app.src.api.project.sendFile)        
             
-    /* ============= CREATE BUDGET ============= */
+    /* ============= CREATE/GET BUDGET ============= */
     app.route('/budget')
         .all(app.src.config.passport.authenticate())
         .get(app.src.api.project.getBudget)

@@ -1,218 +1,160 @@
-<section class="content-header">
-    <h1>
-        Profile
-        <small>Your panel</small>
-    </h1>
-    <ol class="breadcrumb">
-        <li><a href="/dashboard"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Profile</li>
-    </ol>
-</section>
-
-<section class="content">
+<div class="container-fluid mt--7">
     <div class="row">
-        <div class="col-md-3">
-            <div class="box box-primary">
-                <div class="box-body box-profile">
-                    <img class="profile-user-img img-responsive img-circle" src="<%= user.avatar %>">
-                    <h3 class="profile-username text-center">
-                    <%= user.name %>
-                    </h3>
-                    <% if(user.description) { %>
-                    <p class="text-muted text-center">
-                    <%= user.description %>
-                    </p>
-                    <% } %>
-                    <p class="text-muted text-center"><%= user.email %></p>
-                    <ul class="list-group list-group-unbordered">
-                        <li class="list-group-item">
-                            <% if(user.admin) { %>
-                            <b>Role</b> <a class="pull-right">Admin</a>
-                            <% } else {%>
-                            <b>Role</b> <a class="pull-right">Normal</a>
-                            <% } %>
-                        </li>
-                        <li class="list-group-item">
-                            <b>Member since</b> <a class="pull-right"><%= user.createdAt %></a>
-                        </li>
-                        <li class="list-group-item">
-                            <b>Delete my account</b> <a href="#" class="pull-right" data-toggle="modal" data-target="#delModal">Areyou sure?</a>
-                        </li>      
-                    </ul>
+        <div class="col-xl-4 order-xl-1">
+            <div class="card card-profile">
+                <img src="/views/assets/img/theme/img-1-1000x600.jpg" alt="Image placeholder" class="card-img-top">
+                <div class="row justify-content-center">
+                    <div class="col-lg-3 order-lg-2">
+                        <div class="card-profile-image">
+                            <a>
+                                <% if(user.avatar) { %>
+                                <img alt="Image placeholder" class="rounded-circle" src="<%= user.avatar %>">
+                                <% } else { %>
+                                <img alt="Image placeholder" class="rounded-circle" src="/profilePicture/<%= user._id %>">
+                                <% } %>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="text-center">
+                        <h5 class="h3">
+                            <%= user.name %><span class="font-weight-light"></span></h5>
+                        <div>
+                            <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal"
+                                data-target="#modal-changeProfilePic">Alterar foto</button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="text-center">
+                        <p>Membro desde
+                            <%= user.createdAt %>
+                        </p>
+                        <p><%= user.email %></p>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-9">
-            <div class="nav-tabs-custom">
-                <ul class="nav nav-tabs">
-                    
-                    <% if(!style) { %>
-                    <li class="active"><a href="#settings" data-toggle="tab">Settings</a></li>
-                    <li><a href="#timeline" data-toggle="tab">Timeline</a></li>
-                    <% } else { %>
-                    <li><a href="#settings" data-toggle="tab">Settings</a></li>
-                    <li class="active"><a href="#timeline" data-toggle="tab">Timeline</a></li>
-                    <% } %>
-                </ul>
-                <div class="tab-content">
-                    <% if(!style) { %>
-                    <div class="active tab-pane" id="settings">
-                    <% } else { %>
-                    <div class="tab-pane" id="settings">
-                    <% } %>                    
-                        <form action="/profile" method="POST" class="form-horizontal">
-                            <input type="hidden" name="_method" value="PUT">
-                            <h4 style="text-align: center;">Change profile information</h4>
-                            <div class="form-group">
-                                <label for="inputNewName" class="col-sm-2 control-label">Name</label>
-                                <div class="col-sm-10">
-                                    <input type="text" name="newName" class="form-control" id="inputNewName" placeholder="Enter your Name">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="inputDescription" class="col-sm-2 control-label">Description</label>
-                                <div class="col-sm-10">
-                                    <input type="text" name="newDescription" class="form-control" id="inputDescription" placeholder="Enter your description">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="inputNewEmail" class="col-sm-2 control-label">Email</label>
-                                <div class="col-sm-10">
-                                    <input type="email" name="newEmail" class="form-control" id="inputNewEmail" placeholder="Enter your Email">
-                                </div>
-                            </div>
-                            <h4 style="text-align: center;">Change Password</h4>
-                            <div class="form-group">
-                                <label for="inputCurrentPassword"  class="col-sm-2 control-label">Current
-                                    password</label>
-                                <div class="col-sm-10">
-                                    <input type="password" name="currentPassword" class="form-control" id="inputCurrentPassword" placeholder="Enter your current password">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="inputNewPassword" class="col-sm-2 control-label">New password</label>
-                                <div class="col-sm-10">
-                                    <input type="password" class="form-control" name="newPassword" id="inputNewPassword"
-                                        placeholder="Enter your new password">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="inputConfirmNewPassword" class="col-sm-2 control-label">Confirm new password</label>
-                                <div class="col-sm-10">
-                                    <input type="password" name="confirmNewPassword" class="form-control" id="inputConfirmNewPassword"
-                                        placeholder="Enter the password confirmation">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-offset-2 col-sm-10">
-                                    <button type="submit" class="btn btn-primary btn-block">Update profile</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <!-- /.tab-pane -->
-                    <% if(!style) { %>
-                    <div class="tab-pane" id="timeline">
-                    <% } else { %>
-                    <div class="active tab-pane" id="timeline">
-                    <% } %> 
-                        <!-- The timeline -->
-                        <ul class="timeline timeline-inverse">
-                            <% if(user.profileChange[0]) { %>
-                            <% for(let i = ((user.profileChange).length)-1; i >= 0; i--) { %>
-                            <li class="time-label">
-                                <span class="bg-gray">
-                                    <%= user.profileChange[i].dateTodayChange %>
-                                </span>
+        <div class="col-xl-8 order-xl-2">
+            <div class="card">
+                <div class="card-header">
+                    <div class="nav-wrapper">
+                        <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab"
+                                    href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1"
+                                    aria-selected="true"><i class="ni ni-circle-08 mr-2"></i>Editar perfil</a>
                             </li>
-                            <!-- /.timeline-label -->
-                            <!-- timeline item -->
-                            <li>
-                                <% if(user.profileChange[i].dataChange == 'NameChange') { %>
-                                    <i class="fa fa-id-card bg-yellow"></i>
-                                <% } else if(user.profileChange[i].dataChange == 'EmailChange') { %>
-                                    <i class="fa fa-envelope bg-blue"></i>
-                                <% } else if(user.profileChange[i].dataChange == 'DescriptionChange') { %>
-                                    <i class="fa fa-comment bg-green"></i>
-                                <% } else { %>
-                                    <i class="fa fa-lock bg-red"></i>
-                                <% } %>
-
-                                <div class="timeline-item">
-                                    <span class="time"><i class="fa fa-clock-o"> <%= user.profileChange[i].dateChange %></i></span>
-
-                                    <% if(user.profileChange[i].dataChange == 'NameChange') { %>
-                                        <h3 class="timeline-header">Your name has been changed</h3>
-                                    <% } else if(user.profileChange[i].dataChange == 'EmailChange') { %>
-                                        <h3 class="timeline-header">Your email has been changed</h3>
-                                    <% } else if(user.profileChange[i].dataChange == 'DescriptionChange') { %>
-                                        <h3 class="timeline-header">Your description has been changed</h3>
-                                    <% } else { %>
-                                        <h3 class="timeline-header">Your password has been changed</h3>
-                                    <% } %>
-                                    
-
-                                    <div class="timeline-body">
-                                        Text text text ...
-                                    </div>
-                                    <div class="timeline-footer">
-                                        <form id="<%= user.profileChange[i]._id %>" action="/profile" method="POST">
-                                            <input type="hidden" name="_method" value="DELETE">
-                                            <input type="hidden" name="deleteHistory" value="<%= user.profileChange[i]._id %>">
-                                            <a class="btn btn-danger btn-xs" 
-                                                href="javascript:{}"
-                                                onclick="document.getElementById('<%= user.profileChange[i]._id %>').submit();">
-                                                Delete
-                                            </a>
-                                        </form>
-                                    </div>
-                                </div>
+                            <li class="nav-item">
+                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#tabs-icons-text-2"
+                                    role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bullet-list-67 mr-2"></i>Timeline</a>
                             </li>
-                            <% } %>
-                            <% } else { %>
-                            <li>
-                                <div class="timeline-item">
-                                    <h3 class="timeline-header">You have no updates</h3>
-                                </div>
-                            </li>
-                            <% } %>
                         </ul>
                     </div>
-                    <!-- /.tab-pane -->
-                    
-
-                    <!-- /.tab-pane -->
                 </div>
-                <!-- /.tab-content -->
+                <div class="card-body">
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
+                            <form action="/profile" method="POST" role="form">
+                                <input type="hidden" name="_method" value="PUT">
+                                <div class="pl-lg-4">
+                                    <h6 class="heading-small text-muted mb-4">Informações</h6>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="form-control-label" for="input-username">Seu nome</label>
+                                                <input type="text" id="input-username" name="newName" class="form-control" placeholder="Nome">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="form-control-label" for="input-email">Email</label>
+                                                <input type="email" id="input-email" name="newEmail" class="form-control" placeholder="Email">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <h6 class="heading-small text-muted mb-4">Alterar senha</h6>
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label class="form-control-label" for="input-first-name">Senha atual</label>
+                                                <input type="password" id="input-first-name" name="currentPassword" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label class="form-control-label" for="input-last-name">Nova senha</label>
+                                                <input type="password" id="input-last-name" name="newPassword" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label class="form-control-label" for="input-last-name">Confirmar nova senha</label>
+                                                <input type="password" id="input-last-name" name="confirmNewPassword" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                    <div class="col-lg-12">
+                                        <button type="submit" class="btn btn-primary btn-lg btn-block">Alterar</button>
+                                    </div></div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
+                            <p class="description">Cosby sweater eu banh mi, qui irure terry richardson ex
+                                squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan
+                                american apparel, butcher voluptate nisi qui.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <!-- /.nav-tabs-custom -->
         </div>
-        <!-- /.col -->
-</section>
-<!-- Modal -->
-<div class="modal fade" id="delModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <form action="/profile" method="POST">            
-            <input type="hidden" name="_method" value="DELETE">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="title">Delete my account</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure about that?</p>
-                    <input type="email" class="form-control" name="emailConfirm" placeholder="Enter your e-mail to confirm">
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" type="button" class="btn btn-primary">Delete</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                </div>
-            </div>
-        </form>
     </div>
-</div>
-<!-- /.modal -->
-
-    
+    <div class="modal fade" id="modal-changeProfilePic" tabindex="-1" role="dialog" aria-labelledby="modal-notification"
+        aria-hidden="true">
+        <div class="modal-dialog modal-danger modal-dialog-centered modal-" role="document">
+            <div class="modal-content bg-gradient-danger">
+                <form method="POST" enctype="multipart/form-data" action="/profilePicture/<%= user._id %>" class="controls-stacked">
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="modal-title-default">Alterar foto</h2>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">x</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="py-3 text-center">
+                            <i class="ni ni-image ni-2x"></i>
+                            <h4 class="heading mt-4">Selecione abaixo sua nova foto de perfil</h4>
+                            <div class="custom-file">
+                                <input type="file" name="file" class="custom-file-input" id="customFileLang" lang="en"
+                                    onchange='uploadFile(this)'>
+                                <label class="custom-file-label" id="file-name" for="customFileLang">Escolha sua foto</label>
+                            </div>
+                            <br />
+                            <div class="showImg divShow">
+                                <img id="output" class="imgShow rounded-circle" />
+                            </div>
+                            <script>
+                                function uploadFile(target) { 
+                                    document.getElementById("file-name").innerHTML = target.files[0].name; 
+                                    var output = document.getElementById('output');
+                                    output.src = URL.createObjectURL(event.target.files[0]) 
+                                    $('.showImg').css("display", "block")
+                                }
+                            </script>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-white">Alterar</button>
+                        <button type="button" class="btn btn-link text-white ml-auto" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--
+        
+                            
+    -->

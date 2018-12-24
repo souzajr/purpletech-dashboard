@@ -1,89 +1,51 @@
-<div class="header-top-area">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                <div class="logo-area">
-                        <a href="/dashboard"><h2 style="color:#fff">PurpleTech</h2></a>
-                </div>
-            </div>
-            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-                <div class="header-top-menu">
-                    <ul class="nav navbar-nav notika-top-nav">
-                        <li class="nav-item dropdown">
-                            <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">
-                                <span><i class="notika-icon notika-alarm"></i></span>
-                            </a>
-                            <div role="menu" class="dropdown-menu message-dd animated zoomIn">
-                                <div class="hd-mg-tt">
-                                    <h2>Avisos</h2>
-                                </div>
-                                <div class="hd-message-info">
-                                    <a href="#">
-                                        <div class="hd-message-sn">
-                                            <div class="hd-mg-ctn">
-                                                <h3>Não há avisos</h3>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div class="hd-mg-va">
-                                        <a href="/notice">Ver tudo</a>
-                                    </div>
-                                </div>
+<div class="main-content">
+    <!-- Top navbar -->
+    <nav class="navbar navbar-top navbar-expand-md navbar-dark" id="navbar-main">
+        <div class="container-fluid">
+            <!-- Brand -->
+            <%- include breadcomb.ejs %>
+            <!-- User -->
+            <ul class="navbar-nav align-items-center d-none d-md-flex">
+                <li class="nav-item dropdown">
+                    <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                        <div class="media align-items-center">
+                            <span class="avatar avatar-sm rounded-circle">
+                                <% if(user.avatar) { %>
+                                <img alt="Image placeholder" src="<%= user.avatar %>">
+                                <% } else { %>
+                                <img alt="Image placeholder" src="/profilePicture/<%= user._id %>">
+                                <% } %>
+                            </span>
+                            <div class="media-body ml-2 d-none d-lg-block">
+                                <span class="mb-0 text-sm  font-weight-bold">
+                                    <%= user.name %></span>
                             </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">
-                                <span><i class="notika-icon notika-mail"></i></span>
-                            </a>
-                            <div role="menu" class="dropdown-menu message-dd animated zoomIn">
-                                <div class="hd-mg-tt">
-                                    <h2>Mensagens</h2>
-                                </div>
-                                <div class="hd-message-info">
-                                    <a href="#">
-                                        <div class="hd-message-sn">
-                                            <div class="hd-mg-ctn">
-                                                <h3>Não há mensagens</h3>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div class="hd-mg-va">
-                                        <a href="/message">Ver tudo</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">
-                                <span><img src="<%= user.avatar %>" class="user-image" alt="User Image"></span>
-                            </a>
-                            <div role="menu" class="dropdown-menu message-dd animated zoomIn">
-                                <div class="hd-mg-tt">
-                                    <h2><%= user.name %></h2>
-                                </div>
-                                <div class="hd-message-info">
-                                    <a href="/profile">
-                                        <div class="hd-message-sn">
-                                            <div class="hd-mg-ctn">
-                                                <p>Editar perfil</p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="hd-message-info">
-                                    <a href="/logout">
-                                        <div class="hd-message-sn">
-                                            <div class="hd-mg-ctn">
-                                                <p>Sair</p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+                        </div>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-right">
+                        <div class=" dropdown-header noti-title">
+                            <h6 class="text-overflow m-0">Bem-vindo(a)!</h6>
+                        </div>
+                        <a href="/profile" class="dropdown-item">
+                            <i class="ni ni-single-02"></i>
+                            <span>Meu perfil</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="/logout" class="dropdown-item">
+                            <i class="ni ni-user-run"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <!-- Header -->
+    <div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
+        <div class="container-fluid">
+            <div class="header-body">
+                <!-- Card stats -->
             </div>
         </div>
     </div>
-</div>

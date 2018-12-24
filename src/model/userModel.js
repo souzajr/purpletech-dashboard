@@ -11,15 +11,15 @@ const UserSchema = new moongoose.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     phone: { type: String, required: true },
-    avatar: { type: String, required: true },
-    description: String,
+    avatar: String,
     profileChange: [HistoricSchema],
     admin: { type: Boolean, required: true },
     createdAt: { type: String, required: true },
     deletedAt: String,
     resetPasswordToken: String,
     resetPasswordExpires: Date,
-    _idProject: Array
+    _idProject: Array,
+    profilePicture: String
 })
 
 moongoose.model('User', UserSchema)
