@@ -33,17 +33,21 @@ module.exports = app => {
         })
     })
 
+    /* ============= VALIDATE USER  ============= */
+    app.route('/validate')
+        .all(app.src.config.passport.authenticate())
+        .get(app.src.api.auth.validateToken)
+
     /* ============= DASHBOARD  ============= */
     app.route('/dashboard')
         .all(app.src.config.passport.authenticate())
-        .get(app.src.api.auth.validateToken)
+        .get(app.src.api.user.get)
 
     /* ============= USER PROFILE ============= */
     app.route('/profile')
         .all(app.src.config.passport.authenticate())        
-        .get(app.src.api.user.get)
-        .put(app.src.api.user.change)
-        .delete(app.src.api.user.remove)
+        .get(app.src.api.user.getProfile)
+        .put(app.src.api.user.changeProfile)
     
     /* ============= UPLOAD NEW/GET PROFILE PIC ============= */
     app.route('/profilePicture/:id')
@@ -51,10 +55,11 @@ module.exports = app => {
         .get(app.src.api.user.getProfilePicture)
         .post(app.src.api.user.profilePicture)
 
-    /* ============= GET ALL USER PROJECTS ============= */
+    /* ============= CREATE / GET ALL USER PROJECTS ============= */
     app.route('/project')
         .all(app.src.config.passport.authenticate())
         .get(app.src.api.project.getAll)
+        .post(app.src.api.project.save)
 
     /* ============= VIEW OF PROJECT ============= */
     app.route('/project/:id')
@@ -67,25 +72,21 @@ module.exports = app => {
         .post(app.src.api.project.uploadFile)
     app.route('/get/:id/:filename')
         .all(app.src.config.passport.authenticate())
-        .get(app.src.api.project.sendFile)        
-            
-    /* ============= CREATE/GET BUDGET ============= */
-    app.route('/budget')
+        .get(app.src.api.project.sendFile)  
+    app.route('/getThumb/:id/:filename')
         .all(app.src.config.passport.authenticate())
-        .get(app.src.api.project.getBudget)
-        .post(app.src.api.project.save)
+        .get(app.src.api.project.sendFileThumb)      
 
     /* ============= LIST OF ALL USSER & ADD NEW USER ============= */
     app.route('/users')
         .all(app.src.config.passport.authenticate())
         .get(admin(app.src.api.user.getAll))
         .post(admin(app.src.api.user.save))
-        .delete(admin(app.src.api.user.remove))
 
     /* ============= HANDLE ERROR  ============= */ 
-    //app.use(function(err, req, res, next) {
-    //    res.status(500).render('500')
-    //})
+    app.use(function(err, req, res, next) {
+        res.status(500).send(err)
+    })
     app.use(function(req, res) {
         res.status(404).render('404');
     })

@@ -4,49 +4,151 @@
         <div class="col">
             <div class="card shadow">
                 <div class="card-header border-0">
-                    <h3 class="mb-0">Seus projetos</h3>
-                </div>
-                <div class="card-body">
+                    <h3 class="mb-0">Informações do projeto</h3>
                     <div class="nav-wrapper">
                         <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab"
-                                    href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1"
-                                    aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i>Home</a>
+                            <% if(style == 'details') { %>
+                                <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-details-tab" data-toggle="tab" href="#tabs-details"
+                                    role="tab" aria-controls="tabs-details" aria-selected="true"><i class="ni ni-single-copy-04 mr-2"></i>Detalhes</a>
+                            <% } else { %>
+                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-details-tab" data-toggle="tab" href="#tabs-details"
+                                    role="tab" aria-controls="tabs-details" aria-selected="false"><i class="ni ni-single-copy-04 mr-2"></i>Detalhes</a>
+                            <% } %>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#tabs-icons-text-2"
-                                    role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Profile</a>
+                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-tasks-tab" data-toggle="tab" href="#tabs-tasks"
+                                    role="tab" aria-controls="tabs-tasks" aria-selected="false"><i class="ni ni-trophy mr-2"></i>Tarefas</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-3-tab" data-toggle="tab" href="#tabs-icons-text-3"
-                                    role="tab" aria-controls="tabs-icons-text-3" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Messages</a>
+                                <% if(style == 'archive') { %>
+                                <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-archive-tab" data-toggle="tab" href="#tabs-archive"
+                                    role="tab" aria-controls="tabs-archive" aria-selected="true"><i class="ni ni-archive-2 mr-2"></i>Arquivos</a>
+                                <% } else { %>
+                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-archive-tab" data-toggle="tab" href="#tabs-archive"
+                                    role="tab" aria-controls="tabs-archive" aria-selected="false"><i class="ni ni-archive-2 mr-2"></i>Arquivos</a>
+                                <% } %>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-invoice-tab" data-toggle="tab" href="#tabs-invoice"
+                                    role="tab" aria-controls="tabs-invoice" aria-selected="false"><i class="ni ni-chart-bar-32 mr-2"></i>Faturas</a>
                             </li>
                         </ul>
                     </div>
-                    <div class="card shadow">
-                        <div class="card-body">
-                            <div class="tab-content" id="myTabContent">
-                                <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel"
-                                    aria-labelledby="tabs-icons-text-1-tab">
-                                    <p class="description">Raw denim you probably haven't heard of them jean shorts
-                                        Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache
-                                        cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro
-                                        keffiyeh dreamcatcher synth.</p>
-                                    <p class="description">Raw denim you probably haven't heard of them jean shorts
-                                        Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse.</p>
+                </div>
+                <div class="card shadow">
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <% if(style == 'details') { %>
+                            <div class="tab-pane fade show active" id="tabs-details" role="tabpanel" aria-labelledby="tabs-details-tab">
+                            <% } else { %>
+                            <div class="tab-pane fade" id="tabs-details" role="tabpanel" aria-labelledby="tabs-details-tab">
+                            <% } %>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h4>#ID</h4>
+                                            <p>
+                                                <%= project._id %>
+                                            </p>
+                                            <h4>Orçamento</h4>
+                                            <p>
+                                                <%= project.budget %>
+                                            </p>
+                                            <h4>Criado em</h4>
+                                            <p>
+                                                <%= project.createdAt %>
+                                            </p>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h4>Status</h4>
+                                            <p>
+                                                <%= project.status %>
+                                            </p>
+                                            <h4>Prazo</h4>
+                                            <p>
+                                                <%= project.deadline %>
+                                            </p>
+                                            <h4>Responsável</h4>
+                                            <p>O projeto ainda não foi aprovado</p>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h4>Últimas atividades</h4>
+                                            <div class="timeline timeline-one-side" data-timeline-content="axis"
+                                                data-timeline-axis-style="dashed">
+                                                <div class="timeline-block">
+                                                    <span class="timeline-step badge-success">
+                                                        <i class="ni ni-bell-55"></i>
+                                                    </span>
+                                                    <div class="timeline-content">
+                                                        <small class="text-muted font-weight-bold">
+                                                            <%= project.projectHistory[0].dateTodayChange %> -
+                                                            <%= project.projectHistory[0].dateChange %></small>
+                                                        <h5 class=" mt-3 mb-0">Projeto criado!</h5>
+                                                    </div>
+                                                </div>
+                                                <div class="timeline-block">
+                                                    <span class="timeline-step badge-success">
+                                                        <i class="ni ni-bell-55"></i>
+                                                    </span>
+                                                    <div class="timeline-content">
+                                                        <small class="text-muted font-weight-bold">
+                                                            <%= project.projectHistory[0].dateTodayChange %> -
+                                                            <%= project.projectHistory[0].dateChange %></small>
+                                                        <h5 class=" mt-3 mb-0">Projeto criado!</h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
-                                    <p class="description">Cosby sweater eu banh mi, qui irure terry richardson ex
-                                        squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan
-                                        american apparel, butcher voluptate nisi qui.</p>
+                            </div>
+                            <div class="tab-pane fade" id="tabs-tasks" role="tabpanel" aria-labelledby="tabs-tasks-tab">
+                                <p class="description">Ainda não há atividades</p>
+                            </div>
+                            <% if(style == 'archive') { %>
+                            <div class="tab-pane fade show active" id="tabs-archive" role="tabpanel" aria-labelledby="tabs-archive-tab">
+                            <% } else { %>
+                            <div class="tab-pane fade" id="tabs-archive" role="tabpanel" aria-labelledby="tabs-archive-tab">
+                            <% } %>
+                                <div class="tz-gallery">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="card">
+                                                <form method="POST" enctype="multipart/form-data" action="/upload/<%= project._id %>" role="form">
+                                                    <div class="card-body">
+                                                        <h3 class="card-title mb-3">Enviar arquivos</h3>
+                                                        <div class="custom-file">
+                                                            <input type="file" name="file" accept=".jpg, .jpeg, .png, .gif, .bmp" class="custom-file-input"
+                                                            id="customFileLangProject" lang="en" onchange='uploadFileProject(this)' multiple>
+                                                            <label class="custom-file-label" id="file-name-project" for="customFileLangProject"></label>
+                                                        </div>
+                                                        <script>
+                                                            function uploadFileProject(target) { 
+                                                                document.getElementById("file-name-project").innerHTML = target.files[0].name;
+                                                            }
+                                                        </script>
+                                                    </div>
+                                                    <div class="card-footer">
+                                                        <button type="submit" class="btn btn-primary">Enviar fotos</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>                                    
+                                        <% if(project.file.length) { %>
+                                        <% for(let i = project.file.length - 1; i >= 0; i--) { %>
+                                        <div class="col-md-4">
+                                                <a class="lightbox" href="/get/<%= project._id %>/<%= project.file[i].fileName %>" alt="Project Image">
+                                                    <img class="card-img-top" src="/getThumb/<%= project._id %>/<%= project.file[i].fileName %>">
+                                                </a>
+                                        </div>  
+                                        <% } %>
+                                        <% } %>
+                                    </div>
                                 </div>
-                                <div class="tab-pane fade" id="tabs-icons-text-3" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
-                                    <p class="description">Raw denim you probably haven't heard of them jean shorts
-                                        Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache
-                                        cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro
-                                        keffiyeh dreamcatcher synth.</p>
-                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="tabs-invoice" role="tabpanel" aria-labelledby="tabs-invoice-tab">
+                                <p class="description">Ainda não há faturas</p>
                             </div>
                         </div>
                     </div>

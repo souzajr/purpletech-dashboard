@@ -28,7 +28,11 @@
   <link type="text/css" href="/views/assets/css/argon.min.css" rel="stylesheet"> 
   <!-- Jquery -->
   <script src="/views/assets/vendor/jquery/dist/jquery.min.js"></script> 
-  <link type="text/css" href="/views/assets/vendor/notify/animate.min.css"/>
+  <% if(page == '/project') { %>
+  <link rel="stylesheet" href="/views/assets/vendor/gallery/gallery-grid.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.8.1/baguetteBox.min.css">
+  <% } %>
+  
 </head>
 
 <body>

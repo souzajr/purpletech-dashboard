@@ -1,50 +1,50 @@
-const mongoose = require('mongoose')
-const User = mongoose.model('User')
-const Project = mongoose.model('Project')
+const User = require('../procedure/userProcedure')
+const Project = require('../procedure/projectProcedure')
 const jwt = require('jwt-simple')
 const bcrypt = require('bcrypt-nodejs')
 
 module.exports = app => {
     const login = async (req, res) => {
-        if (!req.body.email || !req.body.password) {
-            return res.status(400).render('login', { message: JSON.stringify('Digite o E-mail e a senha') })
+        const {
+            existOrError,
+            tooBigEmail,
+            validEmailOrError
+        } = app.src.api.validation
+
+        try {
+            existOrError(req.body.email, 'Digite seu Email')
+            tooBigEmail(req.body.email, 'Seu Email é muito longo')
+            validEmailOrError(req.body.email, 'Email inválido')
+            existOrError(req.body.password, 'Digite sua senha')
+        } catch(msg) {
+            return res.status(400).json(msg)
         }
 
-        const user = await User.findOne({ email: req.body.email })
-        .catch(_ => res.status(500).render('500'))
+        await User.getByEmailWithPass(req.body.email).then(async user => {
+            if(user === undefined) return res.status(500).json('Algo deu errado')
+            if (user.deletedAt) return res.status(401).json('E-mail ou senha inválidos')
+            const isMatch = bcrypt.compareSync(req.body.password, user.password)
+            if (!isMatch) return res.status(401).json('E-mail ou senha inválidos')
+            user.password = undefined
 
-        if (!user || user.deletedAt) return res.status(400).render('login', { message: JSON.stringify('Usuário não encontrado') })
-        const isMatch = bcrypt.compareSync(req.body.password, user.password)
-        if (!isMatch) return res.status(401).render('login', { message: JSON.stringify('E-mail ou senha inválidos') })
-        
-        const now = Math.floor(Date.now() / 1000)
-        const payload = {
-            id: user._id,
-            iss: 'http://localhost:3000',
-            iat: now,
-            exp: now + (60 * 60 * 24 * 3)
-        }
+            const now = Math.floor(Date.now() / 1000)
+            const payload = {
+                id: user._id,
+                iss: 'http://localhost:3000',
+                iat: now,
+                exp: now + (60 * 60 * 24 * 3)
+            }
 
-        await User.findOne({ email: req.body.email }, {
-            "_id": 1,
-            "name": 1,
-            "email": 1,
-            "avatar": 1,
-            "description": 1,
-            "profileChange": 1,
-            "admin": 1,
-            "phone": 1,
-            "createdAt": 1,
-            "_idProject": 1,
-            "profilePicture": 1
-        }).then(async getUser => {
-            const project = await Project.find({ _id: getUser._idProject })
-            .catch(_ => res.status(500).render('500'))
-            req.session.project = project
-            req.session.user = getUser
-            req.session.token = jwt.encode(payload, process.env.AUTH_SECRET)
-            res.redirect('/dashboard')
-        }).catch(_ => res.status(500).render('500'))
+            await Project.getAllById(user._idProject).then(project => {
+                if(project === undefined) return res.status(500).json('Algo deu errado')
+                req.session.project = project
+                req.session.user = user
+                req.session.token = jwt.encode(payload, process.env.AUTH_SECRET)
+                res.status(200).end()
+            })
+        }).catch(_ => {
+            res.status(401).json('E-mail ou senha inválidos')
+        })
     }
 
     const validateToken = async (req, res) => {
@@ -53,33 +53,11 @@ module.exports = app => {
             if (userToken) {
                 const token = jwt.decode(userToken, process.env.AUTH_SECRET)
                 if (new Date(token.exp * 1000) > new Date()) {
-                    await User.findOne({ _id: req.session.user._id }, {
-                        "_id": 1,
-                        "name": 1,
-                        "email": 1,
-                        "avatar": 1,
-                        "profileChange": 1,
-                        "admin": 1,
-                        "phone": 1,
-                        "createdAt": 1,
-                        "_idProject": 1,
-                        "profilePicture": 1
-                    }).then(async user => {
-                        await Project.find({ _id: user._idProject }).then(project => { 
-                            req.session.project = project
-                            req.session.user = user
-                            return res.status(200).render('./dashboard/index', {
-                                project,
-                                user,
-                                page: req.url,
-                                message: null
-                            })
-                        }).catch(_ => res.status(500).render('500'))
-                    }).catch(_ => res.status(500).render('500'))
+                    res.status(200).redirect('/dashboard')
                 }
             }
         } catch (err) {
-            return res.status(400).render('login', { message: JSON.stringify('Algo deu errado') })
+            return res.status(401).render('login', { message: JSON.stringify('Algo deu errado') })
         }
     }
 
