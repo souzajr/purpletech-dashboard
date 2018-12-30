@@ -1,0 +1,63 @@
+<div class="container-fluid mt--8">
+    <!-- Table -->
+    <div class="row justify-content-center">
+        <div class="col">
+            <div class="card shadow">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <!-- Title -->
+                            <h5 class="h3 mb-0">Usuários cadastrados</h5>
+                        </div>
+                        <div class="col-4 text-right">
+                            <a class="btn btn-sm btn-danger" style="color:#fff" data-toggle="modal" data-target="#modal-user">Cadastrar novo usuário</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive py-4">
+                    <table class="table table-flush" id="datatable-basic">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Nome</th>
+                                <th scope="col">Telefone</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Projetos</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for(let i = users.length - 1; i >= 0; i--) { %>
+                            <tr style="cursor:pointer" onclick="location.href='/user/<%= users[i]._id %>'">
+                                <th scope="row">
+                                    <div class="media align-items-center">
+                                        <a class="avatar rounded-circle mr-3">
+                                            <% if(users[i].avatar) { %>
+                                            <img alt="User profile avatar" src="<%= users[i].avatar %>">
+                                            <% } else { %>
+                                                <img alt="User profile avatar" src="/profilePicture/<%= users[i]._id %>">
+                                            <% } %>
+                                        </a>
+                                        <div class="media-body">
+                                            <span class="mb-0 text-sm">
+                                                <%= users[i].name %>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </th>
+                                <td>
+                                    <%= users[i].phone %>
+                                </td>
+                                <td>
+                                    <%= users[i].email %>
+                                </td>
+                                <td>
+                                    <%= users[i]._idProject.length %>
+                                </td>
+                            </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>

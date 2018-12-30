@@ -19,6 +19,7 @@
                 <div class="card-body">
                     <div class="text-center">
                         <h5 id="name" class="h3"><%= user.name %><span class="font-weight-light"></span></h5>
+                        <div id="phone"><%= user.phone %></div>
                         <div id="email"><%= user.email %></div><br/>
                         <div>
                             <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal"
@@ -51,8 +52,26 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="form-control-label" for="input-username">Seu nome</label>
-                                        <input type="text" id="input-username" name="newName" class="form-control">
+                                        <label class="form-control-label" for="input-phone">Telefone</label>
+                                        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+                                        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
+                                        <input type="text" id="input-phone" name="newPhone" class="phone form-control">
+                                        <script>
+                                          jQuery("input.phone")
+                                            .mask("(99) 9999-9999?9")
+                                            .focusout(function (event) {  
+                                                var target, phone, element;  
+                                                target = (event.currentTarget) ? event.currentTarget : event.srcElement;  
+                                                phone = target.value.replace(/\D/g, '');
+                                                element = $(target);  
+                                                element.unmask();  
+                                                if(phone.length > 10) {  
+                                                    element.mask("(99) 99999-999?9");  
+                                                } else {  
+                                                    element.mask("(99) 9999-9999?9");  
+                                                }  
+                                          })
+                                        </script>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -100,7 +119,7 @@
             <div class="modal-content bg-gradient-danger">
                 <form method="POST" enctype="multipart/form-data" action="/profilePicture/<%= user._id %>" class="controls-stacked">
                     <div class="modal-header">
-                        <h2 class="modal-title" id="modal-title-default">Alterar foto</h2>
+                        <h3 class="modal-title" id="modal-title-default">Alterar foto</h3>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">x</span>
                         </button>
@@ -136,7 +155,3 @@
             </div>
         </div>
     </div>
-    <!--
-        
-                            
-    -->

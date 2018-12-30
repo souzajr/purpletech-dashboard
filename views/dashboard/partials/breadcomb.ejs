@@ -1,5 +1,15 @@
-<% if(page == '/dashboard' || page == '/project') { %>
-<a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">Projetos</a>
+<% if(page == '/dashboard' || page == '/allproject') { %>
+    <% if(user.admin && page == '/dashboard') { %>
+        <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">Início</a>
+    <% } else { %>
+        <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">Projetos</a>
+    <% } %>
 <% } else if(page == '/profile') { %>
 <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">Perfil</a>
+<% } else if(page == '/project') { %>
+    <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">Projetos > <%= project.name %></a>
+<% } else if(page == '/budget') { %>
+    <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">Novo projeto</a>
+<% } else if(page == '/users') { %>
+    <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">Usuários</a>
 <% } %>

@@ -27,10 +27,10 @@ module.exports = app => {
     app.post('/reset/:token', app.src.api.user.reset)
 
     /* ============= LOGOUT ============= */
-    app.get('/logout', function(req, res) {
-        req.session.destroy(function () {
-            res.redirect('/')
-        })
+    app.get('/logout', function(req, res) {      
+        req.session.destroy()  
+        req.logout()
+        res.status(200).redirect('/')
     })
 
     /* ============= VALIDATE USER  ============= */
@@ -40,7 +40,7 @@ module.exports = app => {
 
     /* ============= DASHBOARD  ============= */
     app.route('/dashboard')
-        .all(app.src.config.passport.authenticate())
+        .all(app.src.config.passport.authenticate({failureRedirect: '/login' }))
         .get(app.src.api.user.get)
 
     /* ============= USER PROFILE ============= */
@@ -55,16 +55,19 @@ module.exports = app => {
         .get(app.src.api.user.getProfilePicture)
         .post(app.src.api.user.profilePicture)
 
-    /* ============= CREATE / GET ALL USER PROJECTS ============= */
+    /* ============= CREATE NEW PROJECT ============= */
     app.route('/project')
         .all(app.src.config.passport.authenticate())
-        .get(app.src.api.project.getAll)
         .post(app.src.api.project.save)
 
-    /* ============= VIEW OF PROJECT ============= */
+    /* ============= VIEW/EDIT PROJECT ============= */
     app.route('/project/:id')
         .all(app.src.config.passport.authenticate())
         .get(app.src.api.project.get)
+        .put(admin(app.src.api.project.change))
+    app.route('/allproject')
+        .all(app.src.config.passport.authenticate())
+        .get(admin(app.src.api.user.get))
 
     /* ============= UPLOAD/GET PROJECT FILES ============= */
     app.route('/upload/:id')
@@ -82,11 +85,17 @@ module.exports = app => {
         .all(app.src.config.passport.authenticate())
         .get(admin(app.src.api.user.getAll))
         .post(admin(app.src.api.user.save))
+    app.route('/users/:id')
+        .all(app.src.config.passport.authenticate())
+        .get(admin(app.src.api.user.getAll))
+        .put(admin(app.src.api.user.getAll))
+        .delete(admin(app.src.api.user.getAll))
 
     /* ============= HANDLE ERROR  ============= */ 
-    app.use(function(err, req, res, next) {
+    /*app.use(function(err, req, res, next) {
+        req.session.reset()
         res.status(500).send(err)
-    })
+    })*/
     app.use(function(req, res) {
         res.status(404).render('404');
     })

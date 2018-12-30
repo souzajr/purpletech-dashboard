@@ -13,6 +13,7 @@
                         <thead class="thead-light">
                             <tr>
                                 <th scope="col">Projeto</th>
+                                <th scope="col">Responsável</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Plataforma</th>
                                 <th scope="col">Prazo</th>
@@ -25,10 +26,25 @@
                                 <th scope="row">
                                     <span class="mb-0 text-sm"><%= project[i].name %></span>
                                 </th>
+                                <% if(project[i]._idResponsible) { %>
                                 <td>
+                                    <a class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Nome">
+                                        <img alt="Image placeholder" src="/profilePicture/<%= project[i]._idResponsible %>">
+                                    </a>
+                                </td>
+                                <% } else { %>
+                                <td></td>
+                                <% } %>
+                                <td>
+                                    <% if(project[i].status == 'Aguardando aprovação') { %>
                                     <span class="badge badge-dot mr-4">
                                         <i class="bg-warning"></i> Aguardando aprovação
                                     </span>
+                                    <% } else { %>
+                                    <span class="badge badge-dot mr-4">
+                                        <i class="bg-danger"></i> Projeto cancelado
+                                    </span>
+                                    <% } %>
                                 </td>
                                 <td>
                                 <div class="avatar-group">

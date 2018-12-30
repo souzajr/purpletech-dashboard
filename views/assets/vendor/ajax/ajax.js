@@ -33,7 +33,7 @@ $(document).ready(function() {
             data: $('#profile').serialize(),
             success: function(result) {
                 alertify.notify(result.msg, 'success', 5)
-                if(result.name) $('#name').html(result.name)
+                if(result.phone) $('#phone').html(result.phone)
                 if(result.email) $('#email').html(result.email)
                 $('#profile')[0].reset()
             },
@@ -59,26 +59,6 @@ $(document).ready(function() {
                 setTimeout(function(){ 
                     window.location.href = '/login'
                 }, 1000)
-            },
-            error : function(xhr, status, error) {
-                alertify.notify(JSON.parse(xhr.responseText), 'error', 5)
-            },
-        })
-    })
-})
-
-$(document).ready(function() {
-    $('#login').on('submit', function(e) {
-        e.preventDefault()
-        
-        $.ajax({
-            type: 'POST',
-            url: '/login',
-            datatype: 'html',
-            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-            data: $('#login').serialize(),
-            success: function() {          
-                window.location.href = '/validate'
             },
             error : function(xhr, status, error) {
                 alertify.notify(JSON.parse(xhr.responseText), 'error', 5)

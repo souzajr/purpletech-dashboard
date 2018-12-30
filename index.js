@@ -17,8 +17,7 @@ consign()
     .then('./src/config/routes.js')  
     .into(app)
 
-console.log(__dirname) 
-const port = process.env.PORT || 8080
+const port = process.env.PORT || 3000
 app.listen(port, () => {
-    console.log(`Server running on port ${port}`)
+    console.log(`Servidor funcionando na porta ${port}`)
 })

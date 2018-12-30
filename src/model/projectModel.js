@@ -1,11 +1,5 @@
 const moongoose = require('mongoose')
 
-const PlatformSchema = new moongoose.Schema({
-    app: Boolean,
-    web: Boolean,
-    desktop: Boolean
-})
-
 const ProjectHistorySchema = new moongoose.Schema({
     dataChange: String,
     dateChange: String,
@@ -37,7 +31,8 @@ const ProjectSchema = new moongoose.Schema({
     startAt: String,
     endAt: String,
     task: [TaskSchema],
-    file: [FileSchema]
+    file: [FileSchema],
+    canceledReason: String
 })
 
 moongoose.model('Project', ProjectSchema)

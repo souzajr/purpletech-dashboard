@@ -1,5 +1,6 @@
-const User = require('../procedure/userProcedure')
-const Project = require('../procedure/projectProcedure')
+const mongoose = require('mongoose')
+const User = mongoose.model('User')
+const Project = mongoose.model('Project')
 const jwt = require('jwt-simple')
 const bcrypt = require('bcrypt-nodejs')
 
@@ -17,34 +18,30 @@ module.exports = app => {
             validEmailOrError(req.body.email, 'Email inválido')
             existOrError(req.body.password, 'Digite sua senha')
         } catch(msg) {
-            return res.status(400).json(msg)
+            return res.status(400).render('login', { message: JSON.stringify(msg)})
         }
+        
+        const user = await User.findOne({ email: req.body.email })
+        .catch(_ => res.status(500).render('500'))
+        if(!user || user.deletedAt) return res.status(401).render('login', { message: JSON.stringify('Email ou senha inválidos')})
+        const isMatch = bcrypt.compareSync(req.body.password, user.password)
+        if (!isMatch) return res.status(401).render('login', { message: JSON.stringify('Email ou senha inválidos')})
+        user.password = undefined
 
-        await User.getByEmailWithPass(req.body.email).then(async user => {
-            if(user === undefined) return res.status(500).json('Algo deu errado')
-            if (user.deletedAt) return res.status(401).json('E-mail ou senha inválidos')
-            const isMatch = bcrypt.compareSync(req.body.password, user.password)
-            if (!isMatch) return res.status(401).json('E-mail ou senha inválidos')
-            user.password = undefined
-
-            const now = Math.floor(Date.now() / 1000)
-            const payload = {
-                id: user._id,
-                iss: 'http://localhost:3000',
-                iat: now,
-                exp: now + (60 * 60 * 24 * 3)
-            }
-
-            await Project.getAllById(user._idProject).then(project => {
-                if(project === undefined) return res.status(500).json('Algo deu errado')
-                req.session.project = project
-                req.session.user = user
-                req.session.token = jwt.encode(payload, process.env.AUTH_SECRET)
-                res.status(200).end()
-            })
-        }).catch(_ => {
-            res.status(401).json('E-mail ou senha inválidos')
-        })
+        const now = Math.floor(Date.now() / 1000)
+        const payload = {
+            id: user._id,
+            iss: 'http://localhost:3000', 
+            iat: now,
+            exp: now + 60 * 60 * 24
+        }
+        await Project.find({ _id: user._idProject }).then(project => {
+            req.session.project = project
+            req.session.user = user
+            req.session.token = jwt.encode(payload, process.env.AUTH_SECRET)
+            req.session.save()
+            res.status(200).redirect('/validate')
+        }).catch(_ => res.status(500).render('500'))
     }
 
     const validateToken = async (req, res) => {
