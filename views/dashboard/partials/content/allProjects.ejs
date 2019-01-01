@@ -32,7 +32,19 @@
                                     </td>
                                     <td>
                                         <span class="badge badge-dot mr-4">
+                                            <% if(project[i].status == 'Aguardando aprovação') { %>
                                             <i class="bg-warning"></i>
+                                            <% } else if(project[i].status == 'Projeto aprovado') { %>
+                                            <i class="bg-info"></i>
+                                            <% } else if(project[i].status == 'Projeto em desenvolvimento') { %>
+                                            <i class="bg-primary"></i>
+                                            <% } else if(project[i].status == 'Projeto concluído') { %>
+                                            <i class="bg-success"></i>
+                                            <% } else if(project[i].status == 'Projeto pausado') { %>
+                                            <i class="bg-default"></i>
+                                            <% } else { %>
+                                            <i class="bg-danger"></i>
+                                            <% } %>
                                             <%= project[i].status %>
                                         </span>
                                     </td>

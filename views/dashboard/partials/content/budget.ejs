@@ -1,0 +1,213 @@
+<div class="container-fluid mt--8">
+    <div class="row justify-content-center">
+        <div class="col">
+            <div class="card shadow">
+                <form id="createNewProjectAdmin" role="form">
+                    <div class="card-header">
+                        <h3 class="mb-0">Adicionar novo projeto</h3>
+                    </div>
+                    <div class="card-body">
+                        <h4>Informações do projeto</h4>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="input-group input-group-alternative mb-4">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="ni ni-atom"></i></span>
+                                        </div>
+                                        <input class="form-control form-control-alternative" name="name" placeholder="Nome do projeto"
+                                            type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="input-group input-group-alternative mb-4">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="ni ni-money-coins"></i></span>
+                                        </div>
+                                        <input class="form-control form-control-alternative" name="budget" onkeyup="maskIt(this,event,'###.###.###,##',true,{pre:'R$', pos:''})"
+                                            placeholder="Orçamento" type="text">
+                                        <script src="/views/assets/vendor/mask/money.js"></script>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="input-group input-group-alternative mb-4">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="ni ni-bullet-list-67"></i></span>
+                                        </div>
+                                        <select name="category" class="form-control">
+                                            <option disabled selected>Categoria</option>
+                                            <option>Loja Online</option>
+                                            <option>Blog</option>
+                                            <option>Institucional</option>
+                                            <option>Portal de Notícias</option>
+                                            <option>ERP</option>
+                                            <option>Outro</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="input-group input-group-alternative mb-4">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
+                                        </div>
+                                        <input class="form-control form-control-alternative datepicker" id="data" name="deadline"
+                                            placeholder="Prazo" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h4>Plataformas do projeto</h4>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="custom-control custom-control-alternative custom-checkbox mb-3">
+                                            <input class="custom-control-input" name="web" id="webCheck" type="checkbox">
+                                            <label class="custom-control-label" for="webCheck">Site (web)</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="custom-control custom-control-alternative custom-checkbox mb-3">
+                                            <input class="custom-control-input" name="app" id="appCheck" type="checkbox">
+                                            <label class="custom-control-label" for="appCheck">App (Android/iOS)</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="custom-control custom-control-alternative custom-checkbox mb-3">
+                                            <input class="custom-control-input" name="desktop" id="desktopCheck" type="checkbox">
+                                            <label class="custom-control-label" for="desktopCheck">Desktop (software)</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <h4>Responsabilidade</h4>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="custom-control custom-control-alternative custom-checkbox mb-3">
+                                            <input class="custom-control-input" name="responsible" id="responsible" type="checkbox" checked>
+                                            <label class="custom-control-label" for="responsible">Tornar-se responsável</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h4>Descrição do projeto</h4>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <textarea class="form-control form-control-alternative" name="description" placeholder="Descrição do projeto"
+                                    rows="3"></textarea>
+                            </div>
+                        </div><br/>
+                        <h4>Status</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="input-group input-group-alternative mb-4">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="ni ni-bullet-list-67"></i></span>
+                                        </div>
+                                        <select name="status" id="status" class="form-control form-control-alternative">
+                                            <option disabled selected>Selecione uma opção</option>
+                                            <option>Aguardando aprovação</option>
+                                            <option>Projeto aprovado</option>
+                                            <option>Projeto em desenvolvimento</option>
+                                            <option>Projeto concluído</option>
+                                            <option>Projeto pausado</option>
+                                            <option>Projeto cancelado</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <style>div.reason { display:none; }</style>
+                                <div id="reason" class="form-group reason">
+                                    <div class="input-group input-group-alternative mb-4">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-ban"></i></span>
+                                        </div>
+                                        <input class="form-control form-control-alternative" id="inputReason" name="reason" placeholder="Motivo do cancelamento" type="text">
+                                        <script>
+                                            $(document).ready(function() {
+                                                $('#status').on('change', function () {
+                                                    $('#reason').hide()
+                                                    let myInput = document.getElementById("inputReason")
+                                                    myInput.value = null
+                                                    let val = $('#status option:selected').text()
+                                                    if(val == 'Projeto cancelado') $('#reason').show()
+                                                })
+                                            })
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h4>Usuário</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="input-group input-group-alternative mb-4">
+                                        <select id="selectUser" name="_idClient" class="form-control form-control-alternative" data-toggle="select" data-live-search="true">
+                                            <option value="" selected>Selecione um usuário</option>
+                                            <% for(let i = 0; i < users.length; i++) { %>
+                                            <option value="<%= users[i]._id %>"><%= users[i].name %></option>
+                                            <% } %>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <style>div.createUser { display:none; }</style>
+                                <div id="createUser">
+                                    <a href="#!" data-toggle="modal" data-target="#modal-createUser">Adicionar novo usuário</a>
+                                </div>
+                                <script>
+                                    $(document).ready(function() {
+                                        $('#selectUser').on('change', function () {
+                                            $('#createUser').hide()
+                                            let val = $('#selectUser option:selected').text()
+                                            if(val == 'Selecione um usuário') $('#createUser').show()
+                                        })
+                                    })
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">Criar projeto</button>
+                    </div>
+                </form>
+                <script>
+                    $(document).ready(function() {
+                        $('#createNewProjectAdmin').on('submit', function(e) {
+                            e.preventDefault()
+                            
+                            $.ajax({
+                                type: 'POST',
+                                url: '/budget',
+                                datatype: 'html',
+                                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                                data: $('#createNewProjectAdmin').serialize(),
+                                success: function(result) {
+                                    alertify.notify(result.msg, 'success', 5)
+                                    setTimeout(function() { 
+                                        window.location.href = '/project/' + result.id
+                                    }, 500)
+                                },
+                                error : function(xhr, status, error) {
+                                    alertify.notify(JSON.parse(xhr.responseText), 'error', 5)
+                                },
+                            })
+                        })
+                    })
+                </script>
+            </div>
+        </div>
+    </div>
+    <%- include createUser-modal.ejs %>

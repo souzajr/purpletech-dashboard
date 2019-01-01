@@ -1,0 +1,180 @@
+<div class="container-fluid mt--7">
+        <div class="row">
+            <div class="col-xl-4 order-xl-1">
+                <div class="card card-profile">
+                    <img src="/views/assets/img/theme/img-1-1000x600.jpg" class="card-img-top">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-3 order-lg-2">
+                            <div class="card-profile-image">
+                                <a>
+                                    <% if(getUser.avatar) { %>
+                                    <img alt="Image placeholder" class="rounded-circle" src="<%= getUser.avatar %>">
+                                    <% } else { %>
+                                    <img alt="Image placeholder" class="rounded-circle" src="/profilePicture/<%= getUser._id %>">
+                                    <% } %>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center">
+                            <h5 id="name" class="h3"><%= getUser.name %><span class="font-weight-light"></span></h5>
+                            <div id="phone"><%= getUser.phone %></div>
+                            <div id="email"><%= getUser.email %></div><br/>
+                            <div>
+                                <button type="button" class="btn btn-danger btn-lg btn-block" data-toggle="modal" data-target="#modal-remove">
+                                    <% if(!getUser.deletedAt) { %>Banir usuário<% } else { %>Desbanir usuário<% } %>
+                                </button>
+                                <form id="removeUser" action="/users/<%= getUser._id %>" role="form">
+                                    <div class="modal fade" id="modal-remove" tabindex="-1" role="dialog" aria-labelledby="modal-notification" aria-hidden="true">
+                                        <div class="modal-dialog modal-danger modal-dialog-centered modal-" role="document">
+                                            <div class="modal-content bg-gradient-danger">
+                                                <div class="modal-header">
+                                                    <h3 class="modal-title" id="modal-title-default"><% if(!getUser.deletedAt) { %>Banir usuário<% } else { %>Desbanir usuário<% } %></h3>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">x</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="py-3 text-center">
+                                                        <i class="fas fa-user-slash ni-2x"></i>
+                                                        <h4 class="heading mt-4">Digite abaixo a frase corretamente para banir ou desbanir o usuário</h4>
+                                                        <div class="form-group">
+                                                            <label class="form-control-label" style="color:#fff" for="input-remove">"EU TENHO CERTEZA"</label>
+                                                            <div class="input-group input-group-alternative mb-4">
+                                                                <div class="input-group-prepend">
+                                                                    <span class="input-group-text"><i class="fas fa-exclamation-triangle"></i></span>
+                                                                </div>
+                                                                <input class="form-control form-control-alternative" id="input-remove" name="remove" placeholder="Digite a frase" type="text">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-white"><% if(!getUser.deletedAt) { %>Banir<% } else { %>Desbanir<% } %></button>
+                                                    <button type="button" class="btn btn-link text-white ml-auto" data-dismiss="modal">Cancelar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <script>
+                                    $(document).ready(function() {
+                                        $('#removeUser').on('submit', function(e) {
+                                            e.preventDefault()
+                                            
+                                            $.ajax({
+                                                type: 'DELETE',
+                                                url: '/users/<%= getUser._id %>',
+                                                datatype: 'html',
+                                                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                                                data: $('#removeUser').serialize(),
+                                                success: function(result) {
+                                                    alertify.notify(result, 'success', 5)
+                                                    setTimeout(function() { 
+                                                        window.location.reload()
+                                                    }, 500)
+                                                },
+                                                error : function(xhr, status, error) {
+                                                    alertify.notify(JSON.parse(xhr.responseText), 'error', 5)
+                                                },
+                                            })
+                                        })
+                                    })
+                                </script>
+                            </div>
+                        </div>
+                        <hr>
+                        <% if(getUser.deletedAt) { %> 
+                        <div class="text-center">
+                            <p style="color:red">Banido em: <%= getUser.deletedAt %></p>
+                        </div>
+                        <% } %>
+                        <div class="text-center">
+                            <p>Projetos: <%= getUser._idProject.length %></p>
+                        </div>
+                        <div class="text-center">
+                            <p>Membro desde <%= getUser.createdAt %></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-8 order-xl-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row align-items-center">
+                            <div class="col-8">
+                              <h3 class="mb-0">Editar perfil - #<%= getUser._id %></h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form id="changeUser" role="form">
+                            <div class="pl-lg-4">
+                                <h6 class="heading-small text-muted mb-4">Informações</h6>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="input-phone">Telefone</label>
+                                            <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+                                            <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
+                                            <input type="text" id="input-phone" name="newPhone" class="phone form-control">
+                                            <script>
+                                              jQuery("input.phone")
+                                                .mask("(99) 9999-9999?9")
+                                                .focusout(function (event) {  
+                                                    var target, phone, element;  
+                                                    target = (event.currentTarget) ? event.currentTarget : event.srcElement;  
+                                                    phone = target.value.replace(/\D/g, '');
+                                                    element = $(target);  
+                                                    element.unmask();  
+                                                    if(phone.length > 10) {  
+                                                        element.mask("(99) 99999-999?9");  
+                                                    } else {  
+                                                        element.mask("(99) 9999-9999?9");  
+                                                    }  
+                                              })
+                                            </script>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="input-email">Email</label>
+                                            <input type="email" id="input-email" name="newEmail" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                <div class="col-lg-12">
+                                    <button type="submit" class="btn btn-primary btn-lg btn-block">Alterar</button>
+                                </div></div>
+                            </div>
+                        </form>
+                        <script>
+                            $(document).ready(function() {
+                                $('#changeUser').on('submit', function(e) {
+                                    e.preventDefault()
+                                    
+                                    $.ajax({
+                                        type: 'PUT',
+                                        url: '/users/<%= getUser._id %>',
+                                        datatype: 'html',
+                                        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                                        data: $('#changeUser').serialize(),
+                                        success: function(result) {
+                                            alertify.notify(result.msg, 'success', 5)
+                                            if(result.phone) $('#phone').html(result.phone)
+                                            if(result.email) $('#email').html(result.email)
+                                        },
+                                        error : function(xhr, status, error) {
+                                            alertify.notify(JSON.parse(xhr.responseText), 'error', 5)
+                                        },
+                                    })
+                                })
+                            })
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+                    

@@ -4,7 +4,7 @@ module.exports = middleware => {
         if(req.session.user.admin) {
             middleware(req, res, next)
         } else {
-            req.session.destroy()
+            req.session.reset()
             req.logout()
             res.status(401).render('login', { message: JSON.stringify('Algo deu errado') })
         }

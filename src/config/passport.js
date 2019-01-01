@@ -8,7 +8,7 @@ module.exports = (app) => {
     const getToken = function(req) {
         let token = null
         try {
-            if(req && req.session) token = req.session.token
+            if(req.session && req.session.token) token = req.session.token
             return token
         } catch(err) {
             return err
@@ -25,6 +25,7 @@ module.exports = (app) => {
         .then(user => done(null, user ? { ...payload } : false))
         .catch(err => done(err, false))
     })
+    
     passport.use(strategy)
     
     return {

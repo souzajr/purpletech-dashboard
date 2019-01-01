@@ -1,5 +1,5 @@
-<% if(page == '/dashboard' || page == '/allproject') { %>
-    <% if(user.admin && page == '/dashboard') { %>
+<% if(page == '/dashboard') { %>
+    <% if(user.admin) { %>
         <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">Início</a>
     <% } else { %>
         <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">Projetos</a>
@@ -7,9 +7,13 @@
 <% } else if(page == '/profile') { %>
 <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">Perfil</a>
 <% } else if(page == '/project') { %>
-    <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">Projetos > <%= project.name %></a>
+    <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">Projetos - <%= project.name %></a>
 <% } else if(page == '/budget') { %>
     <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">Novo projeto</a>
 <% } else if(page == '/users') { %>
     <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">Usuários</a>
+<% } else if(page == '/allprojects') { %>
+    <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">Projetos</a>
+<% } else if(page == '/viewUser') { %>
+    <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">Usuário - <%= getUser.name %></a>
 <% } %>

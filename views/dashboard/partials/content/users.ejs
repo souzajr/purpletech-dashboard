@@ -10,7 +10,7 @@
                             <h5 class="h3 mb-0">Usuários cadastrados</h5>
                         </div>
                         <div class="col-4 text-right">
-                            <a class="btn btn-sm btn-danger" style="color:#fff" data-toggle="modal" data-target="#modal-user">Cadastrar novo usuário</a>
+                            <a class="btn btn-sm btn-danger" style="color:#fff" data-toggle="modal" data-target="#modal-createUser">Cadastrar novo usuário</a>
                         </div>
                     </div>
                 </div>
@@ -27,7 +27,7 @@
                         </thead>
                         <tbody>
                             <% for(let i = users.length - 1; i >= 0; i--) { %>
-                            <tr style="cursor:pointer" onclick="location.href='/user/<%= users[i]._id %>'">
+                            <tr style="cursor:pointer" onclick="location.href='/users/<%= users[i]._id %>'">
                                 <th scope="row">
                                     <div class="media align-items-center">
                                         <a class="avatar rounded-circle mr-3">
@@ -60,4 +60,5 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>    
+    <%- include createUser-modal.ejs %>

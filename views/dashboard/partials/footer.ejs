@@ -23,22 +23,25 @@
 </footer>
 </div>
 </div>
-<!-- Argon Scripts -->
 <!-- Core -->
 <script src="/views/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/views/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
-<script src="/views/assets/vendor/bootstrap-datepicker/dist/locales/bootstrap-datepicker.pt-BR.min.js"></script>
-<script>
-    $('#data').datepicker({
-        format: 'dd/mm/yy',
-        language: 'pt-BR',
-        startDate: '+0'
-    })
-</script>
 <script src="/views/assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js"></script>
 <script src="/views/assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
 <script src="/views/assets/vendor/lavalamp/js/jquery.lavalamp.min.js"></script>
 <script src="/views/assets/vendor/js-cookie/js.cookie.js"></script>
+
+<% if(!user.admin || page == '/budget') { %>
+    <script src="/views/assets/vendor/bootstrap-datepicker/dist/locales/bootstrap-datepicker.pt-BR.min.js"></script>
+    <script>
+        $('#data').datepicker({
+            format: 'dd/mm/yy',
+            language: 'pt-BR',
+            startDate: '+0'
+        })
+    </script>
+<% } %>
+
 <% if(page == '/project') { %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.8.1/baguetteBox.min.js"></script>
 <script>
@@ -46,7 +49,7 @@
 </script>
 <% } %>
 
-<% if(user.admin) { %>
+<% if(page == '/allprojects') { %>
 <script src="/views/assets/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="/views/assets/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
 <script>
@@ -56,6 +59,9 @@
 </script>
 <% } %>
 
+<% if(page == '/budget') { %>
+<script src="/views/assets/vendor/select2/dist/js/select2.min.js"></script>
+<% } %>
 
 <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.11.2/build/alertify.min.js"></script>
 <% if(message) { %>
@@ -71,5 +77,4 @@
 <!-- Argon JS -->
 <script src="/views/assets/js/argon.min.js"></script>
 </body>
-
 </html>

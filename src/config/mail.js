@@ -1,6 +1,5 @@
 
 const nodemailer = require('nodemailer')
-
 const transporter = nodemailer.createTransport({
     host: process.env.MAIL_HOST,
     port: process.env.MAIL_PORT,
@@ -17,7 +16,7 @@ module.exports = {
             from: process.env.MAIL_AUTH_USER,
             to: email,
             subject: 'Recuperação de senha 🔒⛔',
-            text: 'Você está recebendo isso porque você (ou outra pessoa) solicitou a redefinição da senha da sua conta.\n' +
+            text: 'Você está recebendo este Email pois solicitou a redefinição da senha da sua conta.\n' +
             'Por favor, clique no link abaixo ou cole no seu navegador para completar o processo:\n\n' +
             'http://localhost:3000/reset/' + token + '\n\n' +
             'Se você não solicitou isso, ignore este Email e sua senha permanecerá inalterada.\n'
@@ -44,7 +43,7 @@ module.exports = {
             subject: 'Projeto criado com sucesso! 💖😍',
             html: '<b>Parabéns ' + name + ', você deu o primeiro passo para o sucesso da sua ideia!</b><br/><br/>'+
             'Seu projeto agora está em fase de análise, entraremos em contato em breve.<br/>' +
-            'Para conferir as atualizações referente ao seu projeto, acesse:<br/>' +
+            'Para conferir as atualizações referentes ao seu projeto, acesse:<br/>' +
             'http://localhost:3000/project/' + project + '<br/>' +
             'Em caso de dúvidas, responda a este Email ou nos chame através do nosso WhatsApp.<br/><br/>' +
             '<b>PurpleTech</b><br/>https://purpletech.com.br<br/>' +
@@ -60,7 +59,7 @@ module.exports = {
             to: email,
             subject: 'Seu projeto foi aprovado! 🤩🤩',
             html: '<b>Olá, ' + name + '. É com muito prazer que anunciamos que seu projeto foi aprovado!</b><br/><br/>'+
-            'Isso significa que agora o seu projeto será estudado e analizado para que possamos começar o desenvolvimento.<br/>' +
+            'Isso significa que agora o seu projeto será estudado e analisado para que possamos começar o desenvolvimento.<br/>' +
             'Em caso de dúvidas, responda a este Email ou nos chame através do nosso WhatsApp.<br/><br/>' +
             '<b>PurpleTech</b><br/>https://purpletech.com.br<br/>' +
             '<a href="https://wa.me/5519995360651">WhatsApp: (19) 9 9536-0651</a>'
@@ -123,9 +122,29 @@ module.exports = {
             to: email,
             subject: 'Seu projeto foi cancelado! 😥😔',
             html: '<b>Olá, ' + name + '. Infelizmente, seu projeto foi cancelado.</b><br/><br/>' +
-            'Lamentamos que isso tenha acontecido e prometemos nos empenhar para que nunca mais ocorra.<br/>' +
+            'Lamentamos que isso tenha ocorrido e prometemos nos empenhar para que nunca mais aconteça.<br/>' +
             'Por favor, responda a este Email com suas reclamações, queixas e os motivos que levaram ao cancelamento.<br/>' +
-            'Analizaremos todos os detalhes com bastante cuidado para que isso não volte a se repetir.<br/><br/>' +
+            'Analisaremos todos os detalhes com bastante cuidado para que isso não volte a se repetir.<br/><br/>' +
+            '<b>PurpleTech</b><br/>https://purpletech.com.br<br/>' +
+            '<a href="https://wa.me/5519995360651">WhatsApp: (19) 9 9536-0651</a>'
+        }
+
+        transporter.sendMail(mailOptions)
+    },
+
+    userCreated(email, name, password) {
+        const mailOptions = {
+            from: process.env.MAIL_AUTH_USER,
+            to: email,
+            subject: 'Uma conta foi criada para você 🤩🌟',
+            html: '<b>Olá, ' + name + '. Uma conta em nosso painel foi criada para que você possa acompanhar o andamento do seu projeto.</b><br/><br/>' +
+            'Em nosso sistema, você terá um controle maior sobre o seu projeto e comunicação direta com os desenvolvedores.<br/>' +
+            'Além disso, você poderá solicitar novos orçamentos diretamente e ter acesso a diversos tutoriais sobre como gerenciar seu projeto após a finalização.<br/><br/>' +
+            'Para acessar a plataforma, utilize as informações abaixo:<br/>' +
+            '<b>http://localhost:3000/login<br/>' +
+            'Email: ' + email +
+            '<br/>Senha: ' + password + '</b><br/><br/>' +
+            'Em caso de dúvidas, responda a este Email ou nos chame através do nosso WhatsApp.<br/><br/>' +
             '<b>PurpleTech</b><br/>https://purpletech.com.br<br/>' +
             '<a href="https://wa.me/5519995360651">WhatsApp: (19) 9 9536-0651</a>'
         }

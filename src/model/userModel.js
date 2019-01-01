@@ -12,7 +12,8 @@ const UserSchema = new moongoose.Schema({
     resetPasswordToken: String,
     resetPasswordExpires: Date,
     _idProject: Array,
-    profilePicture: String
+    profilePicture: String,
+    firstAccess: { type: Boolean, required: true }
 })
 
 moongoose.model('User', UserSchema)

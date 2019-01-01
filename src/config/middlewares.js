@@ -1,5 +1,5 @@
 
-const session = require('express-session')
+const session = require("client-sessions")
 const passport = require('passport')
 const bodyParser = require('body-parser')
 const cors = require('cors')
@@ -10,14 +10,17 @@ const methodOverride = require('method-override')
 module.exports = app => {
     app.use(helmet({ dnsPrefetchControl: { allow: true }}))
     app.use(session({
-        secret: process.env.SESSION_SECRET,
-        resave: true,
-        saveUninitialized: false,
+        cookieName: 'session',
+        encryptionAlgorithm: 'aes256',
+        encryptionKey: new Buffer.from(process.env.SESSION_SECRET1),
+        signatureAlgorithm: 'sha256-drop128',
+        signatureKey: new Buffer.from(process.env.SESSION_SECRET2, 'base64'),
+        duration: 3600000,
         cookie: {
             path: '/',
             httpOnly: true,
             secure: false,
-            maxAge: 3600000,
+            ephemeral: false
         }
     }))    
     app.use(passport.initialize())
@@ -40,9 +43,13 @@ module.exports = app => {
         '/project',
         '/upload',
         '/get',
+        '/getThumb',
         '/users',
         '/validate',
-        '/allproject'
+        '/allprojects',
+        '/budget',
+        '/viewUser',
+        '/newPassword'
     ], function (req, res, next) {
         if (!req.session.user) {
             res.status(401).render('login', { message: JSON.stringify('Por favor, faça o login para acessar') })

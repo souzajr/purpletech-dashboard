@@ -89,8 +89,8 @@
                                             <% if(!project._idResponsible) { %>
                                             <p>O projeto ainda não foi aprovado</p>
                                             <% } else { %>
-                                            <a class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Nome">
-                                                <img alt="Image placeholder" src="/profilePicture/<%= project._idResponsible %>">
+                                            <a class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="<%= responsible %>">
+                                                <img alt="Responsável" src="/profilePicture/<%= project._idResponsible %>">
                                             </a>
                                             <% } %>
                                         </div>
@@ -209,7 +209,10 @@
                                                     </div>
                                                     <script>
                                                         function uploadFileProject(target) { 
-                                                            document.getElementById("file-name-project").innerHTML = target.files[0].name;
+                                                            if(target.files.length == 1)
+                                                                document.getElementById("file-name-project").innerHTML = target.files[0].name;
+                                                            else
+                                                                document.getElementById("file-name-project").innerHTML = '(' + target.files.length + ') fotos';
                                                         }
                                                     </script><br/><br/>
                                                     <button type="submit" class="btn btn-danger btn-block">Enviar fotos</button><br/>

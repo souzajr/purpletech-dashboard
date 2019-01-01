@@ -34,7 +34,7 @@ module.exports = app => {
         fileSize: 1024 * 2048
     }}).any()
 
-    const save = async (req, res) => {
+    const createNewProject = async (req, res) => {
         const project = { ...req.body }
 
         try {
@@ -56,7 +56,7 @@ module.exports = app => {
             dateChange: date.toLocaleDateString().split('-').reverse().join('/'),
             dateTodayChange: date.getHours() + ':' + ((date.getMinutes() < 10 ? "0" : "") + date.getMinutes())
         }]
-        project.createdAt = project.projectHistory[0].dateTodayChange
+        project.createdAt = project.projectHistory[0].dateChange
         project.status = 'Aguardando aprovação'
         project._idClient = req.session.user._id
         let { web, app, desktop } = false
@@ -68,34 +68,32 @@ module.exports = app => {
             desktop = true
         project.platform = { web, app, desktop }
 
-        await Project.create(project).then(async project => {
-            await User.findOne({ _id: req.session.user._id }).then(async user => {
+        await User.findOne({ _id: req.session.user._id }).then(async user => {
+            await Project.create(project).then(async project => {
                 user._idProject.push(project._id)
                 mail.projectCreated(user.email, user.name, project._id)
                 await user.save().catch(_ => res.status(500).json('Algo deu errado'))
-                user.password = undefined
-                await Project.find({ _id: user._idProject }).then(project => {
-                    req.session.project = project
-                    req.session.user = user
-                    res.status(200).json('Sucesso!')
-                }).catch(_ => res.status(500).json('Algo deu errado'))
+                res.status(200).json('Sucesso!')
             }).catch(_ => res.status(500).json('Algo deu errado'))
         }).catch(_ => res.status(500).json('Algo deu errado'))
     }
 
-    const get = async (req, res) => {
-        await Project.findOne({ _id: req.params.id }).then(project => {
-            res.status(200).render('./dashboard/index', {
-                project,
-                user: req.session.user, 
-                page: '/project',
-                style: 'details',
-                message: null
+    const viewProject = async (req, res) => {
+        await Project.findOne({ _id: req.params.id }).then(async project => {
+            await User.findOne({ _id: project._idResponsible }).then(user => {
+                res.status(200).render('./dashboard/index', {
+                    project,
+                    responsible: user.name,
+                    user: req.session.user, 
+                    page: '/project',
+                    style: 'details',
+                    message: null
+                })
             })
         })
     }
 
-    const uploadFile = (req, res) => {
+    const uploadProjectFile = (req, res) => {
         upload(req, res, async function(err) {
             if (err instanceof multer.MulterError) {
                 return res.status(500).render('500')
@@ -112,7 +110,7 @@ module.exports = app => {
                     })
                 }).catch(_ => res.status(500).render('500'))
             }
-
+    
             await Project.findOne({ _id: req.params.id }).then(async project => {
                 for (let i = 0; i < req.files.length; i++) {
                     sharp('./public/upload/' + req.files[i].filename)
@@ -126,8 +124,8 @@ module.exports = app => {
                     .catch(_ => res.status(500).render('500'))
                     project.file.push({ fileName: req.files[i].filename })
                 }
+
                 await project.save().catch(_ => res.status(500).render('500'))
-                req.session.project = project
                 res.status(200).render('./dashboard/index', {
                     project,
                     user: req.session.user, 
@@ -139,19 +137,19 @@ module.exports = app => {
         })
     }
 
-    const sendFile = async (req, res) => {
+    const getProjectFile = async (req, res) => {
         await Project.findOne({ _id: req.params.id }).then(_ => { 
             res.sendFile(req.params.filename, { root: './public/upload/' })
         }).catch(_ => res.status(500).render('500'))
     }
 
-    const sendFileThumb = async (req, res) => {
+    const getProjectFileThumb = async (req, res) => {
         await Project.findOne({ _id: req.params.id }).then(_ => { 
             res.sendFile(req.params.filename, { root: './public/upload/thumb/' })
         }).catch(_ => res.status(500).render('500'))
     }
 
-    const change = async (req, res) => {  
+    const changeProject = async (req, res) => {  
         const newProject = { ...req.body }     
         try {
             existOrError(newProject.name, 'Por favor, digite o nome do projeto')
@@ -233,12 +231,113 @@ module.exports = app => {
         }).catch(_ => res.status(500).json('Algo deu errado'))
     }
 
+    const viewAllProjects = async (req, res) => {
+        await Project.find().then(async project => {
+            let client = []
+            for(let i = 0; i < project.length; i++) {
+                await User.findOne({ _id: project[i]._idClient }).then(user => {
+                    client.push(user)
+                }).catch(_ => res.status(500).render('500'))
+            }
+
+            res.status(200).render('./dashboard/index', {
+                project,
+                client,
+                user: req.session.user,
+                page: req.url,
+                message: null
+            })
+        }).catch(_ => res.status(500).render('500'))
+    }
+
+    const viewBudget = async (req, res) => {
+        await User.find().then(users => {
+            for(let i = 0; i < users.length; i++) users[i].password = undefined
+            res.status(200).render('./dashboard/index', {
+                users,
+                user: req.session.user, 
+                page: req.url,
+                message: null
+            })
+        }).catch(_ => res.status(500).render('500'))
+    }
+
+    const createNewProjectAdmin = async (req, res) => {
+        const project = { ...req.body }
+
+        try {            
+            existOrError(project.name, 'Por favor, digite o nome do projeto')
+            existOrError(project.budget, 'Por favor, digite o orçamento do projeto')            
+            existOrError(project.category, 'Por favor, escolha a categoria do projeto')
+            existOrError(project.deadline, 'Por favor, escolha o prazo do projeto')
+            existOrError(project.description, 'Por favor, digite a descrição do projeto')
+            tooSmall(project.name, 'Digite um nome de projeto maior')
+            tooBig(project.name, 'Digite um nome de projeto menor')
+            tooSmall(project.description, 'Digite uma descrição de projeto maior')
+            existOrError(project.status, 'Escolha o status do projeto')
+            if(project.status == 'Projeto cancelado') { 
+                existOrError(project.reason, 'Digite o motivo do cancelamento')
+                tooSmall(project.reason, 'Digite um motivo maior')
+            }
+            existOrError(project._idClient, 'Escolha um usuário')
+        } catch (msg) {
+            return res.status(400).json(msg)
+        }       
+
+        let { web, app, desktop } = false
+        if(project.web)
+            web = true
+        if(project.app)
+            app = true
+        if(project.desktop)
+            desktop = true
+        project.platform = { web, app, desktop }
+        if(project.responsible)
+            project._idResponsible = req.session.user._id
+        else
+            project._idResponsible = undefined
+        let dataChange = ''
+        if(project.status == 'Aguardando aprovação') dataChange = 'Created'
+        else if(project.status == 'Projeto aprovado') dataChange = 'Approved'
+        else if(project.status == 'Projeto em desenvolvimento') dataChange = 'Development'
+        else if(project.status == 'Projeto concluído') dataChange = 'Completed'
+        else if(project.status == 'Projeto pausado') DataChange = 'Paused'
+        else dataChange = 'Canceled'
+        const date = new Date()
+        project.projectHistory = [{ 
+            dataChange,
+            dateChange: date.toLocaleDateString().split('-').reverse().join('/'),
+            dateTodayChange: date.getHours() + ':' + ((date.getMinutes() < 10 ? "0" : "") + date.getMinutes())
+        }]
+        project.createdAt = project.projectHistory[0].dateChange
+
+        await Project.create(project).then(async project => {
+            await User.findOne({ _id: project._idClient }).then(async user => {
+                user._idProject.push(project._id)
+                await user.save().catch(_ => res.status(500).json('Algo deu errado'))
+                if(project.projectHistory[0].dataChange == 'Created') mail.projectCreated(user.email, user.name, project._id)
+                else if(project.projectHistory[0].dataChange == 'Approved') mail.projectApproved(user.email, user.name)  
+                else if(project.projectHistory[0].dataChange == 'Development') mail.projectDevelopment(user.email, user.name)
+                else if(project.projectHistory[0].dataChange == 'Completed') mail.projectCompleted(user.email, user.name)  
+                else if(project.projectHistory[0].dataChange == 'Paused') mail.projectPaused(user.email, user.name)   
+                else mail.projectCanceled(user.email, user.name) 
+                res.status(200).json({
+                    'msg': 'Sucesso!',
+                    'id': project._id
+                })
+            }).catch(_ => res.status(500).json('Algo deu errado'))  
+        }).catch(_ => res.status(500).json('Algo deu errado'))        
+    }
+
     return { 
-        save, 
-        get,
-        uploadFile, 
-        sendFile,
-        sendFileThumb,
-        change
+        createNewProject, 
+        viewProject,
+        uploadProjectFile, 
+        getProjectFile,
+        getProjectFileThumb,
+        changeProject,
+        viewAllProjects,
+        viewBudget,
+        createNewProjectAdmin
     }
 }

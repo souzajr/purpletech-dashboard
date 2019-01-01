@@ -28,23 +28,30 @@
                                 </th>
                                 <% if(project[i]._idResponsible) { %>
                                 <td>
-                                    <a class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Nome">
-                                        <img alt="Image placeholder" src="/profilePicture/<%= project[i]._idResponsible %>">
+                                    <a class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="<%= responsible[i] %>">
+                                        <img alt="Responsável" src="/profilePicture/<%= project[i]._idResponsible %>">
                                     </a>
                                 </td>
                                 <% } else { %>
                                 <td></td>
                                 <% } %>
                                 <td>
-                                    <% if(project[i].status == 'Aguardando aprovação') { %>
                                     <span class="badge badge-dot mr-4">
-                                        <i class="bg-warning"></i> Aguardando aprovação
+                                        <% if(project[i].status == 'Aguardando aprovação') { %>
+                                        <i class="bg-warning"></i>
+                                        <% } else if(project[i].status == 'Projeto aprovado') { %>
+                                        <i class="bg-info"></i>
+                                        <% } else if(project[i].status == 'Projeto em desenvolvimento') { %>
+                                        <i class="bg-primary"></i>
+                                        <% } else if(project[i].status == 'Projeto concluído') { %>
+                                        <i class="bg-success"></i>
+                                        <% } else if(project[i].status == 'Projeto pausado') { %>
+                                        <i class="bg-default"></i>
+                                        <% } else { %>
+                                        <i class="bg-danger"></i>
+                                        <% } %>
+                                        <%= project[i].status %>
                                     </span>
-                                    <% } else { %>
-                                    <span class="badge badge-dot mr-4">
-                                        <i class="bg-danger"></i> Projeto cancelado
-                                    </span>
-                                    <% } %>
                                 </td>
                                 <td>
                                 <div class="avatar-group">

@@ -1,0 +1,109 @@
+<div class="modal fade" id="modal-createUser" tabindex="-1" role="dialog" aria-labelledby="modal-default" style="display: none;"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form id="createNewUser" role="form">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="modal-title-default">Novo usuário</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">x</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group input-group-alternative mb-4">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    </div>
+                                    <input type="text" placeholder="Nome do usuário" name="name" class="form-control form-control-alternative">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group input-group-alternative mb-4">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="ni ni-bullet-list-67"></i></span>
+                                    </div>
+                                    <select name="role" class="form-control form-control-alternative">
+                                        <option selected disabled>Cargo</option>
+                                        <option>Normal</option>
+                                        <option>Admin</option>
+                                    </select>
+                                </div>
+                            </div>                        
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group input-group-alternative mb-4">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    </div>
+                                    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+                                    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
+                                    <input type="text" name="phone" placeholder="Telefone" class="phone form-control form-control-alternative">
+                                    <script>
+                                        jQuery("input.phone")
+                                        .mask("(99) 9999-9999?9")
+                                        .focusout(function (event) {  
+                                            var target, phone, element;  
+                                            target = (event.currentTarget) ? event.currentTarget : event.srcElement;  
+                                            phone = target.value.replace(/\D/g, '');
+                                            element = $(target);  
+                                            element.unmask();  
+                                            if(phone.length > 10) {  
+                                                element.mask("(99) 99999-999?9");  
+                                            } else {  
+                                                element.mask("(99) 9999-9999?9");  
+                                            }  
+                                        })
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group input-group-alternative mb-4">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    </div>
+                                    <input type="email" name="email" placeholder="Email" class="form-control form-control-alternative">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Cadastrar usuário</button>
+                    <button type="button" class="btn btn-link  ml-auto" data-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+            <script>
+                $(document).ready(function() {
+                    $('#createNewUser').on('submit', function(e) {
+                        e.preventDefault()
+                        
+                        $.ajax({
+                            type: 'POST',
+                            url: '/users',
+                            datatype: 'html',
+                            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                            data: $('#createNewUser').serialize(),
+                            success: function(result) {          
+                                alertify.notify(result, 'success', 5)
+                                setTimeout(function() { 
+                                    location.reload()
+                                }, 500)
+                            },
+                            error : function(xhr, status, error) {
+                                alertify.notify(JSON.parse(xhr.responseText), 'error', 5)
+                            },
+                        })
+                    })
+                })
+            </script>
+        </div>
+    </div>
+</div>

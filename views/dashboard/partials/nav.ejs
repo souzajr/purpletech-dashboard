@@ -71,7 +71,7 @@
                         <i class="ni ni-planet text-purple"></i> Projetos
                     </a>
                     <% } else { %>
-                        <% if(page == '/dashboard' || page == '/allproject') { %>
+                        <% if(page == '/dashboard' || page == '/allprojectss') { %>
                         <a class="nav-link active" href="#navbar-dashboard" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-dashboard">
                         <% } else { %>
                         <a class="nav-link" href="#navbar-dashboard" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-dashboard">
@@ -79,7 +79,7 @@
                             <i class="ni ni-planet text-purple"></i>
                             <span class="nav-link-text">Dashboard</span>
                         </a>
-                        <% if(page == '/dashboard' || page == '/allproject') { %>
+                        <% if(page == '/dashboard' || page == '/allprojectss') { %>
                         <div class="collapse show" id="navbar-dashboard">
                         <% } else { %>
                         <div class="collapse" id="navbar-dashboard">
@@ -88,13 +88,13 @@
                                 <li class="nav-item">
                                     <% if(page == '/dashboard') { %>
                                     <a href="#!" class="nav-link text-purple">Início</a>
-                                    <a href="/allproject" class="nav-link">Todos os projetos</a>
-                                    <% } else if(page == '/allproject') { %>
+                                    <a href="/allprojects" class="nav-link">Todos os projetos</a>
+                                    <% } else if(page == '/allprojects') { %>
                                     <a href="/dashboard" class="nav-link">Início</a>
                                     <a href="#!" class="nav-link text-purple">Todos os projetos</a>
                                     <% } else { %>
                                     <a href="/dashboard" class="nav-link">Início</a>
-                                    <a href="/allproject" class="nav-link">Todos os projetos</a>
+                                    <a href="/allprojects" class="nav-link">Todos os projetos</a>
                                     <% } %>
                                 </li>
                             </ul>
@@ -110,17 +110,17 @@
                 <% } %>
                 <li class="nav-item">
                     <a class="nav-link" href="/message">
-                        <i class="ni ni-email-83 text-orange"></i> Mensagens
+                        <i class="fas fa-envelope text-orange"></i> Mensagens
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/invoice">
-                        <i class="ni ni-credit-card text-blue"></i> Faturas
+                        <i class="fas fa-file-invoice-dollar text-blue"></i> Faturas
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/support">
-                        <i class="ni ni-circle-08 text-red"></i> Suporte
+                        <i class="fas fa-question-circle text-red"></i></i> Suporte
                     </a>
                 </li>
             </ul>

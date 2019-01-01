@@ -10,7 +10,14 @@ module.exports = app => {
     app.get('/register', function(req, res) {
         res.render('register', { refresh: null, message: null })
     })
-    app.post('/register', app.src.api.user.save)
+    app.post('/register', app.src.api.user.registerNewUser)
+
+    /* ============= CHANGE PASSWORD ============= */
+    /* ============= IN CASE USER CREATED BY ADMIN ============= */
+    app.route('/newPassword')
+        .all(app.src.config.passport.authenticate())
+        .get(app.src.api.user.viewNewPassword)
+        .post(app.src.api.user.createNewPassword)
 
     /* ============= LOGIN ============= */
     app.get('/login', function(req, res) {
@@ -22,14 +29,14 @@ module.exports = app => {
     app.get('/forgotpassword', function(req, res) {
         res.render('forgotpassword', { message: null })
     })
-    app.post('/forgotpassword', app.src.api.user.recover)
-    app.get('/reset/:token', app.src.api.user.recover)
-    app.post('/reset/:token', app.src.api.user.reset)
+    app.post('/forgotpassword', app.src.api.user.recoverPassword)
+    app.get('/reset/:token', app.src.api.user.recoverPassword)
+    app.post('/reset/:token', app.src.api.user.resetPassword)
 
     /* ============= LOGOUT ============= */
-    app.get('/logout', function(req, res) {      
-        req.session.destroy()  
-        req.logout()
+    app.get('/logout', function(req, res) {
+        req.session.reset()          
+        req.logout()     
         res.status(200).redirect('/')
     })
 
@@ -40,61 +47,68 @@ module.exports = app => {
 
     /* ============= DASHBOARD  ============= */
     app.route('/dashboard')
-        .all(app.src.config.passport.authenticate({failureRedirect: '/login' }))
-        .get(app.src.api.user.get)
+        .all(app.src.config.passport.authenticate())
+        .get(app.src.api.user.viewDashboard)
 
     /* ============= USER PROFILE ============= */
     app.route('/profile')
         .all(app.src.config.passport.authenticate())        
-        .get(app.src.api.user.getProfile)
+        .get(app.src.api.user.viewProfile)
         .put(app.src.api.user.changeProfile)
     
     /* ============= UPLOAD NEW/GET PROFILE PIC ============= */
     app.route('/profilePicture/:id')
         .all(app.src.config.passport.authenticate())        
-        .get(app.src.api.user.getProfilePicture)
-        .post(app.src.api.user.profilePicture)
+        .get(app.src.api.user.getProfileAvatar)
+        .post(app.src.api.user.uploadProfileAvatar)
 
-    /* ============= CREATE NEW PROJECT ============= */
+    /* ============= CREATE NEW PROJECT BY NORMAL USER ============= */
     app.route('/project')
         .all(app.src.config.passport.authenticate())
-        .post(app.src.api.project.save)
+        .post(app.src.api.project.createNewProject)
+
+    /* ============= CREATE NEW PROJECT BY ADMIN USER ============= */
+    app.route('/budget')
+        .all(app.src.config.passport.authenticate())
+        .get(admin(app.src.api.project.viewBudget))
+        .post(admin(app.src.api.project.createNewProjectAdmin))    
 
     /* ============= VIEW/EDIT PROJECT ============= */
     app.route('/project/:id')
         .all(app.src.config.passport.authenticate())
-        .get(app.src.api.project.get)
-        .put(admin(app.src.api.project.change))
-    app.route('/allproject')
+        .get(app.src.api.project.viewProject)
+        .put(admin(app.src.api.project.changeProject))
+    app.route('/allprojects')
         .all(app.src.config.passport.authenticate())
-        .get(admin(app.src.api.user.get))
+        .get(admin(app.src.api.project.viewAllProjects))
 
     /* ============= UPLOAD/GET PROJECT FILES ============= */
     app.route('/upload/:id')
         .all(app.src.config.passport.authenticate())
-        .post(app.src.api.project.uploadFile)
+        .post(app.src.api.project.uploadProjectFile)
     app.route('/get/:id/:filename')
         .all(app.src.config.passport.authenticate())
-        .get(app.src.api.project.sendFile)  
+        .get(app.src.api.project.getProjectFile)  
     app.route('/getThumb/:id/:filename')
         .all(app.src.config.passport.authenticate())
-        .get(app.src.api.project.sendFileThumb)      
+        .get(app.src.api.project.getProjectFileThumb)      
 
     /* ============= LIST OF ALL USSER & ADD NEW USER ============= */
     app.route('/users')
         .all(app.src.config.passport.authenticate())
-        .get(admin(app.src.api.user.getAll))
-        .post(admin(app.src.api.user.save))
+        .get(admin(app.src.api.user.viewAllUsers))
+        .post(admin(app.src.api.user.registerNewUserAdmin))
     app.route('/users/:id')
         .all(app.src.config.passport.authenticate())
-        .get(admin(app.src.api.user.getAll))
-        .put(admin(app.src.api.user.getAll))
-        .delete(admin(app.src.api.user.getAll))
+        .get(admin(app.src.api.user.viewUser))
+        .put(admin(app.src.api.user.changeUser))
+        .delete(admin(app.src.api.user.removeUser))
 
     /* ============= HANDLE ERROR  ============= */ 
     /*app.use(function(err, req, res, next) {
-        req.session.reset()
-        res.status(500).send(err)
+        req.session.reset()          
+        req.logout()  
+        res.status(500).render('500')
     })*/
     app.use(function(req, res) {
         res.status(404).render('404');

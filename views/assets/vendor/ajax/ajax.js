@@ -12,7 +12,7 @@ $(document).ready(function() {
                 alertify.notify(result, 'success', 5)
                 setTimeout(function() { 
                     window.location.href = '/dashboard'
-                }, 1000)
+                }, 500)
             },
             error : function(xhr, status, error) {
                 alertify.notify(JSON.parse(xhr.responseText), 'error', 5)
@@ -58,7 +58,7 @@ $(document).ready(function() {
                 alertify.notify(result, 'success', 5)
                 setTimeout(function(){ 
                     window.location.href = '/login'
-                }, 1000)
+                }, 500)
             },
             error : function(xhr, status, error) {
                 alertify.notify(JSON.parse(xhr.responseText), 'error', 5)

@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
-const Project = mongoose.model('Project')
 const jwt = require('jwt-simple')
 const bcrypt = require('bcrypt-nodejs')
 
@@ -35,28 +34,32 @@ module.exports = app => {
             iat: now,
             exp: now + 60 * 60 * 24
         }
-        await Project.find({ _id: user._idProject }).then(project => {
-            req.session.project = project
-            req.session.user = user
-            req.session.token = jwt.encode(payload, process.env.AUTH_SECRET)
-            req.session.save()
+
+        req.session.user = user
+        req.session.token = jwt.encode(payload, process.env.AUTH_SECRET)
+        if(!user.firstAccess)
             res.status(200).redirect('/validate')
-        }).catch(_ => res.status(500).render('500'))
+        else
+            res.status(200).redirect('/newPassword')
     }
 
     const validateToken = async (req, res) => {
-        const userToken = req.session.token || null
-        try {
-            if (userToken) {
-                const token = jwt.decode(userToken, process.env.AUTH_SECRET)
-                if (new Date(token.exp * 1000) > new Date()) {
-                    res.status(200).redirect('/dashboard')
+        if(req.session.user) {
+            const userToken = req.session.token || null
+            try {
+                if (userToken) {
+                    const token = jwt.decode(userToken, process.env.AUTH_SECRET)
+                    if (new Date(token.exp * 1000) > new Date()) {
+                        res.status(200).redirect('/dashboard')
+                    }
                 }
+            } catch (err) {
+                return res.status(401).render('login', { message: JSON.stringify('Algo deu errado') })
             }
-        } catch (err) {
+        } else {
             return res.status(401).render('login', { message: JSON.stringify('Algo deu errado') })
         }
-    }
+    }      
 
     return { login, validateToken }
 }
