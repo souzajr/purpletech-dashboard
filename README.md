@@ -10,13 +10,17 @@ $ git clone https://github.com/souzajr/purpletech-dashboard
 
 # Configuração e instalação 
 
-Você irá precisar do mongoDB
+1) Você irá precisar do mongoDB
 ```bash
 https://www.mongodb.com/
 ```
-Instalação usando npm ou yarn
+2) Instalação usando npm ou yarn
 ```bash
 $ npm install ou yarn install
+```
+3) Configure o arquivo .env
+```bash
+Use como base o arquivo env_file
 ```
 
 # Iniciando e acessando o projeto após a instalação
