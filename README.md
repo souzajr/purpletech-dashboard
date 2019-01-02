@@ -1,7 +1,7 @@
 # Dashboard para gerenciamento e solicitação de orçamentos e projetos
 
 ```bash
-Demo: Indisponível
+Demo: http://ec2-18-228-241-43.sa-east-1.compute.amazonaws.com
 ```
 
 ```bash
