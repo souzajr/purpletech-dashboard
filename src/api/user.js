@@ -260,21 +260,17 @@ module.exports = app => {
         res.status(200).render('login', { message: JSON.stringify('Sucesso!') })
     }
 
-    const uploadProfileAvatar = async (req, res) => {
-        await User.findOne({ _id: req.session.user._id }).then(user => {
+    const uploadProfileAvatar = async (req, res) => {    
+        await User.findOne({ _id: req.session.user._id }).then(async user => {
             upload(req, res, async function(err) {
                 if (err instanceof multer.MulterError) {
-                    return res.status(500).render('500')
+                    return res.status(500).json('Algo deu errado')
                 } else if (err) {
-                    return res.status(500).render('500')
+                    return res.status(500).json('Algo deu errado')
                 } else if (!req.file) {
-                    return res.status(400).render('./dashboard/index', {
-                        user, 
-                        page: '/profile',
-                        message: JSON.stringify('Você deve selecionar uma imagem')
-                    })
+                    return res.status(400).json('Você deve selecionar uma imagem')
                 }
-    
+
                 sharp.cache(false)
                 sharp('./public/upload/' + req.file.filename)
                 .resize({
@@ -284,21 +280,16 @@ module.exports = app => {
                     position: sharp.strategy.entropy
                 })
                 .toFile('./public/upload/profile/' + req.file.filename)
-                .catch(_ => res.status(500).render('500'))
+                .catch(_ => res.status(500).json('Algo deu errado'))
 
                 user.profilePicture = req.file.filename
                 user.avatar = undefined
-                await user.save()
-                .catch(_ => res.status(500).render('500'))
+                await user.save().catch(_ => res.status(500).json('Algo deu errado'))
                 user.password = undefined
                 fs.unlinkSync('./public/upload/' + req.file.filename)
-                res.status(200).render('./dashboard/index', {
-                    user, 
-                    page: '/profile',
-                    message: JSON.stringify('Sucesso!')
-                })
+                res.status(200).json('Sucesso!')
             })
-        }).catch(_ => res.status(500).render('500'))
+        }).catch(_ => res.status(500).json('Algo deu errado'))
     }
 
     const getProfileAvatar = async (req, res) => {

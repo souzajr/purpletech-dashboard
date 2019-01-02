@@ -98,16 +98,19 @@ module.exports = app => {
             if (err instanceof multer.MulterError) {
                 return res.status(500).render('500')
             } else if (err) {
-                return res.status(500).json('Algo deu errado')
+                return res.status(500).render('500')
             } else if (!req.files.length) {
-                await Project.findOne({ _id: req.params.id }).then(project => {
-                    res.status(200).render('./dashboard/index', { 
-                        project,
-                        user: req.session.user, 
-                        page: '/project',
-                        style: 'archive',
-                        message: JSON.stringify('Você deve selecionar ao menos uma imagem') 
-                    })
+                await Project.findOne({ _id: req.params.id }).then(async project => {
+                    await User.findOne({ _id: project._idResponsible }).then(user => {
+                        res.status(200).render('./dashboard/index', { 
+                            project,
+                            responsible: user.name,
+                            user: req.session.user, 
+                            page: '/project',
+                            style: 'archive',
+                            message: JSON.stringify('Você deve selecionar ao menos uma imagem') 
+                        })
+                    }).catch(_ => res.status(500).render('500'))
                 }).catch(_ => res.status(500).render('500'))
             }
     
@@ -126,13 +129,16 @@ module.exports = app => {
                 }
 
                 await project.save().catch(_ => res.status(500).render('500'))
-                res.status(200).render('./dashboard/index', {
-                    project,
-                    user: req.session.user, 
-                    page: '/project',
-                    style: 'archive',
-                    message: JSON.stringify('Sucesso!')
-                })
+                await User.findOne({ _id: project._idResponsible }).then(user => {
+                    res.status(200).render('./dashboard/index', {
+                        project,
+                        responsible: user.name,
+                        user: req.session.user, 
+                        page: '/project',
+                        style: 'archive',
+                        message: JSON.stringify('Sucesso!')
+                    })
+                }).catch(_ => res.status(500).render('500'))
             }).catch(_ => res.status(500).render('500'))
         })
     }

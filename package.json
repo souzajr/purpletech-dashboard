@@ -2,16 +2,21 @@
   "name": "purpletech-dashboard",
   "version": "1.0.0",
   "description": "Dashboard para gerenciamento e solicitação de orçamentos e projetos",
-  "main": "index.js",
   "scripts": {
-    "start": "nodemon",
-    "production": "pm2 start index.js --watch --name PurpleTech"
+    "start": "nodemon index.js",
+    "production": "pm2 start index.js --name PurpleTech && pm2 start pm2-process.json"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/souzajr/purpletech-dashboard.git"
   },
-  "keywords": ["Dashboard", "CRM", "Node.Js", "MongoDB", "EJS"],
+  "keywords": [
+    "Dashboard",
+    "CRM",
+    "Node.Js",
+    "MongoDB",
+    "EJS"
+  ],
   "author": "Roberto Souza",
   "license": "MIT",
   "bugs": {
@@ -22,6 +27,7 @@
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.3",
     "client-sessions": "^0.8.0",
+    "concurrently": "^4.1.0",
     "consign": "^0.1.6",
     "cors": "^2.8.5",
     "dotenv": "^6.2.0",

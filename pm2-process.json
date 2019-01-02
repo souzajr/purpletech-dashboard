@@ -1,0 +1,15 @@
+{
+    "script": "bin/www",
+    "watch": ["src", "views"],
+    "ignore_watch": ["log",
+        "node_modules",
+        "public",
+        "public/upload",
+        "public/upload/profile",
+        "public/upload/thumb"
+    ],
+    "watch_options": {
+        "followSymlinks": false
+    },
+    "name": "PurpleTech"
+}
