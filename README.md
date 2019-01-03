@@ -1,13 +1,16 @@
 ## [Dashboard para gerenciamento e solicitação de orçamentos e projetos](https://bit.ly/2SBfYRs)
-![Product Gif](https://i.imgur.com/AssHdjd.png)
+![Dashboard](https://i.imgur.com/AssHdjd.png)
+
 
 ```bash
-Demo: [https://bit.ly/2SBfYRs](https://bit.ly/2SBfYRs)
+Demo: https://bit.ly/2SBfYRs
 ```
 
 ```bash
 $ git clone https://github.com/souzajr/purpletech-dashboard
 ```
+
+![Status](https://img.shields.io/badge/status-under%20development-orange.svg) ![Platform](https://img.shields.io/badge/platform-linux--64%20%7C%20win--64%20%7C%20osx--64-lightgrey.svg) ![NodeVersion](https://img.shields.io/badge/node%40latest-%3E%3D%2010.15.0-blue.svg)
 
 ## Projeto construído com:
 
