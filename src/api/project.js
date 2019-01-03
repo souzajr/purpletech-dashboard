@@ -111,7 +111,7 @@ module.exports = app => {
                         .catch(_ => res.status(500).render('500'))
                         responsible.password = undefined
                     }
-                    res.status(400).render('./dashboard/index', { 
+                    return res.status(400).render('./dashboard/index', { 
                         project,
                         responsible,
                         user: req.session.user, 
