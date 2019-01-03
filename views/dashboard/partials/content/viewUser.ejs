@@ -22,6 +22,7 @@
                             <div id="phone"><%= getUser.phone %></div>
                             <div id="email"><%= getUser.email %></div><br/>
                             <div>
+                                <% if(!(user._id == getUser._id) && !getUser.admin) { %>
                                 <button type="button" class="btn btn-danger btn-lg btn-block" data-toggle="modal" data-target="#modal-remove">
                                     <% if(!getUser.deletedAt) { %>Banir usuário<% } else { %>Desbanir usuário<% } %>
                                 </button>
@@ -82,6 +83,7 @@
                                         })
                                     })
                                 </script>
+                                <% } %>
                             </div>
                         </div>
                         <hr>

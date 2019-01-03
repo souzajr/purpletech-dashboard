@@ -80,17 +80,21 @@ module.exports = app => {
 
     const viewProject = async (req, res) => {
         await Project.findOne({ _id: req.params.id }).then(async project => {
-            await User.findOne({ _id: project._idResponsible }).then(user => {
-                res.status(200).render('./dashboard/index', {
-                    project,
-                    responsible: user.name,
-                    user: req.session.user, 
-                    page: '/project',
-                    style: 'details',
-                    message: null
-                })
+            let responsible = null
+            if(project._idResponsible) { 
+                responsible = await User.findOne({ _id: project._idResponsible })
+                .catch(_ => res.status(500).render('500'))
+                responsible.password = undefined
+            }
+            res.status(200).render('./dashboard/index', {
+                project,
+                responsible,
+                user: req.session.user, 
+                page: '/project',
+                style: 'details',
+                message: null
             })
-        })
+        }).catch(_ => res.status(500).render('500'))
     }
 
     const uploadProjectFile = (req, res) => {
@@ -101,16 +105,20 @@ module.exports = app => {
                 return res.status(500).render('500')
             } else if (!req.files.length) {
                 await Project.findOne({ _id: req.params.id }).then(async project => {
-                    await User.findOne({ _id: project._idResponsible }).then(user => {
-                        res.status(200).render('./dashboard/index', { 
-                            project,
-                            responsible: user.name,
-                            user: req.session.user, 
-                            page: '/project',
-                            style: 'archive',
-                            message: JSON.stringify('Você deve selecionar ao menos uma imagem') 
-                        })
-                    }).catch(_ => res.status(500).render('500'))
+                    let responsible = null
+                    if(project._idResponsible) { 
+                        responsible = await User.findOne({ _id: project._idResponsible })
+                        .catch(_ => res.status(500).render('500'))
+                        responsible.password = undefined
+                    }
+                    res.status(400).render('./dashboard/index', { 
+                        project,
+                        responsible,
+                        user: req.session.user, 
+                        page: '/project',
+                        style: 'archive',
+                        message: JSON.stringify('Você deve selecionar ao menos uma imagem') 
+                    })
                 }).catch(_ => res.status(500).render('500'))
             }
     
@@ -128,17 +136,21 @@ module.exports = app => {
                     project.file.push({ fileName: req.files[i].filename })
                 }
 
-                await project.save().catch(_ => res.status(500).render('500'))
-                await User.findOne({ _id: project._idResponsible }).then(user => {
-                    res.status(200).render('./dashboard/index', {
-                        project,
-                        responsible: user.name,
-                        user: req.session.user, 
-                        page: '/project',
-                        style: 'archive',
-                        message: JSON.stringify('Sucesso!')
-                    })
-                }).catch(_ => res.status(500).render('500'))
+                await project.save().catch(_ => res.status(500).render('500'))                
+                let responsible = null
+                if(project._idResponsible) { 
+                    responsible = await User.findOne({ _id: project._idResponsible })
+                    .catch(_ => res.status(500).render('500'))
+                    responsible.password = undefined
+                }
+                res.status(200).render('./dashboard/index', {
+                    project,
+                    responsible,
+                    user: req.session.user, 
+                    page: '/project',
+                    style: 'archive',
+                    message: JSON.stringify('Sucesso!')
+                })
             }).catch(_ => res.status(500).render('500'))
         })
     }

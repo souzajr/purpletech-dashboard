@@ -6,7 +6,7 @@ module.exports = middleware => {
         } else {
             req.session.reset()
             req.logout()
-            res.status(401).render('login', { message: JSON.stringify('Algo deu errado') })
+            res.status(403).render('login', { message: JSON.stringify('Algo deu errado') })
         }
     }
 }

@@ -309,9 +309,11 @@ module.exports = app => {
                 await Project.find({ _id: user._idProject }).then(async project => {
                     let responsible = []
                     for(let i = 0; i < project.length; i++) {
-                        await User.findOne({ _id: project[i]._idResponsible }).then(user => {
-                            responsible.push(user.name)
-                        }).catch(_ => res.status(500).render('500'))
+                        if(project[i]._idResponsible) {
+                            await User.findOne({ _id: project[i]._idResponsible }).then(user => {
+                                responsible.push(user.name)
+                            }).catch(_ => res.status(500).render('500'))
+                        }
                     }
                     res.status(200).render('./dashboard/index', {
                         project,

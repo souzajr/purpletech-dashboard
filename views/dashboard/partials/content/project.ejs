@@ -89,7 +89,7 @@
                                             <% if(!project._idResponsible) { %>
                                             <p>O projeto ainda não foi aprovado</p>
                                             <% } else { %>
-                                            <a class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="<%= responsible %>">
+                                            <a class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="<%= responsible.name %>">
                                                 <img alt="Responsável" src="/profilePicture/<%= project._idResponsible %>">
                                             </a>
                                             <% } %>
