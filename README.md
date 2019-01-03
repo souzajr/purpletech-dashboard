@@ -1,9 +1,9 @@
-# [Dashboard para gerenciamento e solicitação de orçamentos e projetos](http://18.231.101.72)
+# [Dashboard para gerenciamento e solicitação de orçamentos e projetos](https://bit.ly/2SBfYRs)
 
 ![Product Gif](https://i.imgur.com/AssHdjd.png)
 
 ```bash
-Demo: http://18.231.101.72
+Demo: https://bit.ly/2SBfYRs
 ```
 
 ```bash
