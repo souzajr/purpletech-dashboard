@@ -104,14 +104,14 @@ module.exports = app => {
             } else if (err) {
                 return res.status(500).render('500')
             } else if (!req.files.length) {
-                await Project.findOne({ _id: req.params.id }).then(async project => {
+                return await Project.findOne({ _id: req.params.id }).then(async project => {
                     let responsible = null
                     if(project._idResponsible) { 
                         responsible = await User.findOne({ _id: project._idResponsible })
                         .catch(_ => res.status(500).render('500'))
                         responsible.password = undefined
                     }
-                    return res.status(400).render('./dashboard/index', { 
+                    res.status(400).render('./dashboard/index', { 
                         project,
                         responsible,
                         user: req.session.user, 
