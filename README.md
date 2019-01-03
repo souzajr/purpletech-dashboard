@@ -1,16 +1,21 @@
-# [Dashboard para gerenciamento e solicitação de orçamentos e projetos](https://bit.ly/2SBfYRs)
-
+## [Dashboard para gerenciamento e solicitação de orçamentos e projetos](https://bit.ly/2SBfYRs)
 ![Product Gif](https://i.imgur.com/AssHdjd.png)
 
 ```bash
-Demo: https://bit.ly/2SBfYRs
+Demo: [https://bit.ly/2SBfYRs](https://bit.ly/2SBfYRs)
 ```
 
 ```bash
 $ git clone https://github.com/souzajr/purpletech-dashboard
 ```
 
-# Configuração e instalação 
+## Projeto construído com:
+
+```bash
+Node.Js / Express / MongoDB / EJS
+```
+
+## Configuração e instalação 
 
 1) Você irá precisar do mongoDB
 ```bash
@@ -25,7 +30,7 @@ $ npm install
 Use como base o arquivo env_file
 ```
 
-# Iniciando e acessando o projeto após a instalação
+## Iniciando e acessando o projeto após a instalação
 
 ```bash
 $ npm start (development mode)
