@@ -101,14 +101,21 @@ module.exports = app => {
 
     /* ============= HANDLE ERROR  ============= */
     if(process.env.AMBIENT_MODE == 'PROD') {
-        app.use(function(err, req, res, next) {
-            req.session.reset()          
+        app.use(function (err, req, res, next) {      
             req.logout()  
             res.status(500).render('500')
         })
 
         app.use(function(req, res) {
             res.redirect('https://purpletech.com.br/404');
+        })
+    } else {
+        app.use(function (err, req, res, next) { 
+            res.status(500).send(err)
+        })
+
+        app.use(function(req, res) {
+            res.status(404).send('404');
         })
     }
 }

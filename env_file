@@ -1,4 +1,4 @@
-AMBIENT MODE CONFIG (DEV for development or PROD for production)
+AMBIENT MODE CONFIG (DEV for development mod or PROD for prododuction mod)
 AMBIENT_MODE=
 
 DOMAINT OF YOUR SERVER (http://localhost + port for dev mod or yoursite.com for prod mode)

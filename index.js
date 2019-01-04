@@ -20,5 +20,5 @@ consign()
 
 app.listen(process.env.PORT, _ => {
     console.log(`Servidor funcionando na porta ${process.env.PORT}`)
-    if (process.env.AMBIENT_MODE == 'DEV') console.log('\x1b[41m\x1b[37m', 'MODO DE DESENVOLVIMENTO ATIVADO!', '\x1b[0m')
+    if(process.env.AMBIENT_MODE == 'DEV') console.log('\x1b[41m\x1b[37m', 'MODO DE DESENVOLVIMENTO', '\x1b[0m')
 })
