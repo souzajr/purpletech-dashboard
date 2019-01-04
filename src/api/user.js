@@ -285,7 +285,6 @@ module.exports = app => {
                 user.profilePicture = req.file.filename
                 user.avatar = undefined
                 await user.save().catch(_ => res.status(500).json('Algo deu errado'))
-                user.password = undefined
                 fs.unlinkSync('./public/upload/' + req.file.filename)
                 res.status(200).json('Sucesso!')
             })
