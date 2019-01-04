@@ -18,7 +18,7 @@ module.exports = {
             subject: 'Recuperação de senha 🔒⛔',
             text: 'Você está recebendo este Email pois solicitou a redefinição da senha da sua conta.\n' +
             'Por favor, clique no link abaixo ou cole no seu navegador para completar o processo:\n\n' +
-            'http://localhost:3000/reset/' + token + '\n\n' +
+            process.env.DOMAIN_NAME + '/reset/' + token + '\n\n' +
             'Se você não solicitou isso, ignore este Email e sua senha permanecerá inalterada.\n'
         } 
 
@@ -30,7 +30,7 @@ module.exports = {
             from: process.env.MAIL_AUTH_USER,
             to: email,
             subject: 'Alteração de senha 🔒⛔',
-            text: 'Uma alteração de senha acabou de ser feita no site http://localhost:3000' + '\n\n' +
+            text: 'Uma alteração de senha acabou de ser feita no site ' + process.env.DOMAIN_NAME + '\n\n' +
             'Se você não fez essa alteração, por favor entre em contato com o suporte.'
         } 
         transporter.sendMail(mailOptions)
@@ -44,7 +44,7 @@ module.exports = {
             html: '<b>Parabéns ' + name + ', você deu o primeiro passo para o sucesso da sua ideia!</b><br/><br/>'+
             'Seu projeto agora está em fase de análise, entraremos em contato em breve.<br/>' +
             'Para conferir as atualizações referentes ao seu projeto, acesse:<br/>' +
-            'http://localhost:3000/project/' + project + '<br/>' +
+            process.env.DOMAIN_NAME + '/project/' + project + '<br/>' +
             'Em caso de dúvidas, responda a este Email ou nos chame através do nosso WhatsApp.<br/><br/>' +
             '<b>PurpleTech</b><br/>https://purpletech.com.br<br/>' +
             '<a href="https://wa.me/5519995360651">WhatsApp: (19) 9 9536-0651</a>'
@@ -93,7 +93,7 @@ module.exports = {
             'Finalmente, você poderá colocar a sua ideia em prática e alcançar o sucesso que sempre sonhou.<br/>' +
             'Contudo, isso não significa que a nossa parceria chegou ao fim. A PurpleTech estará sempre a disposição para ajudar você.<br/>' +
             'Ainda há muito trabalho para ser feito e muitas dúvidas surgirão. Por isso, recomendamos que acesse a nossa sessão de tutoriais.<br/>' +
-            'Para acessar os tutoriais, basta clicar no link: http://localhost:3000/support<br/>' +
+            'Para acessar os tutoriais, basta clicar no link: ' + process.env.DOMAIN_NAME + '/support<br/>' +
             'Em caso de dúvidas, responda a este Email ou nos chame através do nosso WhatsApp.<br/><br/>' +
             '<b>PurpleTech</b><br/>https://purpletech.com.br<br/>' +
             '<a href="https://wa.me/5519995360651">WhatsApp: (19) 9 9536-0651</a>'
@@ -141,7 +141,7 @@ module.exports = {
             'Em nosso sistema, você terá um controle maior sobre o seu projeto e comunicação direta com os desenvolvedores.<br/>' +
             'Além disso, você poderá solicitar novos orçamentos diretamente e ter acesso a diversos tutoriais sobre como gerenciar seu projeto após a finalização.<br/><br/>' +
             'Para acessar a plataforma, utilize as informações abaixo:<br/>' +
-            '<b>http://localhost:3000/login<br/>' +
+            '<b>' + process.env.DOMAIN_NAME + '/login<br/>' +
             'Email: ' + email +
             '<br/>Senha: ' + password + '</b><br/><br/>' +
             'Em caso de dúvidas, responda a este Email ou nos chame através do nosso WhatsApp.<br/><br/>' +

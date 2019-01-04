@@ -1,10 +1,11 @@
 const admin = require('./admin')
 
 module.exports = app => {
-    /* ============= INDEX ============= */
+    /* ============= INDEX / LOGIN ============= */
     app.get('/', function(req, res) {
-        res.render('index')
+        res.render('login', { message: null })
     })
+    app.post('/login', app.src.api.auth.login)
 
     /* ============= REGISTER ============= */
     app.get('/register', function(req, res) {
@@ -18,12 +19,6 @@ module.exports = app => {
         .all(app.src.config.passport.authenticate())
         .get(app.src.api.user.viewNewPassword)
         .post(app.src.api.user.createNewPassword)
-
-    /* ============= LOGIN ============= */
-    app.get('/login', function(req, res) {
-        res.render('login', { message: null })
-    })
-    app.post('/login', app.src.api.auth.login)
 
     /* ============= FORGOT PASSWORD ============= */
     app.get('/forgotpassword', function(req, res) {
@@ -104,13 +99,16 @@ module.exports = app => {
         .put(admin(app.src.api.user.changeUser))
         .delete(admin(app.src.api.user.removeUser))
 
-    /* ============= HANDLE ERROR  ============= */ 
-    /*app.use(function(err, req, res, next) {
-        req.session.reset()          
-        req.logout()  
-        res.status(500).render('500')
-    })*/
-    app.use(function(req, res) {
-        res.status(404).render('404');
-    })
+    /* ============= HANDLE ERROR  ============= */
+    if(process.env.AMBIENT_MODE == 'PROD') {
+        app.use(function(err, req, res, next) {
+            req.session.reset()          
+            req.logout()  
+            res.status(500).render('500')
+        })
+
+        app.use(function(req, res) {
+            res.redirect('https://purpletech.com.br/404');
+        })
+    }
 }

@@ -17,7 +17,7 @@ consign()
     .then('./src/config/routes.js')  
     .into(app)
 
-const port = process.env.PORT || 9000
-app.listen(port, _ => {
-    console.log(`Servidor funcionando na porta ${port}`)
+app.listen(process.env.PORT, _ => {
+    console.log(`Servidor funcionando na porta ${process.env.PORT}`)
+    if (process.env.AMBIENT_MODE == 'DEV') console.log('\x1b[41m\x1b[37m', 'MODO DE DESENVOLVIMENTO ATIVADO!', '\x1b[0m')
 })

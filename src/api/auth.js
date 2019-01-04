@@ -30,7 +30,7 @@ module.exports = app => {
         const now = Math.floor(Date.now() / 1000)
         const payload = {
             id: user._id,
-            iss: 'http://localhost:3000', 
+            iss: process.env.DOMAIN_NAME, 
             iat: now,
             exp: now + 60 * 60 * 24
         }

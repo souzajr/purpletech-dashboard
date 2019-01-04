@@ -57,7 +57,7 @@ $(document).ready(function() {
             success: function(result) {          
                 alertify.notify(result, 'success', 5)
                 setTimeout(function(){ 
-                    window.location.href = '/login'
+                    window.location.href = '/'
                 }, 500)
             },
             error : function(xhr, status, error) {
