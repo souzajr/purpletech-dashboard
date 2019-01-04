@@ -106,15 +106,15 @@ module.exports = app => {
             res.status(500).render('500')
         })
 
-        app.use(function(req, res) {
-            res.redirect('https://purpletech.com.br/404');
+        app.get('*', function(req, res) {
+            res.redirect('https://purpletech.com.br/404')
         })
-    } else {
+    } else {  
         app.use(function (err, req, res, next) { 
             res.status(500).send(err)
         })
 
-        app.use(function(req, res) {
+        app.use('*', function(req, res) {
             res.status(404).send('404');
         })
     }
