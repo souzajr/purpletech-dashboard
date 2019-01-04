@@ -8,6 +8,7 @@ require('dotenv').config()
 app.use(express.static(__dirname))
 createFolder()
 db.openConn()
+
 consign()
     .include('./src/config/passport.js')
     .then('./src/config/middlewares.js')

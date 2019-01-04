@@ -4,7 +4,7 @@
   "description": "Dashboard para gerenciamento e solicitação de orçamentos e projetos",
   "scripts": {
     "start": "nodemon index.js",
-    "production": "pm2 start index.js --name PurpleTech && pm2 start pm2-process.json"
+    "production": "pm2 start index.js --name PurpleTech && pm2 start pm2-process.json && pm2 monit"
   },
   "repository": {
     "type": "git",
@@ -38,7 +38,7 @@
     "helmet": "^3.15.0",
     "jwt-simple": "^0.5.5",
     "method-override": "^3.0.0",
-    "mongoose": "^5.4.1",
+    "mongoose": "^5.4.2",
     "multer": "^1.4.1",
     "nodemailer": "^4.7.0",
     "passport": "^0.4.0",
