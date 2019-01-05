@@ -11,6 +11,7 @@ passport.use(new Strategy({
   function(accessToken, refreshToken, profile, cb) {
     console.log('teste 2')
     User.findOne({ facebookId: profile.id }, function (err, user) {
+        if(err) console.log('teste2')
         return cb(err, user)
     }).catch(_ => console.log('teste'))
   }
