@@ -72,8 +72,11 @@ module.exports = app => {
             await Project.create(project).then(async project => {
                 user._idProject.push(project._id)
                 mail.projectCreated(user.email, user.name, project._id)
-                await user.save().catch(_ => res.status(500).json('Algo deu errado'))
-                res.status(200).json('Sucesso!')
+                if(user.firstProject == true) user.firstProject = false
+                await user.save().then(_ => res.status(200).json({
+                    'msg': 'Sucesso!',
+                    'id': project._id
+                })).catch(_ => res.status(500).json('Algo deu errado'))
             }).catch(_ => res.status(500).json('Algo deu errado'))
         }).catch(_ => res.status(500).json('Algo deu errado'))
     }
@@ -242,8 +245,9 @@ module.exports = app => {
                     else
                         project._idResponsible = undefined
 
-                    await project.save().catch(_ => res.status(500).json('Algo deu errado'))
-                    res.status(200).json('Sucesso!')
+                    await project.save()
+                    .then(_ => res.status(200).json('Sucesso!'))
+                    .catch(_ => res.status(500).json('Algo deu errado'))
                 }
             }).catch(_ => res.status(500).json('Algo deu errado'))
         }).catch(_ => res.status(500).json('Algo deu errado'))
@@ -314,7 +318,8 @@ module.exports = app => {
             project._idResponsible = req.session.user._id
         else
             project._idResponsible = undefined
-        let dataChange = ''
+        
+        let dataChange
         if(project.status == 'Aguardando aprovação') dataChange = 'Created'
         else if(project.status == 'Projeto aprovado') dataChange = 'Approved'
         else if(project.status == 'Projeto em desenvolvimento') dataChange = 'Development'
@@ -331,18 +336,20 @@ module.exports = app => {
 
         await Project.create(project).then(async project => {
             await User.findOne({ _id: project._idClient }).then(async user => {
-                user._idProject.push(project._id)
-                await user.save().catch(_ => res.status(500).json('Algo deu errado'))
-                if(project.projectHistory[0].dataChange == 'Created') mail.projectCreated(user.email, user.name, project._id)
-                else if(project.projectHistory[0].dataChange == 'Approved') mail.projectApproved(user.email, user.name)  
-                else if(project.projectHistory[0].dataChange == 'Development') mail.projectDevelopment(user.email, user.name)
-                else if(project.projectHistory[0].dataChange == 'Completed') mail.projectCompleted(user.email, user.name)  
-                else if(project.projectHistory[0].dataChange == 'Paused') mail.projectPaused(user.email, user.name)   
-                else mail.projectCanceled(user.email, user.name) 
-                res.status(200).json({
-                    'msg': 'Sucesso!',
-                    'id': project._id
-                })
+                if(user.firstProject == true) user.firstProject = false
+                user._idProject.push(project._id)                
+                await user.save().then(_ => {
+                    if(dataChange == 'Created') mail.projectCreated(user.email, user.name, project._id)
+                    else if(dataChange == 'Approved') mail.projectApproved(user.email, user.name)  
+                    else if(dataChange == 'Development') mail.projectDevelopment(user.email, user.name)
+                    else if(dataChange == 'Completed') mail.projectCompleted(user.email, user.name)  
+                    else if(dataChange == 'Paused') mail.projectPaused(user.email, user.name)   
+                    else mail.projectCanceled(user.email, user.name) 
+                    res.status(200).json({
+                        'msg': 'Sucesso!',
+                        'id': project._id
+                    })
+                }).catch(_ => res.status(500).json('Algo deu errado'))
             }).catch(_ => res.status(500).json('Algo deu errado'))  
         }).catch(_ => res.status(500).json('Algo deu errado'))        
     }

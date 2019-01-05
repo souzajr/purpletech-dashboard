@@ -25,13 +25,13 @@
 </div>
 <!-- Core -->
 <script src="/views/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="/views/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 <script src="/views/assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js"></script>
 <script src="/views/assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
 <script src="/views/assets/vendor/lavalamp/js/jquery.lavalamp.min.js"></script>
 <script src="/views/assets/vendor/js-cookie/js.cookie.js"></script>
 
 <% if(!user.admin || page == '/budget') { %>
+    <script src="/views/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
     <script src="/views/assets/vendor/bootstrap-datepicker/dist/locales/bootstrap-datepicker.pt-BR.min.js"></script>
     <script>
         $('#data').datepicker({

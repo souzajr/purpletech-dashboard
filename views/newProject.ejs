@@ -1,0 +1,177 @@
+<%- include dashboard/headEnter.ejs %>
+<div class="main-content">
+  <!-- Header -->
+  <div class="header bg-gradient-primary py-7 py-lg-6">
+    <div class="container">
+      <div class="header-body text-center mb-7">
+        <div class="row justify-content-center">
+          <div class="col-lg-5 col-md-6">
+            <a class="navbar-brand" href="https://purpletech.com.br">
+              <img src="/views/assets/img/brand/logo-white.svg" width="100%" height="60">
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="separator separator-bottom separator-skew zindex-100">
+      <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
+      </svg>
+    </div>
+  </div>
+  <!-- Page content -->
+  <div class="container mt--8 pb-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-12">
+        <div class="card bg-secondary shadow border-0">
+          <div class="card-body px-lg-5 py-lg-5">
+            <div class="text-center text-muted mb-4">
+                <p>Falta pouco!</p>
+                <small>Preencha o formulário abaixo para que possamos fazer seu orçamento</small>
+            </div>
+            <form id="budget" role="form">
+                <h4>Informações do projeto</h4>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="input-group input-group-alternative mb-4">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="ni ni-atom"></i></span>
+                                </div>
+                                <input class="form-control form-control-alternative" name="name" placeholder="Nome do projeto"
+                                    type="text">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="input-group input-group-alternative mb-4">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="ni ni-money-coins"></i></span>
+                                </div>
+                                <input class="form-control form-control-alternative" name="budget" onkeyup="maskIt(this,event,'###.###.###,##',true,{pre:'R$', pos:''})"
+                                    placeholder="Qual o seu orçamento?" type="text">
+                                <script src="/views/assets/vendor/mask/money.js"></script>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="input-group input-group-alternative mb-4">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="ni ni-bullet-list-67"></i></span>
+                                </div>
+                                <select name="category" class="form-control">
+                                    <option disabled selected>Categoria</option>
+                                    <option>Loja Online</option>
+                                    <option>Blog</option>
+                                    <option>Institucional</option>
+                                    <option>Portal de Notícias</option>
+                                    <option>ERP</option>
+                                    <option>Outro</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="input-group input-group-alternative mb-4">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
+                                </div>
+                                <input class="form-control form-control-alternative datepicker" id="data" name="deadline" placeholder="Prazo" type="text">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h4>Em quais plataformas você pretende lançar sua aplicação?</h4>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="custom-control custom-control-alternative custom-checkbox mb-3">
+                            <input class="custom-control-input" name="web" id="webCheck" type="checkbox">
+                            <label class="custom-control-label" for="webCheck">Site (web)</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="custom-control custom-control-alternative custom-checkbox mb-3">
+                            <input class="custom-control-input" name="app" id="appCheck" type="checkbox">
+                            <label class="custom-control-label" for="appCheck">App (Android/iOS)</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="custom-control custom-control-alternative custom-checkbox mb-3">
+                            <input class="custom-control-input" name="desktop" id="desktopCheck" type="checkbox">
+                            <label class="custom-control-label" for="desktopCheck">Desktop (software)</label>
+                        </div>
+                    </div>
+                </div>
+                <h4>Por favor, descreva seu projeto. Quanto mais detalhes, melhor</h4>
+                <div class="row">
+                    <div class="col-md-12">
+                        <textarea class="form-control form-control-alternative" name="description" placeholder="Descrição do projeto" rows="3"></textarea>
+                    </div>
+                </div>
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary my-4">Solicitar orçamento</button>
+              </div>
+            </form>            
+            <script src="/views/assets/vendor/ajax/ajax.js"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="py-5">
+    <div class="container">
+        <div class="row align-items-center justify-content-xl-between">
+            <div class="col-xl-6">
+                <div class="copyright text-center text-xl-left text-muted">
+                    &copy; <script>document.write(new Date().getFullYear())</script> <a href="https://purpletech.com.br" class="font-weight-bold ml-1" target="_blank">PurpleTech</a>
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <ul class="nav nav-footer justify-content-center justify-content-xl-end">
+                    <li class="nav-item">
+                        <a href="https://github.com/souzajr" class="nav-link" target="_blank">GitHub</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="https://www.behance.net/purpletech" class="nav-link" target="_blank">Behance</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- Argon Scripts -->
+<!-- Core -->
+<script src="/views/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Argon JS -->
+<script src="/views/assets/js/argon.js?v=1.0.0"></script>
+
+
+<script src="/views/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="/views/assets/vendor/bootstrap-datepicker/dist/locales/bootstrap-datepicker.pt-BR.min.js"></script>
+<script>
+    $('#data').datepicker({
+        format: 'dd/mm/yy',
+        language: 'pt-BR',
+        startDate: '+0'
+    })
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.11.2/build/alertify.min.js"></script>
+<% if(message) { %>
+<script>
+    const msg = JSON.parse('<%- message %>')
+    if (msg !== 'Sucesso!')
+        alertify.notify(msg, 'error', 5)
+    else
+        alertify.notify(msg, 'success', 5)
+</script>
+<% } %>
+</body>
+
+</html>

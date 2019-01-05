@@ -6,19 +6,29 @@ module.exports = app => {
         res.render('login', { message: null })
     })
     app.post('/login', app.src.api.auth.login)
+    app.post('/login/facebook', app.src.api.auth.facebook)
+    app.get('/OAuth/Facebook', function(req, res) {
+        res.redirect('/validate')
+    })
 
     /* ============= REGISTER ============= */
     app.get('/register', function(req, res) {
-        res.render('register', { refresh: null, message: null })
+        res.render('register', { message: null })
     })
     app.post('/register', app.src.api.user.registerNewUser)
 
     /* ============= CHANGE PASSWORD ============= */
-    /* ============= IN CASE USER CREATED BY ADMIN ============= */
+    /* ============= IF THE USER WAS CREATED BY ADMIN ============= */
     app.route('/newPassword')
         .all(app.src.config.passport.authenticate())
         .get(app.src.api.user.viewNewPassword)
         .post(app.src.api.user.createNewPassword)
+
+    /* ============= USER FIRST LOGIN ============= */
+    app.route('/newProject')
+        .all(app.src.config.passport.authenticate())
+        .get(app.src.api.user.viewNewProjectFirstAccess)
+        .post(app.src.api.project.createNewProject)
 
     /* ============= FORGOT PASSWORD ============= */
     app.get('/forgotpassword', function(req, res) {
@@ -99,10 +109,41 @@ module.exports = app => {
         .put(admin(app.src.api.user.changeUser))
         .delete(admin(app.src.api.user.removeUser))
 
+
+    /* ============= MESSAGE  ============= */
+    app.route('/message')
+        .all(app.src.config.passport.authenticate())
+        .get(function(req, res) {
+            res.render('./dashboard/index', { 
+                user: req.session.user,
+                page: req.url,
+                message: null
+            })
+        })
+    /* ============= INVOICE  ============= */
+    app.route('/invoice')
+    .all(app.src.config.passport.authenticate())
+    .get(function(req, res) {
+        res.render('./dashboard/index', { 
+            user: req.session.user,
+            page: req.url,
+            message: null
+        })
+    })
+    /* ============= SUPPORT  ============= */
+    app.route('/support')
+    .all(app.src.config.passport.authenticate())
+    .get(function(req, res) {
+        res.render('./dashboard/index', { 
+            user: req.session.user,
+            page: req.url,
+            message: null
+        })
+    })
+
     /* ============= HANDLE ERROR  ============= */
     if(process.env.AMBIENT_MODE == 'PROD') {
-        app.use(function (err, req, res, next) {      
-            req.logout()  
+        app.use(function (err, req, res, next) { 
             res.status(500).render('500')
         })
 
@@ -110,10 +151,6 @@ module.exports = app => {
             res.redirect('https://purpletech.com.br/404')
         })
     } else {  
-        app.use(function (err, req, res, next) { 
-            res.status(500).send(err)
-        })
-
         app.use('*', function(req, res) {
             res.status(404).send('404');
         })

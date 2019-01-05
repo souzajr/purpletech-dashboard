@@ -9,9 +9,10 @@ $(document).ready(function() {
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             data: $('#budget').serialize(),
             success: function(result) {
-                alertify.notify(result, 'success', 5)
+                console.log('teste')
+                alertify.notify(result.msg, 'success', 5)
                 setTimeout(function() { 
-                    window.location.href = '/dashboard'
+                    window.location.href = '/project/' + result.id
                 }, 500)
             },
             error : function(xhr, status, error) {

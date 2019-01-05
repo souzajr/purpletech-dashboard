@@ -93,6 +93,7 @@ module.exports = app => {
         user.createdAt = new Date().toLocaleDateString().split('-').reverse().join('/')
         user.admin = false        
         user.firstAccess = false
+        user.firstProject = true
 
         await User.create(user).catch(_ => res.status(500).json('Algo deu errado'))
         res.status(200).json('Sucesso!') 
@@ -208,8 +209,7 @@ module.exports = app => {
             const token = crypto.randomBytes(64).toString('hex')
             user.resetPasswordToken = token
             user.resetPasswordExpires = Date.now() + 3600000
-            await user.save()
-            .catch(_ => res.status(500).render('500'))
+            await user.save().catch(_ => res.status(500).render('500'))
             mail.recoveryMail(user.email, token)
             res.status(200).render('forgotpassword', { message: JSON.stringify('Sucesso!') }) 
         } else {
@@ -254,15 +254,14 @@ module.exports = app => {
         user.password = encryptPassword(req.body.password)
         user.resetPasswordToken = undefined
         user.resetPasswordExpires = undefined
-        await user.save()
-        .catch(_ => res.status(500).render('500'))
+        await user.save().catch(_ => res.status(500).render('500'))
         mail.alertOfChange(user.email)
         res.status(200).render('login', { message: JSON.stringify('Sucesso!') })
     }
 
     const uploadProfileAvatar = async (req, res) => {    
-        await User.findOne({ _id: req.session.user._id }).then(async user => {
-            upload(req, res, async function(err) {
+        await User.findOne({ _id: req.session.user._id }).then(user => {
+            upload(req, res, function(err) {
                 if (err instanceof multer.MulterError) {
                     return res.status(500).json('Algo deu errado')
                 } else if (err) {
@@ -272,21 +271,20 @@ module.exports = app => {
                 }
 
                 sharp.cache(false)
-                sharp('./public/upload/' + req.file.filename)
-                .resize({
+                sharp('./public/upload/' + req.file.filename).resize({
                     width: 200,
                     height: 200,
                     fit: sharp.fit.cover,
                     position: sharp.strategy.entropy
-                })
-                .toFile('./public/upload/profile/' + req.file.filename)
-                .catch(_ => res.status(500).json('Algo deu errado'))
-
-                user.profilePicture = req.file.filename
-                user.avatar = undefined
-                await user.save().catch(_ => res.status(500).json('Algo deu errado'))
-                fs.unlinkSync('./public/upload/' + req.file.filename)
-                res.status(200).json('Sucesso!')
+                }).toFile('./public/upload/profile/' + req.file.filename)
+                .then(async _ => {
+                    user.profilePicture = req.file.filename
+                    user.avatar = undefined
+                    await user.save().then(_ => {
+                        fs.unlinkSync('./public/upload/' + req.file.filename)
+                        res.status(200).json('Sucesso!')
+                    }).catch(_ => res.status(500).json('Algo deu errado'))
+                }).catch(_ => res.status(500).json('Algo deu errado'))
             })
         }).catch(_ => res.status(500).json('Algo deu errado'))
     }
@@ -381,12 +379,13 @@ module.exports = app => {
                 user.email = req.body.newEmail
             } 
 
-            await user.save().catch(_ => res.status(500).json('Algo deu errado'))
-            res.status(200).json({ 
-                "msg": "Sucesso!",
-                "phone": req.body.newPhone,
-                "email": req.body.newEmail
-            })
+            await user.save().then(_ => {
+                res.status(200).json({ 
+                    'msg': 'Sucesso!',
+                    'phone': req.body.newPhone,
+                    'email': req.body.newEmail
+                })
+            }).catch(_ => res.status(500).json('Algo deu errado'))
         }).catch(_ => res.status(500).render('500'))
     }
 
@@ -397,8 +396,8 @@ module.exports = app => {
         await User.findOne({ _id: req.params.id }).then(async user => {
             if(!user.deletedAt) user.deletedAt = new Date().toLocaleDateString().split('-').reverse().join('/')
             else user.deletedAt = undefined
-            await user.save().catch(_ => res.status(500).json('Algo deu errado'))
-            res.status(200).json('Sucesso!')
+            await user.save().then(_ => res.status(200).json('Sucesso!'))
+            .catch(_ => res.status(500).json('Algo deu errado'))
         }).catch(_ => res.status(500).json('Algo deu errado'))
     }
 
@@ -441,14 +440,16 @@ module.exports = app => {
         }, true)
         if(!user.phone) user.phone = 'Sem telefone' 
         user.createdAt = new Date().toLocaleDateString().split('-').reverse().join('/')
-        user.firstAccess = true
+        user.firstAccess = true        
+        user.firstProject = true
 
         await User.create(user).catch(_ => res.status(500).json('Algo deu errado'))
         res.status(200).json('Sucesso!')
     }
 
     const viewNewPassword = (req, res) => {
-        res.status(200).render('newPassword', { message: null })
+        if(req.session.user.firstAccess) res.status(200).render('newPassword', { message: null })
+        else res.redirect('/')
     }
 
     const createNewPassword = async (req, res) => {
@@ -472,10 +473,16 @@ module.exports = app => {
         await User.findOne({ _id: req.session.user._id }).then(async user => {
             user.password = newPassword.password
             user.firstAccess = false
-            await user.save().catch(_ => res.status(500).json('Algo deu errado'))
+            await user.save().then(_ => {
+                if(user.firstProject == false) res.status(200).json({ 'msg': 'Sucesso!', 'project': false })
+                else res.status(200).json({ 'msg': 'Sucesso!', 'project': true })
+            }).catch(_ => res.status(500).json('Algo deu errado'))
         }).catch(_ => res.status(500).json('Algo deu errado'))
-        
-        res.status(200).json('Sucesso!')
+    }
+
+    const viewNewProjectFirstAccess = (req, res) => {
+        if(req.session.user.firstProject) res.status(200).render('newProject', { message: null })
+        else res.redirect('/')
     }
 
     return {
@@ -493,6 +500,7 @@ module.exports = app => {
         removeUser,
         registerNewUserAdmin,
         viewNewPassword,
-        createNewPassword
+        createNewPassword,
+        viewNewProjectFirstAccess
     }
 }

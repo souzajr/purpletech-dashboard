@@ -11,10 +11,6 @@ const TaskSchema = new moongoose.Schema({
     description: String,
 })
 
-const FileSchema = new moongoose.Schema({
-    fileName: String
-})
-
 const ProjectSchema = new moongoose.Schema({
     _idClient: { type: String, required: true },
     name: { type: String, required: true },
@@ -31,7 +27,7 @@ const ProjectSchema = new moongoose.Schema({
     startAt: String,
     endAt: String,
     task: [TaskSchema],
-    file: [FileSchema],
+    file: [{ fileName: String }],
     canceledReason: String
 })
 

@@ -36,11 +36,12 @@ module.exports = app => {
                 ephemeral: true
             }
         })) 
+        
+        app.use(morgan('dev'))
     }
     app.use(passport.initialize())
     app.use(passport.session())  
     app.set('view engine', 'ejs') 
-    app.use(morgan('dev'))
     app.use(bodyParser.urlencoded({ extended: true }))      
     app.use(methodOverride(function (req, res) {
         if (req.body && typeof req.body === 'object' && '_method' in req.body) {
@@ -63,7 +64,10 @@ module.exports = app => {
         '/allprojects',
         '/budget',
         '/viewUser',
-        '/newPassword'
+        '/newPassword',
+        '/message',
+        '/invoice',
+        '/support'
     ], function (req, res, next) {
         if (!req.session.user) {
             res.status(401).render('login', { message: JSON.stringify('Por favor, faça o login para acessar') })

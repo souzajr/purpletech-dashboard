@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const jwt = require('jwt-simple')
 const bcrypt = require('bcrypt-nodejs')
+const passport = require('passport-facebook')
 
 module.exports = app => {
     const login = async (req, res) => {
@@ -38,9 +39,25 @@ module.exports = app => {
         req.session.user = user
         req.session.token = jwt.encode(payload, process.env.AUTH_SECRET)
         if(!user.firstAccess)
-            res.status(200).redirect('/validate')
+            res.redirect('/validate')
         else
-            res.status(200).redirect('/newPassword')
+            res.redirect('/newPassword')
+    }
+
+    const facebook = (req, res) => {
+        passport.use(new FacebookStrategy({
+            clientID: '285500958802172',
+            clientSecret: '85db915e7d98c5a8f397cdfc2d8bc3a8',
+            callbackURL: 'https://app.purpletech.com.br/OAuth/Facebook'
+          },
+          function(accessToken, refreshToken, profile, cb) {
+            User.findOne({ facebookId: profile.id }, function (err, user) {
+              cb(err, user)
+              
+              return console.log('teste')
+            })
+          }
+        ))
     }
 
     const validateToken = async (req, res) => {
@@ -50,7 +67,8 @@ module.exports = app => {
                 if (userToken) {
                     const token = jwt.decode(userToken, process.env.AUTH_SECRET)
                     if (new Date(token.exp * 1000) > new Date()) {
-                        res.status(200).redirect('/dashboard')
+                        if(req.session.user.firstProject == true) res.redirect('/newProject')
+                        else res.redirect('/dashboard')
                     }
                 }
             } catch (err) {
@@ -61,5 +79,5 @@ module.exports = app => {
         }
     }      
 
-    return { login, validateToken }
+    return { login, facebook, validateToken }
 }
