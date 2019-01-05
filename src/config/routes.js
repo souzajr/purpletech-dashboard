@@ -1,4 +1,20 @@
 const admin = require('./admin')
+var passport = require('passport');
+var Strategy = require('passport-facebook').Strategy
+
+
+passport.use(new Strategy({
+    clientID: '285500958802172',
+    clientSecret: '85db915e7d98c5a8f397cdfc2d8bc3a8',
+    callbackURL: 'https://app.purpletech.com.br/OAuth/Facebook'
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    console.log('teste 2')
+    User.findOne({ facebookId: profile.id }, function (err, user) {
+        return cb(err, user)
+    })
+  }
+))
 
 module.exports = app => {
     /* ============= INDEX / LOGIN ============= */
@@ -6,9 +22,10 @@ module.exports = app => {
         res.render('login', { message: null })
     })
     app.post('/login', app.src.api.auth.login)
-    app.post('/login/facebook', app.src.api.auth.facebook)
-    app.get('/OAuth/Facebook', function(req, res) {
-        res.redirect('/validate')
+    app.get('/login/facebook', passport.authenticate('facebook'))
+    app.get('/OAuth/Facebook', passport.authenticate('facebook', { failureRedirect: '/' }),
+        function(req, res) {
+            res.render('login', { message: JSON.stringify('Sucesso!') });
     })
 
     /* ============= REGISTER ============= */
