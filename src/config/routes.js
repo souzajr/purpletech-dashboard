@@ -12,7 +12,7 @@ passport.use(new Strategy({
     console.log('teste 2')
     User.findOne({ facebookId: profile.id }, function (err, user) {
         return cb(err, user)
-    })
+    }).catch(_ => console.log('teste'))
   }
 ))
 
