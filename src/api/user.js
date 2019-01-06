@@ -135,7 +135,7 @@ module.exports = app => {
                     existOrError(req.body.currentPassword, 'Digite sua senha atual')
                     existOrError(req.body.newPassword, 'Digite sua nova senha')
                     existOrError(req.body.confirmNewPassword, 'Digite a confirmação da sua nova senha')
-                    const checkUser = await User.findOne({ _id: req.session.user.email })
+                    const checkUser = await User.findOne({ _id: req.session.user._id })
                     .catch(_ => res.status(500).json('Algo deu errado')) 
                     const isMatch = bcrypt.compareSync(req.body.currentPassword, checkUser.password)
                     if (!isMatch) return res.status(401).json('Senha inválida')
@@ -456,6 +456,10 @@ module.exports = app => {
         const newPassword = { ...req.body }
 
         try {
+            const checkUser = await User.findOne({ _id: req.session.user._id })
+            .catch(_ => res.status(500).json('Algo deu errado')) 
+            const isMatch = bcrypt.compareSync(newPassword.password, checkUser.password)
+            if (isMatch) return res.status(400).json('A sua nova senha não pode ser igual a sua senha provisória')
             hasDigitOrError(newPassword.password, 'A senha deve ter pelo menos um número')
             hasLowerOrError(newPassword.password, 'A senha deve ter pelo menos uma letra minúscula')
             hasUpperOrError(newPassword.password, 'A senha deve ter pelo menos uma letra maiúscula')

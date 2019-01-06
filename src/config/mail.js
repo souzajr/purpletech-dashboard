@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
 module.exports = { 
     recoveryMail(email, token) {
         const mailOptions = {
-            from: process.env.MAIL_AUTH_USER,
+            from: 'PurpleTech' + '<'+process.env.MAIL_AUTH_USER+'>',
             to: email,
             subject: 'Recuperação de senha 🔒⛔',
             text: 'Você está recebendo este Email pois solicitou a redefinição da senha da sua conta.\n' +
@@ -27,7 +27,7 @@ module.exports = {
 
     alertOfChange(email) {
         const mailOptions = {
-            from: process.env.MAIL_AUTH_USER,
+            from: 'PurpleTech' + '<'+process.env.MAIL_AUTH_USER+'>',
             to: email,
             subject: 'Alteração de senha 🔒⛔',
             text: 'Uma alteração de senha acabou de ser feita no site ' + process.env.DOMAIN_NAME + '\n\n' +
@@ -38,7 +38,7 @@ module.exports = {
 
     projectCreated(email, name, project) {
         const mailOptions = {
-            from: process.env.MAIL_AUTH_USER,
+            from: 'PurpleTech' + '<'+process.env.MAIL_AUTH_USER+'>',
             to: email,
             subject: 'Projeto criado com sucesso! 💖😍',
             html: '<b>Parabéns ' + name + ', você deu o primeiro passo para o sucesso da sua ideia!</b><br/><br/>'+
@@ -55,7 +55,7 @@ module.exports = {
 
     projectApproved(email, name) {
         const mailOptions = {
-            from: process.env.MAIL_AUTH_USER,
+            from: 'PurpleTech' + '<'+process.env.MAIL_AUTH_USER+'>',
             to: email,
             subject: 'Seu projeto foi aprovado! 🤩🤩',
             html: '<b>Olá, ' + name + '. É com muito prazer que anunciamos que seu projeto foi aprovado!</b><br/><br/>'+
@@ -70,7 +70,7 @@ module.exports = {
 
     projectDevelopment(email, name) {
         const mailOptions = {
-            from: process.env.MAIL_AUTH_USER,
+            from: 'PurpleTech' + '<'+process.env.MAIL_AUTH_USER+'>',
             to: email,
             subject: 'Seu projeto está em desenvolvimento! 🔥🚀',
             html: '<b>Olá, ' + name + '. Seu projeto está em fase de desenvolvimento!</b><br/><br/>'+
@@ -86,13 +86,13 @@ module.exports = {
     projectCompleted(email, name) {
         console.log(email, name)
         const mailOptions = {
-            from: process.env.MAIL_AUTH_USER,
+            from: 'PurpleTech' + '<'+process.env.MAIL_AUTH_USER+'>',
             to: email,
             subject: 'Seu projeto foi concluído! 🌟😍',
             html: '<b>Olá, ' + name + '. Seu projeto foi concluído com sucesso!</b><br/><br/>'+
             'Finalmente, você poderá colocar a sua ideia em prática e alcançar o sucesso que sempre sonhou.<br/>' +
             'Contudo, isso não significa que a nossa parceria chegou ao fim. A PurpleTech estará sempre a disposição para ajudar você.<br/>' +
-            'Ainda há muito trabalho para ser feito e muitas dúvidas surgirão. Por isso, recomendamos que acesse a nossa sessão de tutoriais.<br/>' +
+            'Ainda há muito trabalho para ser feito e muitas dúvidas surgirão. Por isso, recomendamos que acesse a nossa sessão de tutoriais em nossa plataforma.<br/>' +
             'Para acessar os tutoriais, basta clicar no link: ' + process.env.DOMAIN_NAME + '/support<br/>' +
             'Em caso de dúvidas, responda a este Email ou nos chame através do nosso WhatsApp.<br/><br/>' +
             '<b>PurpleTech</b><br/>https://purpletech.com.br<br/>' +
@@ -104,7 +104,7 @@ module.exports = {
 
     projectPaused(email, name) {
         const mailOptions = {
-            from: process.env.MAIL_AUTH_USER,
+            from: 'PurpleTech' + '<'+process.env.MAIL_AUTH_USER+'>',
             to: email,
             subject: 'Seu projeto foi pausado! ⏸⛔',
             html: '<b>Olá, ' + name + '. Seu projeto foi colocado em espera.</b><br/><br/>' +
@@ -118,7 +118,7 @@ module.exports = {
 
     projectCanceled(email, name) {
         const mailOptions = {
-            from: process.env.MAIL_AUTH_USER,
+            from: 'PurpleTech' + '<'+process.env.MAIL_AUTH_USER+'>',
             to: email,
             subject: 'Seu projeto foi cancelado! 😥😔',
             html: '<b>Olá, ' + name + '. Infelizmente, seu projeto foi cancelado.</b><br/><br/>' +
@@ -134,14 +134,14 @@ module.exports = {
 
     userCreated(email, name, password) {
         const mailOptions = {
-            from: process.env.MAIL_AUTH_USER,
+            from: 'PurpleTech' + '<'+process.env.MAIL_AUTH_USER+'>',
             to: email,
             subject: 'Uma conta foi criada para você 🤩🌟',
             html: '<b>Olá, ' + name + '. Uma conta em nosso painel foi criada para que você possa acompanhar o andamento do seu projeto.</b><br/><br/>' +
             'Em nosso sistema, você terá um controle maior sobre o seu projeto e comunicação direta com os desenvolvedores.<br/>' +
             'Além disso, você poderá solicitar novos orçamentos diretamente e ter acesso a diversos tutoriais sobre como gerenciar seu projeto após a finalização.<br/><br/>' +
             'Para acessar a plataforma, utilize as informações abaixo:<br/>' +
-            '<b>' + process.env.DOMAIN_NAME + '/login<br/>' +
+            '<b>' + process.env.DOMAIN_NAME + '<br/>' +
             'Email: ' + email +
             '<br/>Senha: ' + password + '</b><br/><br/>' +
             'Em caso de dúvidas, responda a este Email ou nos chame através do nosso WhatsApp.<br/><br/>' +

@@ -103,23 +103,23 @@
                 </li>
                 <% if(user.admin) { %>
                 <li class="nav-item">
-                    <a class="nav-link" href="/users">
+                    <a class="nav-link <%if (page == '/users') {%>active<% } %>" href="/users">
                         <i class="fas fa-users text-default"></i></i> Usuários
                     </a>
                 </li>
                 <% } %>
                 <li class="nav-item">
-                    <a class="nav-link" href="/message">
+                    <a class="nav-link <%if (page == '/message') {%>active<% } %>" href="/message">
                         <i class="fas fa-envelope text-orange"></i> Mensagens
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/invoice">
+                    <a class="nav-link <%if (page == '/invoice') {%>active<% } %>" href="/invoice">
                         <i class="fas fa-file-invoice-dollar text-blue"></i> Faturas
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/support">
+                    <a class="nav-link <%if (page == '/support') {%>active<% } %>" href="/support">
                         <i class="fas fa-question-circle text-red"></i></i> Suporte
                     </a>
                 </li>
