@@ -97,8 +97,8 @@ module.exports = app => {
         user.firstAccess = false
         user.firstProject = true
 
-        await User.create(user).catch(_ => res.status(500).json('Algo deu errado'))
-        res.status(200).json('Sucesso!') 
+        await User.create(user).then(_ => res.status(200).json('Sucesso!'))
+        .catch(_ => res.status(500).json('Algo deu errado'))
     }
 
     const changeProfile = async (req, res) => {
@@ -441,12 +441,12 @@ module.exports = app => {
             d: 'retro'
         }, true)
         if(!user.phone) user.phone = 'Sem telefone' 
-        user.createdAt = new Date().toLocaleDateString().split('-').reverse().join('/')
+        user.createdAt = moment().format('L')
         user.firstAccess = true        
         user.firstProject = true
 
-        await User.create(user).catch(_ => res.status(500).json('Algo deu errado'))
-        res.status(200).json('Sucesso!')
+        await User.create(user).then(_ => res.status(200).json('Sucesso!'))
+        .catch(_ => res.status(500).json('Algo deu errado'))
     }
 
     const viewNewPassword = (req, res) => {
