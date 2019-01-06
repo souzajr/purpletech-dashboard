@@ -6,6 +6,8 @@ const path = require('path')
 const multer = require('multer')
 const crypto = require('crypto')
 const sharp = require('sharp')
+const moment = require('moment')
+moment.locale('pt-br')
 
 module.exports = app => {    
     const {
@@ -50,11 +52,10 @@ module.exports = app => {
             return res.status(400).json(msg)
         }
 
-        const date = new Date()
         project.projectHistory = [{ 
             dataChange: 'Created',
-            dateChange: date.toLocaleDateString().split('-').reverse().join('/'),
-            dateTodayChange: date.getHours() + ':' + ((date.getMinutes() < 10 ? "0" : "") + date.getMinutes())
+            dateChange: moment().format('L'),
+            dateTodayChange: moment().format('LT')
         }]
         project.createdAt = project.projectHistory[0].dateChange
         project.status = 'Aguardando aprovação'
@@ -214,11 +215,10 @@ module.exports = app => {
 
                 async function changeProject(status, pushHistory, reason) {
                     if(status && pushHistory) {
-                        const date = new Date()
                         project.projectHistory.push({ 
                             dataChange: pushHistory,
-                            dateChange: date.toLocaleDateString().split('-').reverse().join('/'),
-                            dateTodayChange: date.getHours() + ':' + ((date.getMinutes() < 10 ? "0" : "") + date.getMinutes())
+                            dateChange: moment().format('L'),
+                            dateTodayChange: moment().format('LT')
                         })
                         project.status = status
                         if(reason)
@@ -326,11 +326,10 @@ module.exports = app => {
         else if(project.status == 'Projeto concluído') dataChange = 'Completed'
         else if(project.status == 'Projeto pausado') DataChange = 'Paused'
         else dataChange = 'Canceled'
-        const date = new Date()
         project.projectHistory = [{ 
             dataChange,
-            dateChange: date.toLocaleDateString().split('-').reverse().join('/'),
-            dateTodayChange: date.getHours() + ':' + ((date.getMinutes() < 10 ? "0" : "") + date.getMinutes())
+            dateChange: moment().format('L'),
+            dateTodayChange: moment().format('LT')
         }]
         project.createdAt = project.projectHistory[0].dateChange
 
@@ -339,12 +338,14 @@ module.exports = app => {
                 if(user.firstProject == true) user.firstProject = false
                 user._idProject.push(project._id)                
                 await user.save().then(_ => {
-                    if(dataChange == 'Created') mail.projectCreated(user.email, user.name, project._id)
-                    else if(dataChange == 'Approved') mail.projectApproved(user.email, user.name)  
-                    else if(dataChange == 'Development') mail.projectDevelopment(user.email, user.name)
-                    else if(dataChange == 'Completed') mail.projectCompleted(user.email, user.name)  
-                    else if(dataChange == 'Paused') mail.projectPaused(user.email, user.name)   
-                    else mail.projectCanceled(user.email, user.name) 
+                    if(req.body.sendMail) {
+                        if(dataChange == 'Created') mail.projectCreated(user.email, user.name, project._id)
+                        else if(dataChange == 'Approved') mail.projectApproved(user.email, user.name)  
+                        else if(dataChange == 'Development') mail.projectDevelopment(user.email, user.name)
+                        else if(dataChange == 'Completed') mail.projectCompleted(user.email, user.name)  
+                        else if(dataChange == 'Paused') mail.projectPaused(user.email, user.name)   
+                        else mail.projectCanceled(user.email, user.name)
+                    } 
                     res.status(200).json({
                         'msg': 'Sucesso!',
                         'id': project._id

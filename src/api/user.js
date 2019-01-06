@@ -10,6 +10,8 @@ const crypto = require('crypto')
 const fs = require('fs')
 const sharp = require('sharp')
 const generator = require('generate-password')
+const moment = require('moment')
+moment.locale('pt-br')
 
 
 module.exports = app => {
@@ -90,7 +92,7 @@ module.exports = app => {
             r: 'x',
             d: 'retro'
         }, true)
-        user.createdAt = new Date().toLocaleDateString().split('-').reverse().join('/')
+        user.createdAt = moment().format('L')
         user.admin = false        
         user.firstAccess = false
         user.firstProject = true
