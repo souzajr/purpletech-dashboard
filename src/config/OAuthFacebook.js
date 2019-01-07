@@ -2,6 +2,7 @@ const passport = require('passport')
 const FacebookStrategy = require('passport-facebook')
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
+const gravatar = require('gravatar')
 const moment = require('moment')
 moment.locale('pt-br')
 
@@ -18,7 +19,7 @@ passport.use(new FacebookStrategy({
     clientSecret: process.env.CLIENT_FACEBOOK_SECRET,
     callbackURL: process.env.FACEBOOK_CALLBACK_URL,
     enableProof: true,
-    profileFields: ['id', 'name', 'picture', 'email']
+    profileFields: ['id', 'displayName', 'picture.type(large)']
 }, async (accessToken, refreshToken, profile, done) => {   
     console.log(profile) 
     await User.findOne({ facebookId: profile.id }, async function(err, user) {
@@ -34,17 +35,20 @@ passport.use(new FacebookStrategy({
                 user = 'Esse Email já está registrado'
                 return done(err, user)
             }
-
             await new User({
-                name: profile.name,
+                name: profile.displayName,
                 email: profile.email,
                 phone: 'Sem telefone',
                 admin: false,  
-                avatar: profile.picture,      
+                avatar: profile.photos ? profile.photos[0].value : gravatar.url(profile.email, {
+                    s: '160',
+                    r: 'x',
+                    d: 'retro'
+                }, true),      
                 firstAccess: false,
                 firstProject: true,
                 createdAt: moment().format('L'),
-                facebookId: profile.id
+                googleId: profile.id
             }).save().then(user => done(err, user))
         }
 

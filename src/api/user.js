@@ -90,7 +90,7 @@ module.exports = app => {
         delete user.confirmPassword
         user.password = encryptPassword(req.body.password)
         user.avatar = gravatar.url(user.email, {
-            s: '160',
+            s: '200',
             r: 'x',
             d: 'retro'
         }, true)
@@ -435,7 +435,7 @@ module.exports = app => {
         mail.userCreated(user.email, user.name, password)
         user.password = encryptPassword(password)
         user.avatar = gravatar.url(user.email, {
-            s: '160',
+            s: '200',
             r: 'x',
             d: 'retro'
         }, true)

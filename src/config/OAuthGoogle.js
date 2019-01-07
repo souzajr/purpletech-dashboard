@@ -37,7 +37,11 @@ passport.use(new GoogleStrategy({
                 email: profile.emails[0].value,
                 phone: 'Sem telefone',
                 admin: false,  
-                avatar: profile.photos[0].value.replace('sz=50', 'sz=200'),      
+                avatar: profile.photos ? profile.photos[0].value.replace('sz=50', 'sz=200') : gravatar.url(profile.emails[0].value, {
+                    s: '200',
+                    r: 'x',
+                    d: 'retro'
+                }, true),
                 firstAccess: false,
                 firstProject: true,
                 createdAt: moment().format('L'),
