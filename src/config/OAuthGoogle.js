@@ -18,9 +18,13 @@ passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_GOOGLE_ID,
     clientSecret: process.env.CLIENT_GOOGLE_SECRET,
     callbackURL: process.env.GOOGLE_CALLBACK_URL
-}, async (accessToken, refreshToken, profile, done) => {    
+}, async (accessToken, refreshToken, profile, done) => {   
     await User.findOne({ googleId: profile.id }, async function(err, user) {
         if(err) return done(err, user)
+        if(user && user.facebookId) {
+            user = 'Você já está cadastrado'
+            return done(err, user)
+        }
         if(!user && !profile.emails[0].value) {
             user = 'A sua conta do Google deve ter um Email'
             return done(err, user)
@@ -45,11 +49,10 @@ passport.use(new GoogleStrategy({
                 }, true),
                 firstAccess: false,
                 firstProject: true,
+                noPassword: true,
                 createdAt: moment().format('L'),
                 googleId: profile.id
             }).save().then(user => done(err, user))
-        }
-
-        return done(err, user)
+        } else return done(err, user)
     })
 }))

@@ -16,7 +16,8 @@ const UserSchema = new moongoose.Schema({
     firstAccess: { type: Boolean, required: true },
     firstProject: { type: Boolean, required: true },
     googleId: String,
-    facebookId: String
+    facebookId: String,
+    noPassword: Boolean
 })
 
 moongoose.model('User', UserSchema)

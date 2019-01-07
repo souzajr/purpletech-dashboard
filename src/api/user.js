@@ -89,6 +89,7 @@ module.exports = app => {
 
         delete user.confirmPassword
         user.password = encryptPassword(req.body.password)
+        user.noPassword = false
         user.avatar = gravatar.url(user.email, {
             s: '200',
             r: 'x',
@@ -477,6 +478,7 @@ module.exports = app => {
         newPassword.password = encryptPassword(req.body.password)
         await User.findOne({ _id: req.session.user._id }).then(async user => {
             user.password = newPassword.password
+            user.noPassword = false
             user.firstAccess = false
             await user.save().then(_ => {
                 if(user.firstProject == false) res.status(200).json({ 'msg': successMessage, 'project': false })

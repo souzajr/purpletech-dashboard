@@ -50,6 +50,8 @@ module.exports = app => {
                 res.status(400).render('login', { message: JSON.stringify(req.user) })
             } else if (req.user == 'Esse Email já está registrado') {
                 res.status(400).render('login', { message: JSON.stringify(req.user) })
+            } else if(req.user == 'Você já está cadastrado') {
+                res.status(400).render('login', { message: JSON.stringify(req.user) })
             } else {
                 const user = req.user 
                 const now = Math.floor(Date.now() / 1000)
@@ -77,6 +79,8 @@ module.exports = app => {
             if(req.user == 'A sua conta do Facebook deve ter um Email') {
                 res.status(400).render('login', { message: JSON.stringify(req.user) })
             } else if (req.user == 'Esse Email já está registrado') {
+                res.status(400).render('login', { message: JSON.stringify(req.user) })
+            } else if(req.user == 'Você já está cadastrado') {
                 res.status(400).render('login', { message: JSON.stringify(req.user) })
             } else {
                 const user = req.user 
