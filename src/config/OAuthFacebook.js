@@ -17,6 +17,7 @@ passport.use(new FacebookStrategy({
     clientID: process.env.CLIENT_FACEBOOK_ID,
     clientSecret: process.env.CLIENT_FACEBOOK_SECRET,
     callbackURL: process.env.FACEBOOK_CALLBACK_URL,
+    enableProof: true,
     profileFields: ['id', 'name', 'picture', 'email']
 }, async (accessToken, refreshToken, profile, done) => {   
     console.log(profile) 
