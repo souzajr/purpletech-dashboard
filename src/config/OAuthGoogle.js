@@ -2,6 +2,7 @@ const passport = require('passport')
 const GoogleStrategy = require('passport-google-oauth20')
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
+const gravatar = require('gravatar')
 const moment = require('moment')
 moment.locale('pt-br')
 
