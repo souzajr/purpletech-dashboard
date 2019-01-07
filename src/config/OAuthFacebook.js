@@ -19,7 +19,7 @@ passport.use(new FacebookStrategy({
     clientSecret: process.env.CLIENT_FACEBOOK_SECRET,
     callbackURL: process.env.FACEBOOK_CALLBACK_URL,
     enableProof: true,
-    profileFields: ['id', 'displayName', 'picture.type(large)']
+    profileFields: ['id', 'displayName', 'picture.type(large)', 'email']
 }, async (accessToken, refreshToken, profile, done) => {   
     console.log(profile) 
     await User.findOne({ facebookId: profile.id }, async function(err, user) {
