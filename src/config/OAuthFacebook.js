@@ -35,12 +35,13 @@ passport.use(new FacebookStrategy({
                 user = 'Esse Email já está registrado'
                 return done(err, user)
             }
+
             await new User({
                 name: profile.displayName,
                 email: profile.emails[0].value,
                 phone: 'Sem telefone',
                 admin: false,  
-                avatar: profile.photos ? profile.photos[0].value : gravatar.url(profile.email, {
+                avatar: profile.photos ? profile.photos[0].value : gravatar.url(profile.emails[0].value, {
                     s: '200',
                     r: 'x',
                     d: 'retro'
