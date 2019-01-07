@@ -48,7 +48,7 @@ passport.use(new FacebookStrategy({
                 firstAccess: false,
                 firstProject: true,
                 createdAt: moment().format('L'),
-                googleId: profile.id
+                facebookId: profile.id
             }).save().then(user => done(err, user))
         }
 

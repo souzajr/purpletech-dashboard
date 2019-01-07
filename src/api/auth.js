@@ -37,6 +37,7 @@ module.exports = app => {
         }
 
         user.password = undefined
+        if(req.session) req.session.reset()
         req.session.user = user
         req.session.token = jwt.encode(payload, process.env.AUTH_SECRET)
         if(!user.firstAccess) res.redirect('/validate')
@@ -60,6 +61,7 @@ module.exports = app => {
                 }
 
                 user.password = undefined
+                if(req.session) req.session.reset()
                 req.session.user = user
                 req.session.token = jwt.encode(payload, process.env.AUTH_SECRET)
                 if(!user.firstAccess) res.redirect('/validate')
@@ -87,6 +89,7 @@ module.exports = app => {
                 }
 
                 user.password = undefined
+                if(req.session) req.session.reset()
                 req.session.user = user
                 req.session.token = jwt.encode(payload, process.env.AUTH_SECRET)
                 if(!user.firstAccess) res.redirect('/validate')
