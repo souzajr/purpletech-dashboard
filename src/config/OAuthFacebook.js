@@ -20,8 +20,7 @@ passport.use(new FacebookStrategy({
     callbackURL: process.env.FACEBOOK_CALLBACK_URL,
     enableProof: true,
     profileFields: ['id', 'displayName', 'picture.type(large)', 'email']
-}, async (accessToken, refreshToken, profile, done) => {   
-    console.log(profile) 
+}, async (accessToken, refreshToken, profile, done) => { 
     await User.findOne({ facebookId: profile.id }, async function(err, user) {
         if(err) return done(err, user)
         if(!user && !profile.emails[0].value) {
