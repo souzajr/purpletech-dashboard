@@ -70,7 +70,7 @@ module.exports = app => {
         }
     }
 
-    const facebook = _ => {
+    const facebook = (req, res) => {
         if(req.user) {
             if(req.user == 'A sua conta do Facebook deve ter um Email') {
                 res.status(400).render('login', { message: JSON.stringify(req.user) })
