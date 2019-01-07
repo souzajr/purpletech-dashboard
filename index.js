@@ -11,6 +11,8 @@ db.openConn()
 
 consign()
     .include('./src/config/passport.js')
+    .include('./src/config/OAuthGoogle.js')
+    .include('./src/config/OAuthFacebook.js')
     .then('./src/config/middlewares.js')
     .then('./src/api/validation.js')
     .then('./src/config/mail.js')  

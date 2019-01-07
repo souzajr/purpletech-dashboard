@@ -8,6 +8,8 @@ const crypto = require('crypto')
 const sharp = require('sharp')
 const moment = require('moment')
 moment.locale('pt-br')
+const failMessage = 'Algo deu errado'
+const successMessage = 'Sucesso!'
 
 module.exports = app => {    
     const {
@@ -75,11 +77,11 @@ module.exports = app => {
                 mail.projectCreated(user.email, user.name, project._id)
                 if(user.firstProject == true) user.firstProject = false
                 await user.save().then(_ => res.status(200).json({
-                    'msg': 'Sucesso!',
+                    'msg': successMessage,
                     'id': project._id
-                })).catch(_ => res.status(500).json('Algo deu errado'))
-            }).catch(_ => res.status(500).json('Algo deu errado'))
-        }).catch(_ => res.status(500).json('Algo deu errado'))
+                }))
+            })
+        }).catch(_ => res.status(500).json(failMessage))
     }
 
     const viewProject = async (req, res) => {
@@ -87,7 +89,6 @@ module.exports = app => {
             let responsible = null
             if(project._idResponsible) { 
                 responsible = await User.findOne({ _id: project._idResponsible })
-                .catch(_ => res.status(500).render('500'))
                 responsible.password = undefined
             }
             res.status(200).render('./dashboard/index', {
@@ -112,7 +113,6 @@ module.exports = app => {
                     let responsible = null
                     if(project._idResponsible) { 
                         responsible = await User.findOne({ _id: project._idResponsible })
-                        .catch(_ => res.status(500).render('500'))
                         responsible.password = undefined
                     }
                     res.status(400).render('./dashboard/index', { 
@@ -136,7 +136,6 @@ module.exports = app => {
                         position: sharp.strategy.entropy
                     })
                     .toFile('./public/upload/thumb/' + req.files[i].filename)
-                    .catch(_ => res.status(500).render('500'))
                     project.file.push({ fileName: req.files[i].filename })
                 }
 
@@ -144,7 +143,6 @@ module.exports = app => {
                 let responsible = null
                 if(project._idResponsible) { 
                     responsible = await User.findOne({ _id: project._idResponsible })
-                    .catch(_ => res.status(500).render('500'))
                     responsible.password = undefined
                 }
                 res.status(200).render('./dashboard/index', {
@@ -153,7 +151,7 @@ module.exports = app => {
                     user: req.session.user, 
                     page: '/project',
                     style: 'archive',
-                    message: JSON.stringify('Sucesso!')
+                    message: JSON.stringify(successMessage)
                 })
             }).catch(_ => res.status(500).render('500'))
         })
@@ -245,12 +243,10 @@ module.exports = app => {
                     else
                         project._idResponsible = undefined
 
-                    await project.save()
-                    .then(_ => res.status(200).json('Sucesso!'))
-                    .catch(_ => res.status(500).json('Algo deu errado'))
+                    await project.save().then(_ => res.status(200).json(successMessage))
                 }
-            }).catch(_ => res.status(500).json('Algo deu errado'))
-        }).catch(_ => res.status(500).json('Algo deu errado'))
+            })
+        }).catch(_ => res.status(500).json(failMessage))
     }
 
     const viewAllProjects = async (req, res) => {
@@ -258,7 +254,7 @@ module.exports = app => {
             let client = []
             for(let i = 0; i < project.length; i++) {
                 await User.findOne({ _id: project[i]._idClient }).then(user => {
-                    client.push(user)
+                    client.push(user.name)
                 }).catch(_ => res.status(500).render('500'))
             }
 
@@ -347,12 +343,12 @@ module.exports = app => {
                         else mail.projectCanceled(user.email, user.name)
                     } 
                     res.status(200).json({
-                        'msg': 'Sucesso!',
+                        'msg': successMessage,
                         'id': project._id
                     })
-                }).catch(_ => res.status(500).json('Algo deu errado'))
-            }).catch(_ => res.status(500).json('Algo deu errado'))  
-        }).catch(_ => res.status(500).json('Algo deu errado'))        
+                })
+            })  
+        }).catch(_ => res.status(500).json(failMessage))        
     }
 
     return { 

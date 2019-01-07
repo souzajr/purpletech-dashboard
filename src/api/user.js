@@ -12,6 +12,8 @@ const sharp = require('sharp')
 const generator = require('generate-password')
 const moment = require('moment')
 moment.locale('pt-br')
+const failMessage = 'Algo deu errado'
+const successMessage = 'Sucesso!'
 
 
 module.exports = app => {
@@ -97,13 +99,13 @@ module.exports = app => {
         user.firstAccess = false
         user.firstProject = true
 
-        await User.create(user).then(_ => res.status(200).json('Sucesso!'))
-        .catch(_ => res.status(500).json('Algo deu errado'))
+        await User.create(user).then(_ => res.status(200).json(successMessage))
+        .catch(_ => res.status(500).json(failMessage))
     }
 
     const changeProfile = async (req, res) => {
         if (!req.body.newPhone && !req.body.newEmail && !req.body.currentPassword && !req.body.newPassword && !req.body.confirmNewPassword) {
-            return res.status(400).json('Algo deu errado')
+            return res.status(400).json(failMessage)
         } 
         
         await User.findOne({ _id: req.session.user._id }).then(async user => {
@@ -123,7 +125,6 @@ module.exports = app => {
                     tooBigEmail(req.body.newEmail, 'Seu Email é muito longo')
                     validEmailOrError(req.body.newEmail, 'Email inválido')
                     const userFromDB = await User.findOne({ email: req.body.newEmail })
-                    .catch(_ => res.status(500).json('Algo deu errado')) 
                     notExistOrError(userFromDB, 'Esse Email já está registrado')
                 } catch (msg) {
                     return res.status(400).json(msg)
@@ -138,7 +139,6 @@ module.exports = app => {
                     existOrError(req.body.newPassword, 'Digite sua nova senha')
                     existOrError(req.body.confirmNewPassword, 'Digite a confirmação da sua nova senha')
                     const checkUser = await User.findOne({ _id: req.session.user._id })
-                    .catch(_ => res.status(500).json('Algo deu errado')) 
                     const isMatch = bcrypt.compareSync(req.body.currentPassword, checkUser.password)
                     if (!isMatch) return res.status(401).json('Senha inválida')
                     hasDigitOrError(req.body.newPassword, 'A senha deve ter pelo menos um número')
@@ -155,13 +155,14 @@ module.exports = app => {
                 user.password = encryptPassword(req.body.newPassword)
             } 
 
-            await user.save().catch(_ => res.status(500).json('Algo deu errado'))
-            res.status(200).json({ 
-                "msg": "Sucesso!",
-                "phone": req.body.newPhone,
-                "email": req.body.newEmail
+            await user.save().then(_ => {
+                res.status(200).json({ 
+                    "msg": "Sucesso!",
+                    "phone": req.body.newPhone,
+                    "email": req.body.newEmail
+                })
             })
-        }).catch(_ => res.status(400).json('Algo deu errado'))
+        }).catch(_ => res.status(400).json(failMessage))
     }
 
     const viewAllUsers = async (req, res) => {
@@ -177,7 +178,7 @@ module.exports = app => {
                     page: req.url,
                     message: null
                 })
-            }).catch(_ => res.status(500).render('500'))
+            })
         }).catch(_ => res.status(500).render('500'))
     }
 
@@ -206,14 +207,14 @@ module.exports = app => {
 
             const user = await User.findOne({ email })
             .catch(_ => res.status(500).render('500'))
-            if(!user || user.deletedAt) return res.status(400).render('forgotpassword', { message: JSON.stringify('Algo deu errado') })
+            if(!user || user.deletedAt) return res.status(400).render('forgotpassword', { message: JSON.stringify(failMessage) })
             
             const token = crypto.randomBytes(64).toString('hex')
             user.resetPasswordToken = token
             user.resetPasswordExpires = Date.now() + 3600000
             await user.save().catch(_ => res.status(500).render('500'))
             mail.recoveryMail(user.email, token)
-            res.status(200).render('forgotpassword', { message: JSON.stringify('Sucesso!') }) 
+            res.status(200).render('forgotpassword', { message: JSON.stringify(successMessage) }) 
         } else {
             await User.findOne({
                 resetPasswordToken: req.params.token,
@@ -258,16 +259,16 @@ module.exports = app => {
         user.resetPasswordExpires = undefined
         await user.save().catch(_ => res.status(500).render('500'))
         mail.alertOfChange(user.email)
-        res.status(200).render('login', { message: JSON.stringify('Sucesso!') })
+        res.status(200).render('login', { message: JSON.stringify(successMessage) })
     }
 
     const uploadProfileAvatar = async (req, res) => {    
         await User.findOne({ _id: req.session.user._id }).then(user => {
             upload(req, res, function(err) {
                 if (err instanceof multer.MulterError) {
-                    return res.status(500).json('Algo deu errado')
+                    return res.status(500).json(failMessage)
                 } else if (err) {
-                    return res.status(500).json('Algo deu errado')
+                    return res.status(500).json(failMessage)
                 } else if (!req.file) {
                     return res.status(400).json('Você deve selecionar uma imagem')
                 }
@@ -284,11 +285,11 @@ module.exports = app => {
                     user.avatar = undefined
                     await user.save().then(_ => {
                         fs.unlinkSync('./public/upload/' + req.file.filename)
-                        res.status(200).json('Sucesso!')
-                    }).catch(_ => res.status(500).json('Algo deu errado'))
-                }).catch(_ => res.status(500).json('Algo deu errado'))
+                        res.status(200).json(successMessage)
+                    })
+                })
             })
-        }).catch(_ => res.status(500).json('Algo deu errado'))
+        }).catch(_ => res.status(500).json(failMessage))
     }
 
     const getProfileAvatar = async (req, res) => {
@@ -311,7 +312,7 @@ module.exports = app => {
                         if(project[i]._idResponsible) {
                             await User.findOne({ _id: project[i]._idResponsible }).then(user => {
                                 responsible.push(user.name)
-                            }).catch(_ => res.status(500).render('500'))
+                            })
                         }
                     }
                     res.status(200).render('./dashboard/index', {
@@ -321,7 +322,7 @@ module.exports = app => {
                         page: req.url,
                         message: null
                     })
-                }).catch(_ => res.status(500).render('500'))
+                })
             } else {
                 await User.countDocuments().then(async userCount => {
                     await Project.countDocuments().then(projectCount => {
@@ -332,8 +333,8 @@ module.exports = app => {
                             page: req.url,
                             message: null
                         })
-                    }).catch(_ => res.status(500).render('500'))
-                }).catch(_ => res.status(500).render('500'))
+                    })
+                })
             }
         }).catch(_ => res.status(500).render('500'))
     }
@@ -352,7 +353,7 @@ module.exports = app => {
 
     const changeUser = async (req, res) => {
         if (!req.body.newPhone && !req.body.newEmail) {
-            return res.status(400).json('Algo deu errado')
+            return res.status(400).json(failMessage)
         }
 
         await User.findOne({ _id: req.params.id }).then(async user => {
@@ -372,7 +373,6 @@ module.exports = app => {
                     tooBigEmail(req.body.newEmail, 'Seu Email é muito longo')
                     validEmailOrError(req.body.newEmail, 'Email inválido')
                     const userFromDB = await User.findOne({ email: req.body.newEmail })
-                    .catch(_ => res.status(500).json('Algo deu errado')) 
                     notExistOrError(userFromDB, 'Esse Email já está registrado')
                 } catch (msg) {
                     return res.status(400).json(msg)
@@ -383,12 +383,12 @@ module.exports = app => {
 
             await user.save().then(_ => {
                 res.status(200).json({ 
-                    'msg': 'Sucesso!',
+                    'msg': successMessage,
                     'phone': req.body.newPhone,
                     'email': req.body.newEmail
                 })
-            }).catch(_ => res.status(500).json('Algo deu errado'))
-        }).catch(_ => res.status(500).render('500'))
+            })
+        }).catch(_ => res.status(500).json(failMessage))
     }
 
     const removeUser = async (req, res) => {
@@ -398,9 +398,8 @@ module.exports = app => {
         await User.findOne({ _id: req.params.id }).then(async user => {
             if(!user.deletedAt) user.deletedAt = new Date().toLocaleDateString().split('-').reverse().join('/')
             else user.deletedAt = undefined
-            await user.save().then(_ => res.status(200).json('Sucesso!'))
-            .catch(_ => res.status(500).json('Algo deu errado'))
-        }).catch(_ => res.status(500).json('Algo deu errado'))
+            await user.save().then(_ => res.status(200).json(successMessage))
+        }).catch(_ => res.status(500).json(failMessage))
     }
 
     const registerNewUserAdmin = async (req, res) => {
@@ -445,8 +444,8 @@ module.exports = app => {
         user.firstAccess = true        
         user.firstProject = true
 
-        await User.create(user).then(_ => res.status(200).json('Sucesso!'))
-        .catch(_ => res.status(500).json('Algo deu errado'))
+        await User.create(user).then(_ => res.status(200).json(successMessage))
+        .catch(_ => res.status(500).json(failMessage))
     }
 
     const viewNewPassword = (req, res) => {
@@ -459,7 +458,7 @@ module.exports = app => {
 
         try {
             const checkUser = await User.findOne({ _id: req.session.user._id })
-            .catch(_ => res.status(500).json('Algo deu errado')) 
+            .catch(_ => res.status(500).json(failMessage)) 
             const isMatch = bcrypt.compareSync(newPassword.password, checkUser.password)
             if (isMatch) return res.status(400).json('A sua nova senha não pode ser igual a sua senha provisória')
             hasDigitOrError(newPassword.password, 'A senha deve ter pelo menos um número')
@@ -480,10 +479,10 @@ module.exports = app => {
             user.password = newPassword.password
             user.firstAccess = false
             await user.save().then(_ => {
-                if(user.firstProject == false) res.status(200).json({ 'msg': 'Sucesso!', 'project': false })
-                else res.status(200).json({ 'msg': 'Sucesso!', 'project': true })
-            }).catch(_ => res.status(500).json('Algo deu errado'))
-        }).catch(_ => res.status(500).json('Algo deu errado'))
+                if(user.firstProject == false) res.status(200).json({ 'msg': successMessage, 'project': false })
+                else res.status(200).json({ 'msg': successMessage, 'project': true })
+            })
+        }).catch(_ => res.status(500).json(failMessage))
     }
 
     const viewNewProjectFirstAccess = (req, res) => {

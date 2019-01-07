@@ -1,11 +1,28 @@
 const admin = require('./admin')
+const passport = require('passport')
 
 module.exports = app => {
-    /* ============= INDEX / LOGIN ============= */
+    /* ============= INDEX ============= */
     app.get('/', function(req, res) {
         res.render('login', { message: null })
     })
+
+    /* ============= LOCAL LOGIN ============= */
     app.post('/login', app.src.api.auth.login)
+    /* ============= SOCIAL LOGIN / GOOGLE ============= */
+    app.get('/google', passport.authenticate('google', { scope: ['openid', 'profile', 'email'] }))
+    app.get('/OAuth/Google', passport.authenticate('google', { 
+        successRedirect: '/OAuth/Google/login',
+        failureRedirect: '/OAuth/Google/login'
+    }))
+    app.get('/OAuth/Google/login', app.src.api.auth.google)
+    /* ============= SOCIAL LOGIN / FACEBOOK ============= */
+    app.get('/facebook', passport.authenticate('facebook', { authType: 'rerequest' }))
+    app.get('/OAuth/Facebook', passport.authenticate('facebook', { 
+        successRedirect: '/OAuth/Facebook/login',
+        failureRedirect: '/OAuth/Facebook/login'
+    }))
+    app.get('/OAuth/Facebook/login', app.src.api.auth.facebook)
 
     /* ============= REGISTER ============= */
     app.get('/register', function(req, res) {
@@ -38,7 +55,7 @@ module.exports = app => {
     app.get('/logout', function(req, res) {
         req.session.reset()          
         req.logout()     
-        res.status(200).redirect('/')
+        res.redirect('/')
     })
 
     /* ============= VALIDATE USER  ============= */
