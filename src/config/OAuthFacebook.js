@@ -24,6 +24,7 @@ passport.use(new FacebookStrategy({
     await User.findOne({ facebookId: profile.id }, async function(err, user) {
         if(err) return done(err, user)
         if(!user && !profile.emails[0].value) {
+            console.log('teste')
             user = 'A sua conta do Facebook deve ter um Email'
             return done(err, user)
         }
@@ -31,6 +32,7 @@ passport.use(new FacebookStrategy({
             const userFromDB = await User.findOne({ email: profile.emails[0].value })
             .catch(err => done(err, user))   
             if(userFromDB) {
+                console.log('teste 2')
                 user = 'Esse Email já está registrado'
                 return done(err, user)
             }
@@ -49,7 +51,10 @@ passport.use(new FacebookStrategy({
                 firstProject: true,
                 createdAt: moment().format('L'),
                 facebookId: profile.id
-            }).save().then(user => done(err, user))
+            }).save().then(user =>{
+                console.log('teste 3')
+                done(err, user)
+            })
         }
 
         return done(err, user)
