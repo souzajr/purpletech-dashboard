@@ -17,7 +17,7 @@ module.exports = app => {
     }))
     app.get('/OAuth/Google/login', app.src.api.auth.google)
     /* ============= SOCIAL LOGIN / FACEBOOK ============= */
-    app.get('/facebook', passport.authenticate('facebook', { scope: ['email'] }))
+    app.get('/facebook', passport.authenticate('facebook', { authType: 'rerequest', scope: ['email'] }))
     app.get('/OAuth/Facebook', passport.authenticate('facebook', { 
         failureRedirect: '/OAuth/Facebook/login',
         successRedirect: '/OAuth/Facebook/login'
