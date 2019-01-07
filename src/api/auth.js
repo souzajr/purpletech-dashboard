@@ -75,8 +75,12 @@ module.exports = app => {
     const facebook = (req, res) => {
         if(req.user) {
             if(req.user == 'A sua conta do Facebook deve ter um Email') {
+                
+            console.log('teste 0')
                 res.status(400).render('login', { message: JSON.stringify(req.user) })
             } else if (req.user == 'Esse Email já está registrado') {
+                
+            console.log('teste 1')
                 res.status(400).render('login', { message: JSON.stringify(req.user) })
             } else {
                 const user = req.user 
@@ -88,6 +92,7 @@ module.exports = app => {
                     exp: now + 60 * 60 * 24
                 }
 
+                console.log('teste 2')
                 user.password = undefined
                 if(req.session) req.session.reset()
                 req.session.user = user
@@ -96,6 +101,7 @@ module.exports = app => {
                 else res.redirect('/newPassword')
             }
         } else {
+            console.log('teste 3')
             res.status(400).render('login', { message: JSON.stringify('Algo deu errado') })
         }
     }

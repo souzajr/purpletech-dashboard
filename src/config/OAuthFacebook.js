@@ -22,7 +22,6 @@ passport.use(new FacebookStrategy({
     profileFields: ['id', 'displayName', 'picture.type(large)', 'email']
 }, async (accessToken, refreshToken, profile, done) => { 
     await User.findOne({ facebookId: profile.id }, async function(err, user) {
-        console.log(profile)
         if(err) return done(err, user)
         if(!user && !profile.emails[0].value) {
             user = 'A sua conta do Facebook deve ter um Email'
@@ -52,7 +51,7 @@ passport.use(new FacebookStrategy({
                 facebookId: profile.id
             }).save().then(user => done(err, user))
         }
-        console.log('teste')
+
         return done(err, user)
     })
 }))
