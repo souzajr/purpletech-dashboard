@@ -23,10 +23,6 @@ passport.use(new FacebookStrategy({
 }, async (accessToken, refreshToken, profile, done) => { 
     await User.findOne({ facebookId: profile.id }, async function(err, user) {
         if(err) return done(err, user)
-        if(user && user.googleId) {
-            user = 'Você já está cadastrado'
-            return done(err, user)
-        }
         if(!user && !profile.emails[0].value) {
             user = 'A sua conta do Facebook deve ter um Email'
             return done(err, user)

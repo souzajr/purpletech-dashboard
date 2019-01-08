@@ -21,10 +21,6 @@ passport.use(new GoogleStrategy({
 }, async (accessToken, refreshToken, profile, done) => {   
     await User.findOne({ googleId: profile.id }, async function(err, user) {
         if(err) return done(err, user)
-        if(user && user.facebookId) {
-            user = 'Você já está cadastrado'
-            return done(err, user)
-        }
         if(!user && !profile.emails[0].value) {
             user = 'A sua conta do Google deve ter um Email'
             return done(err, user)
