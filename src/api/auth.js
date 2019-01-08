@@ -50,7 +50,7 @@ module.exports = app => {
                 res.status(400).render('login', { message: JSON.stringify(req.user) })
             } else if (req.user == 'Esse Email já está registrado') {
                 res.status(400).render('login', { message: JSON.stringify(req.user) })
-            } else if(req.user == 'Você já está cadastrado') {
+            } else if(req.user == 'Você já está cadastrado com sua conta no Facebook') {
                 res.status(400).render('login', { message: JSON.stringify(req.user) })
             } else {
                 const user = req.user 
@@ -80,7 +80,7 @@ module.exports = app => {
                 res.status(400).render('login', { message: JSON.stringify(req.user) })
             } else if (req.user == 'Esse Email já está registrado') {
                 res.status(400).render('login', { message: JSON.stringify(req.user) })
-            } else if(req.user == 'Você já está cadastrado') {
+            } else if(req.user == 'Você já está cadastrado com sua conta no Google') {
                 res.status(400).render('login', { message: JSON.stringify(req.user) })
             } else {
                 const user = req.user 
