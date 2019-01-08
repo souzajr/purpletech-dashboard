@@ -54,5 +54,5 @@ passport.use(new GoogleStrategy({
                 googleId: profile.id
             }).save().then(user => done(err, user))
         } else return done(err, user)
-    })
+    }).catch(err => done(err, user))
 }))
