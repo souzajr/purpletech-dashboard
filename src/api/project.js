@@ -74,8 +74,9 @@ module.exports = app => {
         await User.findOne({ _id: req.session.user._id }).then(async user => {
             await Project.create(project).then(async project => {
                 user._idProject.push(project._id)
-                mail.projectCreated(user.email, user.name, project._id)
                 if(user.firstProject == true) user.firstProject = false
+                mail.projectCreated(user.email, user.name, project._id)
+                mail.projectNotice(user.name, project._id)
                 await user.save().then(_ => res.status(200).json({
                     'msg': successMessage,
                     'id': project._id

@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
 module.exports = { 
     recoveryMail(email, token) {
         const mailOptions = {
-            from: 'PurpleTech <contato@purpletech.com.br>',
+            from: 'PurpleTech <'+process.env.MAIL_AUTH_USER+'>',
             to: email,
             subject: 'Recuperação de senha 🔒⛔',
             text: 'Você está recebendo este Email pois solicitou a redefinição da senha da sua conta.\n' +
@@ -27,7 +27,7 @@ module.exports = {
 
     alertOfChange(email) {
         const mailOptions = {
-            from: 'PurpleTech <contato@purpletech.com.br>',
+            from: 'PurpleTech <'+process.env.MAIL_AUTH_USER+'>',
             to: email,
             subject: 'Alteração de senha 🔒⛔',
             text: 'Uma alteração de senha acabou de ser feita no site ' + process.env.DOMAIN_NAME + '\n\n' +
@@ -36,12 +36,50 @@ module.exports = {
         transporter.sendMail(mailOptions)
     },
 
+    newAccount(email, name) {
+        const mailOptions = {
+            from: 'PurpleTech <'+process.env.MAIL_AUTH_USER+'>',
+            to: email,
+            subject: 'Sua conta foi criada com sucesso! 🚀🤩',
+            html: '<b>Uhuuuul! ' + name + ', sua conta foi criada com sucesso!</b><br/><br/>' +
+            'Em nossa plataforma, você poderá:<br/>' +
+            '<ul>' +
+                '<li>Acompanhar seus projetos</li>' +
+                '<li>Solicitar novos orçamentos</li>' +
+                '<li>Conversar diretamente com os desenvolvedores</li>' +
+                '<li>Pagar suas faturas de maneira comoda e prática</li>' +
+                '<li>Acessar diversos tutoriais que ajudarão na administração do seu prjeto</li>' +
+                '<li><b>E muito mais!</b></li>' +
+            '</ul><br/><br/>' +
+            'Agradecemos a confiança e preferência. Conte com a PurpleTech para tornar a sua ideia realidade!<br/>' +
+            'Em caso de dúvidas, responda a este Email ou nos chame através do nosso WhatsApp.<br/><br/>' +
+            '<b>PurpleTech</b><br/>https://purpletech.com.br<br/>' +
+            '<a href="https://wa.me/5519995360651">WhatsApp: (19) 9 9536-0651</a>'
+        }
+
+        transporter.sendMail(mailOptions) 
+    },
+
+    projectNotice(name, project) {
+        const mailOptions = {
+            from: 'PurpleTech <'+process.env.MAIL_AUTH_USER+'>',
+            to: process.env.MAIL_AUTH_USER,
+            subject: 'Oba, mais um projeto! 🤑🤑',
+            html: '<b>Parabéns! Um novo projeto foi criado por' + name + '</b><br/><br/>' +
+            'Confira o projeto no link abaixo:<br/>' +
+            process.env.DOMAIN_NAME + '/project/' + project + '<br/><br/>' +
+            '<b>PurpleTech</b><br/>https://purpletech.com.br'
+        }
+
+        transporter.sendMail(mailOptions) 
+    },
+
     projectCreated(email, name, project) {
         const mailOptions = {
-            from: 'PurpleTech <contato@purpletech.com.br>',
+            from: 'PurpleTech <'+process.env.MAIL_AUTH_USER+'>',
             to: email,
             subject: 'Projeto criado com sucesso! 💖😍',
-            html: '<b>Parabéns ' + name + ', você deu o primeiro passo para o sucesso da sua ideia!</b><br/><br/>'+
+            html: '<b>Parabéns ' + name + ', você deu o primeiro passo para o sucesso da sua ideia!</b><br/><br/>' +
             'Seu projeto agora está em fase de análise, entraremos em contato em breve.<br/>' +
             'Para conferir as atualizações referentes ao seu projeto, acesse:<br/>' +
             process.env.DOMAIN_NAME + '/project/' + project + '<br/>' +
@@ -55,7 +93,7 @@ module.exports = {
 
     projectApproved(email, name) {
         const mailOptions = {
-            from: 'PurpleTech <contato@purpletech.com.br>',
+            from: 'PurpleTech <'+process.env.MAIL_AUTH_USER+'>',
             to: email,
             subject: 'Seu projeto foi aprovado! 🤩🤩',
             html: '<b>Olá, ' + name + '. É com muito prazer que anunciamos que seu projeto foi aprovado!</b><br/><br/>'+
@@ -70,7 +108,7 @@ module.exports = {
 
     projectDevelopment(email, name) {
         const mailOptions = {
-            from: 'PurpleTech <contato@purpletech.com.br>',
+            from: 'PurpleTech <'+process.env.MAIL_AUTH_USER+'>',
             to: email,
             subject: 'Seu projeto está em desenvolvimento! 🔥🚀',
             html: '<b>Olá, ' + name + '. Seu projeto está em fase de desenvolvimento!</b><br/><br/>'+
@@ -86,7 +124,7 @@ module.exports = {
     projectCompleted(email, name) {
         console.log(email, name)
         const mailOptions = {
-            from: 'PurpleTech <contato@purpletech.com.br>',
+            from: 'PurpleTech <'+process.env.MAIL_AUTH_USER+'>',
             to: email,
             subject: 'Seu projeto foi concluído! 🌟😍',
             html: '<b>Olá, ' + name + '. Seu projeto foi concluído com sucesso!</b><br/><br/>'+
@@ -104,7 +142,7 @@ module.exports = {
 
     projectPaused(email, name) {
         const mailOptions = {
-            from: 'PurpleTech <contato@purpletech.com.br>',
+            from: 'PurpleTech <'+process.env.MAIL_AUTH_USER+'>',
             to: email,
             subject: 'Seu projeto foi pausado! ⏸⛔',
             html: '<b>Olá, ' + name + '. Seu projeto foi colocado em espera.</b><br/><br/>' +
@@ -118,7 +156,7 @@ module.exports = {
 
     projectCanceled(email, name) {
         const mailOptions = {
-            from: 'PurpleTech <contato@purpletech.com.br>',
+            from: 'PurpleTech <'+process.env.MAIL_AUTH_USER+'>',
             to: email,
             subject: 'Seu projeto foi cancelado! 😥😔',
             html: '<b>Olá, ' + name + '. Infelizmente, seu projeto foi cancelado.</b><br/><br/>' +
@@ -134,7 +172,7 @@ module.exports = {
 
     userCreated(email, name, password) {
         const mailOptions = {
-            from: 'PurpleTech <contato@purpletech.com.br>',
+            from: 'PurpleTech <'+process.env.MAIL_AUTH_USER+'>',
             to: email,
             subject: 'Uma conta foi criada para você 🤩🌟',
             html: '<b>Olá, ' + name + '. Uma conta em nosso painel foi criada para que você possa acompanhar o andamento do seu projeto.</b><br/><br/>' +

@@ -47,7 +47,7 @@ passport.use(new GoogleStrategy({
                     r: 'x',
                     d: 'retro'
                 }, true),
-                firstAccess: false,
+                firstAccess: true,
                 firstProject: true,
                 noPassword: true,
                 createdAt: moment().format('L'),

@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const jwt = require('jwt-simple')
 const bcrypt = require('bcrypt-nodejs')
+const mail = require('../config/mail')
 
 module.exports = app => {
     const login = async (req, res) => {
@@ -44,7 +45,7 @@ module.exports = app => {
         else res.redirect('/newPassword')
     }
 
-    const google = (req, res) => {
+    const google = async (req, res) => {
         if(req.user) {
             if(req.user == 'A sua conta do Google deve ter um Email') {
                 res.status(400).render('login', { message: JSON.stringify(req.user) })
@@ -53,28 +54,33 @@ module.exports = app => {
             } else if(req.user == 'Você já está cadastrado com sua conta no Facebook') {
                 res.status(400).render('login', { message: JSON.stringify(req.user) })
             } else {
-                const user = req.user 
-                const now = Math.floor(Date.now() / 1000)
-                const payload = {
-                    id: user._id,
-                    iss: process.env.DOMAIN_NAME, 
-                    iat: now,
-                    exp: now + 60 * 60 * 24
-                }
-
-                user.password = undefined
-                if(req.session) req.session.reset()
-                req.session.user = user
-                req.session.token = jwt.encode(payload, process.env.AUTH_SECRET)
-                if(!user.firstAccess) res.redirect('/validate')
-                else res.redirect('/newPassword')
+                await User.findOne({ _id: req.user._id }).then(async user => {
+                    const now = Math.floor(Date.now() / 1000)
+                    const payload = {
+                        id: user._id,
+                        iss: process.env.DOMAIN_NAME, 
+                        iat: now,
+                        exp: now + 60 * 60 * 24
+                    }
+    
+                    user.password = undefined
+                    if(req.session) req.session.reset()
+                    req.session.user = user
+                    req.session.token = jwt.encode(payload, process.env.AUTH_SECRET)
+                    if(user.firstAccess) {
+                        user.firstAccess = false
+                        await user.save()
+                        mail.newAccount(user.email, user.name)
+                    }
+                    res.redirect('/validate')                    
+                }).catch(_ => res.status(500).render('500'))
             }
         } else {
-            res.status(400).render('login', { message: JSON.stringify('Algo deu errado') })
+            res.status(401).render('login', { message: JSON.stringify('Algo deu errado') })
         }
     }
 
-    const facebook = (req, res) => {
+    const facebook = async (req, res) => {
         if(req.user) {
             if(req.user == 'A sua conta do Facebook deve ter um Email') {
                 res.status(400).render('login', { message: JSON.stringify(req.user) })
@@ -83,24 +89,29 @@ module.exports = app => {
             } else if(req.user == 'Você já está cadastrado com sua conta no Google') {
                 res.status(400).render('login', { message: JSON.stringify(req.user) })
             } else {
-                const user = req.user 
-                const now = Math.floor(Date.now() / 1000)
-                const payload = {
-                    id: user._id,
-                    iss: process.env.DOMAIN_NAME, 
-                    iat: now,
-                    exp: now + 60 * 60 * 24
-                }
-
-                user.password = undefined
-                if(req.session) req.session.reset()
-                req.session.user = user
-                req.session.token = jwt.encode(payload, process.env.AUTH_SECRET)
-                if(!user.firstAccess) res.redirect('/validate')
-                else res.redirect('/newPassword')
+                await User.findOne({ _id: req.user._id }).then(async user => {
+                    const now = Math.floor(Date.now() / 1000)
+                    const payload = {
+                        id: user._id,
+                        iss: process.env.DOMAIN_NAME, 
+                        iat: now,
+                        exp: now + 60 * 60 * 24
+                    }
+    
+                    user.password = undefined
+                    if(req.session) req.session.reset()
+                    req.session.user = user
+                    req.session.token = jwt.encode(payload, process.env.AUTH_SECRET)
+                    if(user.firstAccess) {
+                        user.firstAccess = false
+                        await user.save()
+                        mail.newAccount(user.email, user.name)
+                    }
+                    res.redirect('/validate')                    
+                }).catch(_ => res.status(500).render('500'))
             }
         } else {
-            res.status(400).render('login', { message: JSON.stringify('Algo deu errado') })
+            res.status(401).render('login', { message: JSON.stringify('Algo deu errado') })
         }
     }
 

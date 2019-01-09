@@ -100,8 +100,10 @@ module.exports = app => {
         user.firstAccess = false
         user.firstProject = true
 
-        await User.create(user).then(_ => res.status(200).json(successMessage))
-        .catch(_ => res.status(500).json(failMessage))
+        await User.create(user).then(_ => {
+            mail.newAccount(user.email, user.name)
+            res.status(200).json(successMessage)
+        }).catch(_ => res.status(500).json(failMessage))
     }
 
     const changeProfile = async (req, res) => {
@@ -397,7 +399,7 @@ module.exports = app => {
             return res.status(400).json('Digite a frase corretamente')
         
         await User.findOne({ _id: req.params.id }).then(async user => {
-            if(!user.deletedAt) user.deletedAt = new Date().toLocaleDateString().split('-').reverse().join('/')
+            if(!user.deletedAt) user.deletedAt = moment().format('L')
             else user.deletedAt = undefined
             await user.save().then(_ => res.status(200).json(successMessage))
         }).catch(_ => res.status(500).json(failMessage))
