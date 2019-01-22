@@ -25,25 +25,26 @@
       <div class="col-lg-5 col-md-7">
         <div class="card bg-secondary shadow border-0">
           <div class="card-header bg-transparent pb-5">
-            <div class="text-muted text-center mt-2 mb-4"><small>Entre com</small></div>
-            <div class="container">
-              <div class="row justify-content-center">
-                <div class="col-8">
-                  <a href="/facebook" class="btn btn-neutral btn-block btn-icon">
-                    <span class="btn-inner--icon"><img src="/views/assets/img/icons/common/facebook.svg"></span>
-                    <span class="btn-inner--text">Facebook</span>
-                  </a>
-                  <a href="/google" class="btn btn-neutral btn-block btn-icon" style="padding-right:36px">
-                    <span class="btn-inner--icon"><img src="/views/assets/img/icons/common/google.svg"></span>
-                    <span class="btn-inner--text">Google</span>
-                  </a>
-                </div>
-              </div>
+            <div class="text-muted text-center mt-2 mb-3">
+              <small>Entre com</small>
+            </div>
+            <div class="btn-wrapper text-center">
+              <a href="/facebook" class="btn btn-neutral btn-icon">
+                <span class="btn-inner--icon"><img src="/views/assets/img/icons/common/facebook.svg"></span>
+                <span class="btn-inner--text">Facebook</span>
+              </a>
+              <style>
+                @media (max-width: 480px) { .btn-google-ajuste { margin-right:5px  }}
+              </style>
+              <a href="/google" class="btn btn-neutral btn-icon btn-google-ajuste">
+                <span class="btn-inner--icon"><img src="/views/assets/img/icons/common/google.svg"></span>
+                <span class="btn-inner--text">Google</span>
+              </a>
             </div>
           </div>
           <div class="card-body px-lg-5 py-lg-5">
             <div class="text-center text-muted mb-4">
-              <small>Se preferir, acesse a plataforma com seu Email e senha</small>
+              <small>Acesse com seu Email e senha</small>
             </div>
             <form method="POST" action="/login" role="form">
               <div class="form-group mb-3">
@@ -69,7 +70,7 @@
                 </label>
               </div>
               <div class="text-center">
-                <button type="submit" class="btn btn-primary my-4">Login</button>
+                <button type="submit" class="btn btn-primary my-4">Acessar</button>
               </div>
             </form>
             <script src="/views/assets/vendor/ajax/ajax.js"></script>

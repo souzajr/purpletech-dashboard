@@ -1,3 +1,5 @@
+"use strict";
+
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const Project = mongoose.model('Project')
@@ -352,6 +354,10 @@ module.exports = app => {
         }).catch(_ => res.status(500).json(failMessage))        
     }
 
+    const createProjectTask = async (req, res) => {
+
+    }
+
     return { 
         createNewProject, 
         viewProject,
@@ -361,6 +367,7 @@ module.exports = app => {
         changeProject,
         viewAllProjects,
         viewBudget,
-        createNewProjectAdmin
+        createNewProjectAdmin,
+        createProjectTask
     }
 }

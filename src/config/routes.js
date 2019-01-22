@@ -1,3 +1,5 @@
+"use strict";
+
 const admin = require('./admin')
 const passport = require('passport')
 

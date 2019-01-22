@@ -1,3 +1,5 @@
+"use strict";
+
 const bcrypt = require('bcrypt-nodejs')
 const mongoose = require('mongoose')
 const User = mongoose.model('User')

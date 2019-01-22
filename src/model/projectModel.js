@@ -7,8 +7,11 @@ const ProjectHistorySchema = new moongoose.Schema({
 })
 
 const TaskSchema = new moongoose.Schema({
-    status: Boolean,
-    description: String,
+    name: { type: String, required: true },
+    priority: String,
+    status: String,
+    milestone: String,
+    description: String
 })
 
 const ProjectSchema = new moongoose.Schema({

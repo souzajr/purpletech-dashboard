@@ -1,4 +1,6 @@
 
+"use strict";
+
 const session = require("client-sessions")
 const passport = require('passport')
 const bodyParser = require('body-parser')

@@ -32,7 +32,7 @@ Use como base o arquivo env_file
 $ npm start (development mode)
 ```
 ```bash
-Acesse http://localhost:9000
+Acesse http://localhost:3000
 ```
 
 ## Licensing
