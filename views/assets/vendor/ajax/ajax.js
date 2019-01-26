@@ -9,7 +9,6 @@ $(document).ready(function() {
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             data: $('#budget').serialize(),
             success: function(result) {
-                console.log('teste')
                 alertify.notify(result.msg, 'success', 5)
                 setTimeout(function() { 
                     window.location.href = '/project/' + result.id

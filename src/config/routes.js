@@ -113,6 +113,22 @@ module.exports = app => {
         .all(app.src.config.passport.authenticate())
         .get(app.src.api.project.getProjectFileThumb)      
 
+    /* ============= CREATE & MODIFY PROJECT TASKS ============= */
+    app.route('/task')
+        .all(app.src.config.passport.authenticate())
+        .post(admin(app.src.api.project.createProjectTask))
+        .put(admin(app.src.api.project.changeProjectTask))
+        .delete(admin(app.src.api.project.removeProjectTask))
+    app.route('/task/:id/:task')
+        .all(app.src.config.passport.authenticate())
+        .put(admin(app.src.api.project.changeProjectTaskStatus))
+
+    /* ============= CONFIGURE PROJECT ============= */
+    app.route('/projectconfig')
+        .all(app.src.config.passport.authenticate())
+        .get(admin(app.src.api.project.viewProjectConfig))
+        //.put new task with pattern
+
     /* ============= LIST OF ALL USSER & ADD NEW USER ============= */
     app.route('/users')
         .all(app.src.config.passport.authenticate())

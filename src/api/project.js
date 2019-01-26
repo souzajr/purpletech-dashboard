@@ -77,9 +77,10 @@ module.exports = app => {
             await Project.create(project).then(async project => {
                 user._idProject.push(project._id)
                 if(user.firstProject == true) user.firstProject = false
-                mail.projectCreated(user.email, user.name, project._id)
+                mail.projectCreated(user.email, user.name, project._id)                    
                 mail.projectNotice(user.name, project._id)
-                await user.save().then(_ => res.status(200).json({
+
+                await user.save().then(_ =>  res.status(200).json({
                     'msg': successMessage,
                     'id': project._id
                 }))
@@ -90,10 +91,12 @@ module.exports = app => {
     const viewProject = async (req, res) => {
         await Project.findOne({ _id: req.params.id }).then(async project => {
             let responsible = null
+
             if(project._idResponsible) { 
                 responsible = await User.findOne({ _id: project._idResponsible })
                 responsible.password = undefined
             }
+
             res.status(200).render('./dashboard/index', {
                 project,
                 responsible,
@@ -113,14 +116,9 @@ module.exports = app => {
                 return res.status(500).render('500')
             } else if (!req.files.length) {
                 return await Project.findOne({ _id: req.params.id }).then(async project => {
-                    let responsible = null
-                    if(project._idResponsible) { 
-                        responsible = await User.findOne({ _id: project._idResponsible })
-                        responsible.password = undefined
-                    }
                     res.status(400).render('./dashboard/index', { 
                         project,
-                        responsible,
+                        responsible: project._idResponsible || null,
                         user: req.session.user, 
                         page: '/project',
                         style: 'archive',
@@ -142,15 +140,11 @@ module.exports = app => {
                     project.file.push({ fileName: req.files[i].filename })
                 }
 
-                await project.save().catch(_ => res.status(500).render('500'))                
-                let responsible = null
-                if(project._idResponsible) { 
-                    responsible = await User.findOne({ _id: project._idResponsible })
-                    responsible.password = undefined
-                }
+                await project.save().catch(_ => res.status(500).render('500'))           
+
                 res.status(200).render('./dashboard/index', {
                     project,
-                    responsible,
+                    responsible: project._idResponsible || null,
                     user: req.session.user, 
                     page: '/project',
                     style: 'archive',
@@ -344,7 +338,8 @@ module.exports = app => {
                         else if(dataChange == 'Completed') mail.projectCompleted(user.email, user.name)  
                         else if(dataChange == 'Paused') mail.projectPaused(user.email, user.name)   
                         else mail.projectCanceled(user.email, user.name)
-                    } 
+                    }                  
+
                     res.status(200).json({
                         'msg': successMessage,
                         'id': project._id
@@ -355,7 +350,128 @@ module.exports = app => {
     }
 
     const createProjectTask = async (req, res) => {
+        const task = { ...req.body }
 
+        try {
+            existOrError(task.name, 'Digite o nome da tarefa')
+            tooSmall(task.name, 'Digite um nome maior')
+            if(task.description) tooSmall(task.description, 'Digite uma descrição maior')
+        } catch (msg) {
+            return await Project.findOne({ _id: task.projectId }).then(async project => {
+                res.status(400).render('./dashboard/index', { 
+                    project,
+                    responsible: project._idResponsible || null,
+                    user: req.session.user, 
+                    page: '/project',
+                    style: 'task',
+                    message: JSON.stringify(failMessage) 
+                })
+            }).catch(_ => res.status(500).render('500'))
+        }
+
+        if(task.pattern) task.pattern = true
+        else task.pattern = false
+
+        await Project.findOne({ _id: task.projectId }).then(async project => {
+            task._idProject = project._id
+            task.category = project.category
+            project.task.push(task)
+            await project.save()
+
+            res.status(200).render('./dashboard/index', { 
+                project,
+                responsible: project._idResponsible || null,
+                user: req.session.user, 
+                page: '/project',
+                style: 'task',
+                message: JSON.stringify(successMessage) 
+            })
+        }).catch(_ => res.status(500).render('500'))
+    }
+
+    const changeProjectTaskStatus = async (req, res) => {
+        const projectId = req.params.id
+        const taskId = req.params.task
+
+        return await Project.findOne({ _id: projectId }).then(async project => {
+            for(let i = 0; i < project.task.length; i++) {
+                if(project.task[i]._id == taskId) {
+                    if(project.task[i].status === 'Concluído') project.task[i].status = 'Pendente'
+                    else project.task[i].status = 'Concluído'                    
+                    break
+                }
+            }
+
+            await project.save()
+            return res.status(200).end()
+        }).catch(_ => res.status(500).json(failMessage))
+    }
+
+    const changeProjectTask = async (req, res) => {
+        const task = { ...req.body }
+
+        return await Project.findOne({ _id: task.projectId }).then(async project => {
+            for(let i = 0; i < project.task.length; i++) {
+                if(task.taskId == project.task[i]._id) {
+                    if(task.pattern) task.pattern = true
+                    else task.pattern = false
+                    task._idProject = project._id
+                    task.category = project.category
+                    project.task[i] = task
+                    break
+                }
+            }
+
+            await project.save()
+            return res.status(200).json(successMessage)
+        }).catch(_ => res.status(500).json(failMessage))
+    }
+
+    const removeProjectTask = async (req, res) => {
+        const projectId = req.body.projectId
+        const taskId = req.body.taskId
+
+        await Project.findOne({ _id: projectId }).then(async project => {
+            for(let i = 0; i < project.task.length; i++) {
+                if(project.task[i]._id == taskId) {
+                    project.task.splice(i, 1)
+                    break
+                }
+            }
+
+            await project.save() 
+
+            res.status(200).render('./dashboard/index', { 
+                project,
+                responsible: project._idResponsible || null,
+                user: req.session.user, 
+                page: '/project',
+                style: 'task',
+                message: JSON.stringify(successMessage) 
+            })
+        }).catch(_ => res.status(500).render('500'))
+    }
+
+    const viewProjectConfig = async (req, res) => {
+        await Project.find().then(project => {
+            let task = []
+
+            for(let i = 0; i < project.length; i++) {
+                for(let j = 0; j < project[i].task.length; j++) {
+                    if(project[i].task[j].pattern === true) {
+                        task.push(project[i].task[j])
+                    }
+                }
+            }
+
+            res.status(200).render('./dashboard/index', { 
+                project,
+                task,
+                user: req.session.user, 
+                page: req.url,
+                message: null
+            })
+        }).catch(_ => res.status(500).render('500'))
     }
 
     return { 
@@ -368,6 +484,10 @@ module.exports = app => {
         viewAllProjects,
         viewBudget,
         createNewProjectAdmin,
-        createProjectTask
+        createProjectTask,
+        changeProjectTaskStatus,
+        changeProjectTask,
+        removeProjectTask,
+        viewProjectConfig
     }
 }

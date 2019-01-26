@@ -69,7 +69,9 @@ module.exports = app => {
         '/newPassword',
         '/message',
         '/invoice',
-        '/support'
+        '/support',
+        '/task',
+        '/projectconfig'
     ], function (req, res, next) {
         if (!req.session.user) {
             res.status(401).render('login', { message: JSON.stringify('Por favor, faça o login para acessar') })

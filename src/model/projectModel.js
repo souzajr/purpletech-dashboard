@@ -11,7 +11,10 @@ const TaskSchema = new moongoose.Schema({
     priority: String,
     status: String,
     milestone: String,
-    description: String
+    description: String,
+    pattern: Boolean,
+    category: String,
+    _idProject: String
 })
 
 const ProjectSchema = new moongoose.Schema({

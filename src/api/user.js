@@ -73,7 +73,7 @@ module.exports = app => {
             tooBigEmail(user.email, 'Seu Email é muito longo')
             validEmailOrError(user.email, 'Email inválido')
             const userFromDB = await User.findOne({ email: user.email })
-            .catch(_ => res.status(500).render('500')) 
+            .catch(_ => res.status(500).json(failMessage))
             notExistOrError(userFromDB, 'Esse Email já está registrado')
             existOrError(user.phone, 'Digite seu telefone')
             existOrError(user.password, 'Digite sua senha')
@@ -162,9 +162,9 @@ module.exports = app => {
 
             await user.save().then(_ => {
                 res.status(200).json({ 
-                    "msg": "Sucesso!",
-                    "phone": req.body.newPhone,
-                    "email": req.body.newEmail
+                    'msg': 'Sucesso!',
+                    'phone': req.body.newPhone,
+                    'email': req.body.newEmail
                 })
             })
         }).catch(_ => res.status(400).json(failMessage))

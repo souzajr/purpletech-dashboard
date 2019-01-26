@@ -20,16 +20,16 @@ module.exports = app => {
             validEmailOrError(req.body.email, 'Email inválido')
             existOrError(req.body.password, 'Digite sua senha')
         } catch(msg) {
-            return res.status(400).render('login', { message: JSON.stringify(msg)})
+            return res.status(400).render('login', { message: JSON.stringify(msg) })
         }
         
         const user = await User.findOne({ email: req.body.email })
         .catch(_ => res.status(500).render('500'))
 
-        if(!user || user.deletedAt) return res.status(401).render('login', { message: JSON.stringify('Email ou senha inválidos')})
-        if(!user.password) return res.status(400).render('login', { message: JSON.stringify('Acesse a plataforma através do seu Facebook/Google') })
+        if(!user || user.deletedAt) return res.status(401).render('login', { message: JSON.stringify('Email ou senha inválidos') })
+        if(!user.password || user.noPassword) return res.status(400).render('login', { message: JSON.stringify('Acesse a plataforma através do seu Facebook/Google') })
         const isMatch = bcrypt.compareSync(req.body.password, user.password)
-        if(!isMatch) return res.status(401).render('login', { message: JSON.stringify('Email ou senha inválidos')})
+        if(!isMatch) return res.status(401).render('login', { message: JSON.stringify('Email ou senha inválidos') })
 
         const now = Math.floor(Date.now() / 1000)
         const payload = {
@@ -43,18 +43,18 @@ module.exports = app => {
         if(req.session) req.session.reset()
         req.session.user = user
         req.session.token = jwt.encode(payload, process.env.AUTH_SECRET)
-        if(!user.firstAccess) res.redirect('/validate')
-        else res.redirect('/newPassword')
+        if(!user.firstAccess) { return res.redirect('/validate') }
+        else { return res.redirect('/newPassword') }
     }
 
     const google = async (req, res) => {
         if(req.user) {
             if(req.user == 'A sua conta do Google deve ter um Email') {
-                res.status(400).render('login', { message: JSON.stringify(req.user) })
+                return res.status(400).render('login', { message: JSON.stringify(req.user) })
             } else if (req.user == 'Esse Email já está registrado') {
-                res.status(400).render('login', { message: JSON.stringify(req.user) })
+                return res.status(400).render('login', { message: JSON.stringify(req.user) })
             } else if(req.user == 'Você já está cadastrado com sua conta no Facebook') {
-                res.status(400).render('login', { message: JSON.stringify(req.user) })
+                return res.status(400).render('login', { message: JSON.stringify(req.user) })
             } else {
                 await User.findOne({ _id: req.user._id }).then(async user => {
                     const now = Math.floor(Date.now() / 1000)
@@ -65,7 +65,7 @@ module.exports = app => {
                         exp: now + 60 * 60 * 24
                     }
     
-                    user.password = undefined
+                    if(user.password) user.password = undefined
                     if(req.session) req.session.reset()
                     req.session.user = user
                     req.session.token = jwt.encode(payload, process.env.AUTH_SECRET)
@@ -74,22 +74,23 @@ module.exports = app => {
                         await user.save()
                         mail.newAccount(user.email, user.name)
                     }
-                    res.redirect('/validate')                    
+
+                    return res.redirect('/validate')                    
                 }).catch(_ => res.status(500).render('500'))
             }
         } else {
-            res.status(401).render('login', { message: JSON.stringify('Algo deu errado') })
+            return res.status(401).render('login', { message: JSON.stringify('Algo deu errado') })
         }
     }
 
     const facebook = async (req, res) => {
         if(req.user) {
             if(req.user == 'A sua conta do Facebook deve ter um Email') {
-                res.status(400).render('login', { message: JSON.stringify(req.user) })
+                return res.status(400).render('login', { message: JSON.stringify(req.user) })
             } else if (req.user == 'Esse Email já está registrado') {
-                res.status(400).render('login', { message: JSON.stringify(req.user) })
+                return res.status(400).render('login', { message: JSON.stringify(req.user) })
             } else if(req.user == 'Você já está cadastrado com sua conta no Google') {
-                res.status(400).render('login', { message: JSON.stringify(req.user) })
+                return res.status(400).render('login', { message: JSON.stringify(req.user) })
             } else {
                 await User.findOne({ _id: req.user._id }).then(async user => {
                     const now = Math.floor(Date.now() / 1000)
@@ -100,7 +101,7 @@ module.exports = app => {
                         exp: now + 60 * 60 * 24
                     }
     
-                    user.password = undefined
+                    if(user.password) user.password = undefined
                     if(req.session) req.session.reset()
                     req.session.user = user
                     req.session.token = jwt.encode(payload, process.env.AUTH_SECRET)
@@ -109,11 +110,12 @@ module.exports = app => {
                         await user.save()
                         mail.newAccount(user.email, user.name)
                     }
-                    res.redirect('/validate')                    
+
+                    return res.redirect('/validate')                    
                 }).catch(_ => res.status(500).render('500'))
             }
         } else {
-            res.status(401).render('login', { message: JSON.stringify('Algo deu errado') })
+            return res.status(401).render('login', { message: JSON.stringify('Algo deu errado') })
         }
     }
 
@@ -124,8 +126,8 @@ module.exports = app => {
                 if (userToken) {
                     const token = jwt.decode(userToken, process.env.AUTH_SECRET)
                     if (new Date(token.exp * 1000) > new Date()) {
-                        if(req.session.user.firstProject == true) res.redirect('/newProject')
-                        else res.redirect('/dashboard')
+                        if(req.session.user.firstProject == true) { return res.redirect('/newProject') }
+                        else { return res.redirect('/dashboard') }
                     }
                 }
             } catch (err) {

@@ -11,7 +11,8 @@
                             <h5 class="h3 mb-0">Informações do projeto</h5>
                         </div>
                         <div class="col-5 text-right">
-                            <a class="btn btn-sm btn-danger" style="color:#fff" data-toggle="modal" data-target="#modal-project">Editar projeto</a>
+                            <a class="btn btn-sm btn-danger" style="color:#fff" data-toggle="modal" data-target="#modal-project">Editar
+                                projeto</a>
                         </div>
                     </div>
                     <% } else { %>
@@ -20,26 +21,25 @@
                     <div class="nav-wrapper">
                         <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
                             <li class="nav-item">
-                            <% if(style == 'details') { %>
-                                <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-details-tab" data-toggle="tab" href="#tabs-details"
-                                    role="tab" aria-controls="tabs-details" aria-selected="true"><i class="ni ni-single-copy-04 mr-2"></i>Detalhes</a>
-                            <% } else { %>
-                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-details-tab" data-toggle="tab" href="#tabs-details"
-                                    role="tab" aria-controls="tabs-details" aria-selected="false"><i class="ni ni-single-copy-04 mr-2"></i>Detalhes</a>
-                            <% } %>
+                                <a class="nav-link mb-sm-3 mb-md-0 <% if(style == 'details') { %>active<% } %>" id="tabs-details-tab"
+                                    data-toggle="tab" href="#tabs-details" role="tab" aria-controls="tabs-details"
+                                    aria-selected="<% if(style == 'details') { %>true<% } else { %>false<% } %>">
+                                    <i class="ni ni-single-copy-04 mr-2"></i>Detalhes
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-tasks-tab" data-toggle="tab" href="#tabs-tasks"
-                                    role="tab" aria-controls="tabs-tasks" aria-selected="false"><i class="ni ni-ruler-pencil mr-2"></i>Tarefas</a>
+                                <a class="nav-link mb-sm-3 mb-md-0 <% if(style == 'task') { %>active<% } %>" id="tabs-tasks-tab"
+                                    data-toggle="tab" href="#tabs-tasks" role="tab" aria-controls="tabs-tasks"
+                                    aria-selected="<% if(style == 'task') { %>true<% } else { %>false<% } %>">
+                                    <i class="ni ni-ruler-pencil mr-2"></i>Tarefas
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <% if(style == 'archive') { %>
-                                <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-archive-tab" data-toggle="tab" href="#tabs-archive"
-                                    role="tab" aria-controls="tabs-archive" aria-selected="true"><i class="ni ni-archive-2 mr-2"></i>Arquivos</a>
-                                <% } else { %>
-                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-archive-tab" data-toggle="tab" href="#tabs-archive"
-                                    role="tab" aria-controls="tabs-archive" aria-selected="false"><i class="ni ni-archive-2 mr-2"></i>Arquivos</a>
-                                <% } %>
+                                <a class="nav-link mb-sm-3 mb-md-0 <% if(style == 'archive') { %>active<% } %>" id="tabs-archive-tab"
+                                    data-toggle="tab" href="#tabs-archive" role="tab" aria-controls="tabs-archive"
+                                    aria-selected="<% if(style == 'archive') { %>true<% } else { %>false<% } %>">
+                                    <i class="ni ni-archive-2 mr-2"></i>Arquivos
+                                </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link mb-sm-3 mb-md-0" id="tabs-invoice-tab" data-toggle="tab" href="#tabs-invoice"
@@ -50,7 +50,8 @@
                 </div>
                 <div class="card-body">
                     <div class="tab-content">
-                        <div class="tab-pane fade <% if(style == 'details') { %>show active<% } %>" id="tabs-details" role="tabpanel" aria-labelledby="tabs-details-tab">
+                        <div class="tab-pane fade <% if(style == 'details') { %>show active<% } %>" id="tabs-details"
+                            role="tabpanel" aria-labelledby="tabs-details-tab">
                             <div class="container">
                                 <div class="row">
                                     <div class="col-md-4">
@@ -68,7 +69,9 @@
                                         </p>
                                         <% if(project.canceledReason) { %>
                                         <h4 style="color:red">Motivo do cancelamento</h4>
-                                        <p><%= project.canceledReason %></p>
+                                        <p>
+                                            <%= project.canceledReason %>
+                                        </p>
                                         <% } %>
                                     </div>
                                     <div class="col-md-4">
@@ -84,7 +87,8 @@
                                         <% if(!project._idResponsible) { %>
                                         <p>O projeto ainda não foi aprovado</p>
                                         <% } else { %>
-                                        <a class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="<%= responsible.name %>">
+                                        <a class="avatar avatar-sm rounded-circle" data-toggle="tooltip"
+                                            data-original-title="<%= responsible.name %>">
                                             <% if(responsible.avatar) { %>
                                             <img alt="Responsável" src="<%= responsible.avatar %>">
                                             <% } else { %>
@@ -98,243 +102,410 @@
                                         <div class="timeline timeline-one-side" data-timeline-content="axis"
                                             data-timeline-axis-style="dashed">
                                             <% for(let i = project.projectHistory.length - 1, count = 0; i >= 0; i--, count++) { %>
-                                                <% if(project.projectHistory[i].dataChange == 'Created') { %>
-                                                <div class="timeline-block">
-                                                    <span class="timeline-step badge-warning">
-                                                        <i class="ni ni-spaceship"></i>
-                                                    </span>
-                                                    <div class="timeline-content">
-                                                        <div class="d-flex justify-content-between pt-1">
-                                                            <div>
-                                                                <span class="text-muted text-sm font-weight-bold"><%= project.projectHistory[i].dateChange %></span>
-                                                            </div>
-                                                            <div class="text-right">
-                                                                <small class="text-muted"><i class="fas fa-clock mr-1"></i><%= project.projectHistory[i].dateTodayChange %></small>
-                                                            </div>
+                                            <% if(project.projectHistory[i].dataChange == 'Created') { %>
+                                            <div class="timeline-block">
+                                                <span class="timeline-step badge-warning">
+                                                    <i class="ni ni-spaceship"></i>
+                                                </span>
+                                                <div class="timeline-content">
+                                                    <div class="d-flex justify-content-between pt-1">
+                                                        <div>
+                                                            <span class="text-muted text-sm font-weight-bold">
+                                                                <%= project.projectHistory[i].dateChange %></span>
                                                         </div>
-                                                        <h6 class="text-sm mt-1 mb-0">Projeto criado</h6>
-                                                    </div>
-                                                </div>
-                                                <% } %><% if(project.projectHistory[i].dataChange == 'Approved') { %>
-                                                <div class="timeline-block">
-                                                    <span class="timeline-step badge-info">
-                                                        <i class="fas fa-handshake"></i>
-                                                    </span>
-                                                    <div class="timeline-content">
-                                                        <div class="d-flex justify-content-between pt-1">
-                                                            <div>
-                                                                <span class="text-muted text-sm font-weight-bold"><%= project.projectHistory[i].dateChange %></span>
-                                                            </div>
-                                                            <div class="text-right">
-                                                                <small class="text-muted"><i class="fas fa-clock mr-1"></i><%= project.projectHistory[i].dateTodayChange %></small>
-                                                            </div>
+                                                        <div class="text-right">
+                                                            <small class="text-muted"><i class="fas fa-clock mr-1"></i>
+                                                                <%= project.projectHistory[i].dateTodayChange %></small>
                                                         </div>
-                                                        <h6 class="text-sm mt-1 mb-0">Projeto aprovado</h6>
                                                     </div>
+                                                    <h6 class="text-sm mt-1 mb-0">Projeto criado</h6>
                                                 </div>
-                                                <% } %>
-                                                <% if(project.projectHistory[i].dataChange == 'Development') { %>
-                                                <div class="timeline-block">
-                                                    <span class="timeline-step badge-primary">
-                                                        <i class="fas fa-cogs"></i>
-                                                    </span>
-                                                    <div class="timeline-content">
-                                                        <div class="d-flex justify-content-between pt-1">
-                                                            <div>
-                                                                <span class="text-muted text-sm font-weight-bold"><%= project.projectHistory[i].dateChange %></span>
-                                                            </div>
-                                                            <div class="text-right">
-                                                                <small class="text-muted"><i class="fas fa-clock mr-1"></i><%= project.projectHistory[i].dateTodayChange %></small>
-                                                            </div>
+                                            </div>
+                                            <% } %>
+                                            <% if(project.projectHistory[i].dataChange == 'Approved') { %>
+                                            <div class="timeline-block">
+                                                <span class="timeline-step badge-info">
+                                                    <i class="fas fa-handshake"></i>
+                                                </span>
+                                                <div class="timeline-content">
+                                                    <div class="d-flex justify-content-between pt-1">
+                                                        <div>
+                                                            <span class="text-muted text-sm font-weight-bold">
+                                                                <%= project.projectHistory[i].dateChange %></span>
                                                         </div>
-                                                        <h6 class="text-sm mt-1 mb-0">Projeto em desenvolvimento</h6>
-                                                    </div>
-                                                </div>
-                                                <% } %>
-                                                <% if(project.projectHistory[i].dataChange == 'Completed') { %>
-                                                <div class="timeline-block">
-                                                    <span class="timeline-step badge-success">
-                                                        <i class="ni ni-trophy"></i>
-                                                    </span>
-                                                    <div class="timeline-content">
-                                                        <div class="d-flex justify-content-between pt-1">
-                                                            <div>
-                                                                <span class="text-muted text-sm font-weight-bold"><%= project.projectHistory[i].dateChange %></span>
-                                                            </div>
-                                                            <div class="text-right">
-                                                                <small class="text-muted"><i class="fas fa-clock mr-1"></i><%= project.projectHistory[i].dateTodayChange %></small>
-                                                            </div>
+                                                        <div class="text-right">
+                                                            <small class="text-muted"><i class="fas fa-clock mr-1"></i>
+                                                                <%= project.projectHistory[i].dateTodayChange %></small>
                                                         </div>
-                                                        <h6 class="text-sm mt-1 mb-0">Projeto concluído</h6>
                                                     </div>
+                                                    <h6 class="text-sm mt-1 mb-0">Projeto aprovado</h6>
                                                 </div>
-                                                <% } %>
-                                                <% if(project.projectHistory[i].dataChange == 'Paused') { %>
-                                                <div class="timeline-block">
-                                                    <span class="timeline-step badge-default">
-                                                        <i class="ni ni-button-pause"></i>
-                                                    </span>
-                                                    <div class="timeline-content">
-                                                        <div class="d-flex justify-content-between pt-1">
-                                                            <div>
-                                                                <span class="text-muted text-sm font-weight-bold"><%= project.projectHistory[i].dateChange %></span>
-                                                            </div>
-                                                            <div class="text-right">
-                                                                <small class="text-muted"><i class="fas fa-clock mr-1"></i><%= project.projectHistory[i].dateTodayChange %></small>
-                                                            </div>
+                                            </div>
+                                            <% } %>
+                                            <% if(project.projectHistory[i].dataChange == 'Development') { %>
+                                            <div class="timeline-block">
+                                                <span class="timeline-step badge-primary">
+                                                    <i class="fas fa-cogs"></i>
+                                                </span>
+                                                <div class="timeline-content">
+                                                    <div class="d-flex justify-content-between pt-1">
+                                                        <div>
+                                                            <span class="text-muted text-sm font-weight-bold">
+                                                                <%= project.projectHistory[i].dateChange %></span>
                                                         </div>
-                                                        <h6 class="text-sm mt-1 mb-0">Projeto pausado</h6>
-                                                    </div>
-                                                </div>
-                                                <% } %>
-                                                <% if(project.projectHistory[i].dataChange == 'Canceled') { %>
-                                                <div class="timeline-block">
-                                                    <span class="timeline-step badge-danger">
-                                                        <i class="fas fa-times-circle"></i>
-                                                    </span>
-                                                    <div class="timeline-content">
-                                                        <div class="d-flex justify-content-between pt-1">
-                                                            <div>
-                                                                <span class="text-muted text-sm font-weight-bold"><%= project.projectHistory[i].dateChange %></span>
-                                                            </div>
-                                                            <div class="text-right">
-                                                                <small class="text-muted"><i class="fas fa-clock mr-1"></i><%= project.projectHistory[i].dateTodayChange %></small>
-                                                            </div>
+                                                        <div class="text-right">
+                                                            <small class="text-muted"><i class="fas fa-clock mr-1"></i>
+                                                                <%= project.projectHistory[i].dateTodayChange %></small>
                                                         </div>
-                                                        <h6 class="text-sm mt-1 mb-0">Projeto cancelado</h6>
                                                     </div>
+                                                    <h6 class="text-sm mt-1 mb-0">Projeto em desenvolvimento</h6>
                                                 </div>
-                                                <% } %>
-                                                <% if(count == 2) break %>
+                                            </div>
+                                            <% } %>
+                                            <% if(project.projectHistory[i].dataChange == 'Completed') { %>
+                                            <div class="timeline-block">
+                                                <span class="timeline-step badge-success">
+                                                    <i class="ni ni-trophy"></i>
+                                                </span>
+                                                <div class="timeline-content">
+                                                    <div class="d-flex justify-content-between pt-1">
+                                                        <div>
+                                                            <span class="text-muted text-sm font-weight-bold">
+                                                                <%= project.projectHistory[i].dateChange %></span>
+                                                        </div>
+                                                        <div class="text-right">
+                                                            <small class="text-muted"><i class="fas fa-clock mr-1"></i>
+                                                                <%= project.projectHistory[i].dateTodayChange %></small>
+                                                        </div>
+                                                    </div>
+                                                    <h6 class="text-sm mt-1 mb-0">Projeto concluído</h6>
+                                                </div>
+                                            </div>
+                                            <% } %>
+                                            <% if(project.projectHistory[i].dataChange == 'Paused') { %>
+                                            <div class="timeline-block">
+                                                <span class="timeline-step badge-default">
+                                                    <i class="ni ni-button-pause"></i>
+                                                </span>
+                                                <div class="timeline-content">
+                                                    <div class="d-flex justify-content-between pt-1">
+                                                        <div>
+                                                            <span class="text-muted text-sm font-weight-bold">
+                                                                <%= project.projectHistory[i].dateChange %></span>
+                                                        </div>
+                                                        <div class="text-right">
+                                                            <small class="text-muted"><i class="fas fa-clock mr-1"></i>
+                                                                <%= project.projectHistory[i].dateTodayChange %></small>
+                                                        </div>
+                                                    </div>
+                                                    <h6 class="text-sm mt-1 mb-0">Projeto pausado</h6>
+                                                </div>
+                                            </div>
+                                            <% } %>
+                                            <% if(project.projectHistory[i].dataChange == 'Canceled') { %>
+                                            <div class="timeline-block">
+                                                <span class="timeline-step badge-danger">
+                                                    <i class="fas fa-times-circle"></i>
+                                                </span>
+                                                <div class="timeline-content">
+                                                    <div class="d-flex justify-content-between pt-1">
+                                                        <div>
+                                                            <span class="text-muted text-sm font-weight-bold">
+                                                                <%= project.projectHistory[i].dateChange %></span>
+                                                        </div>
+                                                        <div class="text-right">
+                                                            <small class="text-muted"><i class="fas fa-clock mr-1"></i>
+                                                                <%= project.projectHistory[i].dateTodayChange %></small>
+                                                        </div>
+                                                    </div>
+                                                    <h6 class="text-sm mt-1 mb-0">Projeto cancelado</h6>
+                                                </div>
+                                            </div>
+                                            <% } %>
+                                            <% if(count == 2) break %>
                                             <% } %>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane fade <% if(style == 'task') { %>show active<% } %>" id="tabs-tasks" role="tabpanel" aria-labelledby="tabs-tasks-tab">
+                        <div class="tab-pane fade <% if(style == 'task') { %>show active<% } %>" id="tabs-tasks" role="tabpanel"
+                            aria-labelledby="tabs-tasks-tab">
+                            <% if(user.admin) { %>
+                            <a class="btn btn-sm btn-secondary">Adicionar tarefas padrões</a>
+                            <a class="btn btn-sm btn-info" style="color:#fff" data-toggle="modal" data-target="#modal-task">Adicionar
+                                nova tarefa</a>
+                            <br /><br />
+                            <% } %>
                             <% if(!project.task.length) { %>
-                                <% if(user.admin) { %>
-                                <a class="btn btn-sm btn-secondary">
-                                    Adicionar tarefas padrões
-                                </a> 
-                                <a class="btn btn-sm btn-info" style="color:#fff" data-toggle="modal" data-target="#modal-task">
-                                    Adicionar nova tarefa
-                                </a><br/><br/>
-                                <% } %>
-                                <p class="description">Ainda não há atividades</p>
+                            <p class="description">Ainda não há atividades</p>
                             <% } else { %>
                             <ul class="list-group list-group-flush" data-toggle="checklist">
-                                <% for(let i = 0; i < project.task.length; i++) { %>
+                                <% for(let i = project.task.length - 1; i >= 0; i--) { %>
                                 <li class="checklist-entry list-group-item flex-column align-items-start py-4 px-4">
                                     <div class="checklist-item checklist-item-success">
-                                        <a href="#">
+                                        <a href="#" data-toggle="modal" data-target="#modal-task-<%= i %>">
                                             <div class="checklist-info">
-                                                <h5 class="checklist-title mb-0">Call with Dave</h5>
-                                                <small>10:30 AM</small>
+                                                <h5 class="checklist-title mb-0">
+                                                    <%= project.task[i].name %>
+                                                </h5>
+                                                <small>
+                                                    <% if(project.task[i].description) { %>
+                                                    <%= project.task[i].description %>
+                                                    <% } else { %>
+                                                    Sem Descrição
+                                                    <% } %>
+                                                </small>
                                             </div>
                                         </a>
                                         <div>
+                                            <div>
+                                            <% if(user.admin) { %>
+                                            <form action="/task" method="POST" role="form" id="form-task-delete-<%= i %>">
+                                                <input type="hidden" name="_method" value="DELETE">
+                                                <input type="hidden" name="projectId" value="<%= project._id %>">
+                                                <input type="hidden" name="taskId" value="<%= project.task[i]._id %>">
+                                                <a href="javascript:{}" onclick="document.getElementById('form-task-delete-<%= i %>').submit();"><i class="fas fa-trash-alt"></i></a>
+                                            </form>
+                                            <form id="form-task-status-<%= i %>" role="form">
+                                                <input hidden name="task" value="<%= project.task[i]._id %>">
+                                                <div class="custom-control custom-checkbox custom-checkbox-success">
+                                                    <input class="custom-control-input checkbox-status-<%= i %>" name="task"
+                                                        value="<%= project.task[i]._id %>" id="chk-todo-<%= i %>" type="checkbox"
+                                                        <% if(project.task[i].status==='Concluído' ) { %>checked
+                                                    <% } %>>
+                                                    <label class="custom-control-label" for="chk-todo-<%= i %>"></label>
+                                                </div>
+                                            </form>
+                                            <script>
+                                                $(document).ready(function () {
+                                                $('.checkbox-status-<%= i %>').click(function (e) {
+                                                    $.ajax({
+                                                        type: 'PUT',
+                                                        url: '/task/<%= project._id %>/<%= project.task[i]._id %>',
+                                                        datatype: 'html',
+                                                        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                                                        data: $('#form-task-status-<%= i %>').serialize(),
+                                                        error: function (xhr, status, error) {
+                                                            alertify.notify(JSON.parse(xhr.responseText), 'error', 5)
+                                                        },
+                                                    })
+                                                })
+                                            })
+                                            </script>
+                                            <% } else { %>
                                             <div class="custom-control custom-checkbox custom-checkbox-success">
-                                                <form id="checkbox-todo-form-<%= i %>">
-                                                    <input class="custom-control-input" id="chk-todo-task-<%= i %>"
-                                                    type="checkbox" <% if(!user.admin) { %>disabled<% } %>
-                                                    checked onchange="document.getElementById('checkbox-todo-form-<%= i %>').submit()">
-                                                    <label class="custom-control-label" for="chk-todo-task-<%= i %>"></label>
-                                                </form>
+                                                <input class="custom-control-input" id="chk-todo" type="checkbox"
+                                                    disabled <% if(project.task[i].status==='Concluído' ) { %>checked
+                                                <% } %>>
+                                                <label class="custom-control-label" for="chk-todo"></label>
                                             </div>
+                                            <% } %>
                                         </div>
                                     </div>
                                 </li>
+                                <div class="modal fade" id="modal-task-<%= i %>" tabindex="-1" role="dialog"
+                                    aria-labelledby="modal-default" style="display: none;" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <% if(user.admin) { %>
+                                        <form id="change-task-form-<%= i %>" role="form">
+                                            <input hidden name="projectId" value="<%= project._id %>">
+                                            <input hidden name="taskId" value="<%= project.task[i]._id %>">
+                                            <% } %>
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h3 class="modal-title" id="modal-title-default">Tarefa
+                                                        <%= project.task[i].name %>
+                                                    </h3>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">x</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label class="form-control-label" for="task-name-<%= i %>">Nome
+                                                                    da tarefa</label>
+                                                                <div class="input-group input-group-alternative mb-4">
+                                                                    <input class="form-control form-control-alternative"
+                                                                        name="name" type="text" id="task-name-<%= i %>"
+                                                                        value="<%= project.task[i].name %>" <%
+                                                                        if(!user.admin) { %>disabled
+                                                                    <% } %>>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="form-control-label" for="select-priority-task-<%= i %>">Prioridade</label>
+                                                                <div class="input-group input-group-alternative mb-4">
+                                                                    <% if(!user.admin) { %>
+                                                                    <input class="form-control form-control-alternative"
+                                                                        name="name" type="text" id="select-priority-task-<%= i %>"
+                                                                        value="<% if(project.task[i].priority) { %><%= project.task[i].priority %><% } else { %>Sem prioridade<% } %>"
+                                                                        disabled>
+                                                                    <% } else { %>
+                                                                    <select name="priority" class="form-control" id="select-priority-task-<%= i %>">
+                                                                        <option <% if(project.task[i].priority==='Baixa'
+                                                                            ) { %>selected
+                                                                            <% } %>>Baixa</option>
+                                                                        <option <% if(project.task[i].priority==='Média'
+                                                                            ) { %>selected
+                                                                            <% } %>>Média</option>
+                                                                        <option <% if(project.task[i].priority==='Alta'
+                                                                            ) { %>selected
+                                                                            <% } %>>Alta</option>
+                                                                    </select>
+                                                                    <% } %>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="form-control-label" for="select-status-task-<%= i %>">Status</label>
+                                                                <div class="input-group input-group-alternative mb-4">
+                                                                    <% if(!user.admin) { %>
+                                                                    <input class="form-control form-control-alternative"
+                                                                        name="name" type="text" id="select-status-task-<%= i %>"
+                                                                        value="<% if(project.task[i].status) { %><%= project.task[i].status %><% } else { %>Sem status<% } %>"
+                                                                        disabled>
+                                                                    <% } else { %>
+                                                                    <select name="status" class="form-control" id="select-status-task-<%= i %>">
+                                                                        <option <% if(project.task[i].status==='Pendente'
+                                                                            ) { %>selected
+                                                                            <% } %>>Pendente</option>
+                                                                        <option <% if(project.task[i].status==='Concluído'
+                                                                            ) { %>selected
+                                                                            <% } %>>Concluído</option>
+                                                                    </select>
+                                                                    <% } %>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <% if(!user.admin) { %>
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label class="form-control-label" for="select-milestone-task-<%= i %>">Milestone</label>
+                                                                <div class="input-group input-group-alternative mb-4">
+                                                                    <input class="form-control form-control-alternative"
+                                                                        name="name" type="text" id="select-milestone-task-<%= i %>"
+                                                                        value="<% if(project.task[i].milestone) { %><%= project.task[i].milestone %><% } else { %>Sem Milestone<% } %>"
+                                                                        disabled>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <% } else { %>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <div class="input-group input-group-alternative mb-4">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text"><i class="ni ni-bullet-list-67"></i></span>
+                                                                    </div>
+                                                                    <select name="milestone" class="form-control" id="select-milestone-task-<%= i %>">
+                                                                        <option <% if(project.task[i].milestone==='Planejamento'
+                                                                            ) { %>selected
+                                                                            <% } %>>Planejamento</option>
+                                                                        <option <% if(project.task[i].milestone==='Desenvolvimento'
+                                                                            ) { %>selected
+                                                                            <% } %>>Desenvolvimento</option>
+                                                                        <option <% if(project.task[i].milestone==='Documentação'
+                                                                            ) { %>selected
+                                                                            <% } %>>Documentação</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="custom-control custom-control-alternative custom-checkbox mb-3">
+                                                                <input class="custom-control-input" name="pattern" id="pattern-task-<%= i %>"
+                                                                    type="checkbox" <% if(project.task[i].pattern) {%>checked
+                                                                <% } %>>
+                                                                <label class="custom-control-label" for="pattern-task-<%= i %>">Marcar
+                                                                    tarefa como padrão da categoria</label>
+                                                            </div>
+                                                        </div>
+                                                        <% } %>
+                                                        <div class="col-md-12">
+                                                            <label class="form-control-label" for="select-description-task-<%= i %>">Descrição</label>
+                                                            <textarea class="form-control form-control-alternative"
+                                                                name="description" <% if(!user.admin) { %>disabled<% } %>
+                                                        rows="3" id="select-description-task-<%= i %>"><%= project.task[i].description %></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <% if(user.admin) { %><button type="submit" class="btn btn-primary">Alterar
+                                                        tarefa</button>
+                                                    <% } %>
+                                                    <button type="button" class="btn btn-link  ml-auto" data-dismiss="modal">Fechar</button>
+                                                </div>
+                                            </div>
+                                            <% if(user.admin) { %>
+                                        </form>
+                                        <script>
+                                            $(document).ready(function() {
+                                            $('#change-task-form-<%= i %>').on('submit', function(e) {
+                                                e.preventDefault()
+                                                
+                                                $.ajax({
+                                                    type: 'PUT',
+                                                    url: '/task',
+                                                    datatype: 'html',
+                                                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                                                    data: $('#change-task-form-<%= i %>').serialize(),
+                                                    success: function(result) {
+                                                        alertify.notify(result, 'success', 5)
+                                                        $('#modal-task-<%= i %>').modal('hide')
+                                                    },
+                                                    error : function(xhr, status, error) {
+                                                        alertify.notify(JSON.parse(xhr.responseText), 'error', 5)
+                                                    },
+                                                })
+                                            })
+                                        })
+                                        </script>
+                                        <% } %>
+                                    </div>
+                                </div>
                                 <% } %>
-                                <li class="checklist-entry list-group-item flex-column align-items-start py-4 px-4">
-                                    <div class="checklist-item checklist-item-warning">
-                                    <div class="checklist-info">
-                                        <h5 class="checklist-title mb-0">Lunch meeting</h5>
-                                        <small>10:30 AM</small>
-                                    </div>
-                                    <div>
-                                        <div class="custom-control custom-checkbox custom-checkbox-warning">
-                                        <input class="custom-control-input" id="chk-todo-task-2" type="checkbox">
-                                        <label class="custom-control-label" for="chk-todo-task-2"></label>
-                                        </div>
-                                    </div>
-                                    </div>
-                                </li>
-                                <li class="checklist-entry list-group-item flex-column align-items-start py-4 px-4">
-                                    <div class="checklist-item checklist-item-info">
-                                    <div class="checklist-info">
-                                        <h5 class="checklist-title mb-0">Argon Dashboard Launch</h5>
-                                        <small>10:30 AM</small>
-                                    </div>
-                                    <div>
-                                        <div class="custom-control custom-checkbox custom-checkbox-info">
-                                        <input class="custom-control-input" id="chk-todo-task-3" type="checkbox">
-                                        <label class="custom-control-label" for="chk-todo-task-3"></label>
-                                        </div>
-                                    </div>
-                                    </div>
-                                </li>
-                                <li class="checklist-entry list-group-item flex-column align-items-start py-4 px-4">
-                                    <div class="checklist-item checklist-item-danger">
-                                    <div class="checklist-info">
-                                        <h5 class="checklist-title mb-0">Winter Hackaton</h5>
-                                        <small>10:30 AM</small>
-                                    </div>
-                                    <div>
-                                        <div class="custom-control custom-checkbox custom-checkbox-danger">
-                                        <input class="custom-control-input" id="chk-todo-task-4" type="checkbox" checked>
-                                        <label class="custom-control-label" for="chk-todo-task-4"></label>
-                                        </div>
-                                    </div>
-                                    </div>
-                                </li>
-                                <li class="checklist-entry list-group-item flex-column align-items-start py-4 px-4">
-                                    <div class="checklist-item checklist-item-success">
-                                    <div class="checklist-info">
-                                        <h5 class="checklist-title mb-0">Dinner with Family</h5>
-                                        <small>10:30 AM</small>
-                                    </div>
-                                    <div>
-                                        <div class="custom-control custom-checkbox custom-checkbox-success">
-                                        <input class="custom-control-input" id="chk-todo-task-5" type="checkbox" checked>
-                                        <label class="custom-control-label" for="chk-todo-task-5"></label>
-                                        </div>
-                                    </div>
-                                    </div>
-                                </li>
-                            </ul>                       
+                            </ul>
                             <% } %>
                         </div>
-                        <div class="tab-pane fade <% if(style == 'archive') { %>show active<% } %>" id="tabs-archive" role="tabpanel" aria-labelledby="tabs-archive-tab">
+                        <div class="tab-pane fade <% if(style == 'archive') { %>show active<% } %>" id="tabs-archive"
+                            role="tabpanel" aria-labelledby="tabs-archive-tab">
                             <div class="tz-gallery">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <form method="POST" enctype="multipart/form-data" action="/upload/<%= project._id %>" role="form">
-                                                <h3 c>Enviar arquivos</h3>
-                                                <div class="custom-file">
-                                                    <input type="file" name="file" accept=".jpg, .jpeg, .png, .gif, .bmp" class="custom-file-input"
-                                                    id="customFileLangProject" lang="en" onchange='uploadFileProject(this)' multiple>
-                                                    <label class="custom-file-label" id="file-name-project" for="customFileLangProject">Escolha suas fotos</label>
-                                                </div>
-                                                <script>
-                                                    function uploadFileProject(target) { 
+                                        <form method="POST" enctype="multipart/form-data" action="/upload/<%= project._id %>"
+                                            role="form">
+                                            <h3 c>Enviar arquivos</h3>
+                                            <div class="custom-file">
+                                                <input type="file" name="file" accept=".jpg, .jpeg, .png, .gif, .bmp"
+                                                    class="custom-file-input" id="customFileLangProject" lang="en"
+                                                    onchange='uploadFileProject(this)' multiple>
+                                                <label class="custom-file-label" id="file-name-project" for="customFileLangProject">Escolha
+                                                    suas fotos</label>
+                                            </div>
+                                            <script>
+                                                function uploadFileProject(target) { 
                                                         if(target.files.length == 1)
                                                             document.getElementById("file-name-project").innerHTML = target.files[0].name;
                                                         else
                                                             document.getElementById("file-name-project").innerHTML = '(' + target.files.length + ') fotos';
                                                     }
-                                                </script><br/><br/>
-                                                <button type="submit" class="btn btn-danger btn-block">Enviar fotos</button><br/>
+                                                </script><br /><br />
+                                            <button type="submit" class="btn btn-danger btn-block">Enviar fotos</button><br />
                                         </form>
-                                    </div>                                    
+                                    </div>
                                     <% if(project.file.length) { %>
                                     <% for(let i = project.file.length - 1; i >= 0; i--) { %>
                                     <div class="col-md-4">
-                                            <a class="lightbox" href="/get/<%= project._id %>/<%= project.file[i].fileName %>" alt="Project Image">
-                                                <img class="card-img-top" src="/getThumb/<%= project._id %>/<%= project.file[i].fileName %>">
-                                            </a>
-                                    </div>  
+                                        <a class="lightbox" href="/get/<%= project._id %>/<%= project.file[i].fileName %>"
+                                            alt="Project Image">
+                                            <img class="card-img-top" src="/getThumb/<%= project._id %>/<%= project.file[i].fileName %>">
+                                        </a>
+                                    </div>
                                     <% } %>
                                     <% } %>
                                 </div>
@@ -349,39 +520,95 @@
         </div>
     </div>
     <% if(user.admin) { %>
-        <div class="modal fade" id="modal-task" tabindex="-1" role="dialog" aria-labelledby="modal-default" style="display: none;"
+    <div class="modal fade" id="modal-task" tabindex="-1" role="dialog" aria-labelledby="modal-default" style="display: none;"
         aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <form id="budget" role="form">
-                        <div class="modal-header">
-                            <h3 class="modal-title" id="modal-title-default">Adicionar tarefa</h3>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">x</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">  
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <form action="/task" method="POST" role="form">
+                    <input type="hidden" name="projectId" value="<%= project._id %>">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="modal-title-default">Adicionar tarefa</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">x</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <div class="input-group input-group-alternative mb-4">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="ni ni-atom"></i></span>
                                         </div>
-                                        <input class="form-control form-control-alternative" placeholder="Nome da tarefa" name="name" type="text">
+                                        <input class="form-control form-control-alternative" placeholder="Nome da tarefa"
+                                            name="name" type="text">
                                     </div>
                                 </div>
-                            </div>  
-                            <div class="row">
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="input-group input-group-alternative mb-4">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="ni ni-bullet-list-67"></i></span>
+                                        </div>
+                                        <select name="priority" class="form-control">
+                                            <option disabled selected>Prioridade</option>
+                                            <option>Baixa</option>
+                                            <option>Média</option>
+                                            <option>Alta</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="input-group input-group-alternative mb-4">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="ni ni-bullet-list-67"></i></span>
+                                        </div>
+                                        <select name="status" class="form-control">
+                                            <option disabled selected>Status</option>
+                                            <option>Pendente</option>
+                                            <option>Concluído</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="input-group input-group-alternative mb-4">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="ni ni-bullet-list-67"></i></span>
+                                        </div>
+                                        <select name="milestone" class="form-control">
+                                            <option disabled selected>Milestone</option>
+                                            <option>Planejamento</option>
+                                            <option>Desenvolvimento</option>
+                                            <option>Documentação</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="custom-control custom-control-alternative custom-checkbox mb-3">
+                                    <input class="custom-control-input" name="pattern" id="pattern-task" type="checkbox">
+                                    <label class="custom-control-label" for="pattern-task">Marcar tarefa como padrão da
+                                        categoria</label>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <textarea class="form-control form-control-alternative" name="description" placeholder="Descrição da tarefa"
+                                    rows="3"></textarea>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Adicionar</button>
-                            <button type="button" class="btn btn-link  ml-auto" data-dismiss="modal">Cancelar</button>
-                        </div>
-                    </form>
-                    <script src="/views/assets/vendor/ajax/ajax.js"></script>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Adicionar</button>
+                        <button type="button" class="btn btn-link  ml-auto" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
             </div>
         </div>
-        <%- include project-modal.ejs %>
+    </div>
+    <%- include project-modal.ejs %>
     <% } %>
