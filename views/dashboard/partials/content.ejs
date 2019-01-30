@@ -1,9 +1,5 @@
 <% if(page == '/dashboard') { %>
-    <% if(user.admin) { %>
-        <%- include content/dashboardAdmin.ejs %>
-    <% } else { %>
-        <%- include content/dashboardUser.ejs %>
-    <% } %>
+    <%- include content/dashboard.ejs %>
 <% } else if(page == '/profile') { %>
     <%- include content/profile.ejs %>
 <% } else if(page == '/project') { %>
@@ -17,7 +13,7 @@
 <% } else if(page == '/viewUser') { %>
     <%- include content/viewUser.ejs %>
 <% } else if(page == '/message') { %>
-    <%- include content/underConstruction.ejs %>
+    <%- include content/message.ejs %>
 <% } else if(page == '/invoice') { %>
     <%- include content/underConstruction.ejs %>
 <% } else if(page == '/support') { %>

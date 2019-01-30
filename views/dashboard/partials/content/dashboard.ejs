@@ -1,5 +1,5 @@
-<div class="container-fluid mt--8">
-    <!-- Table -->
+<div class="container-fluid mt--<% if(user.admin) { %>6<% } else { %>8<% } %>">
+    <% if(!user.admin) { %>
     <div class="row justify-content-center">
         <% if(user._idProject.length) { %>
         <div class="col">
@@ -95,7 +95,8 @@
                 </div>
                 <div class="card-body">
                     <div class="alert alert-success" role="alert">
-                        <span class="alert-icon"><i class="ni ni-spaceship"></i></span>
+                        <style>@media (max-width: 480px) { .span-icone-ajuste { display: none }}</style>
+                        <span class="alert-icon span-icone-ajuste"><i class="ni ni-spaceship"></i></span>
                         <span class="alert-text">Clique no botão <strong>Novo projeto</strong> para adicionar um novo projeto</span>
                     </div>
                 </div>
@@ -103,3 +104,6 @@
         </div>
         <% } %>
     </div>
+    <% } else { %>
+        <!-- TODO: conteúdo -->
+    <% } %>

@@ -1,0 +1,66 @@
+<div class="container-fluid mt--8">
+        <!-- Table -->
+        <div class="row justify-content-center">
+            <% if(message) { %>
+            <div class="col">
+                <div class="card shadow">
+                    <div class="card-header border-0">
+                        <h3 class="mb-0">Tarefas</h3>
+                    </div>
+                    <div class="table-responsive py-4">
+                        <table class="table table-flush" id="datatable-basic">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Nome</th>
+                                    <th scope="col">Projeto</th>
+                                    <th scope="col">Categoria</th>
+                                    <th scope="col">Prioridade</th>
+                                    <th scope="col">Milestone</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">
+                                        <span class="mb-0 text-sm">
+                                        </span>
+                                    </th>
+                                    <td style="cursor:pointer" onclick="location.href=''">
+                                        Clique para acessar
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <% } else { %>
+            <div class="col-lg-8 card-wrapper">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row align-items-center">
+                            <div class="col-7">
+                                <h3 class="mb-0">Suas mensagens</h3>
+                            </div>
+                            <div class="col-5 text-right">
+                                <a class="btn btn-sm btn-danger" style="color:#fff; margin-left: -50px" data-toggle="modal" data-target="#modal-message">Nova mensagem</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-success" role="alert">
+                            <style>@media (max-width: 480px) { .span-icone-ajuste { display: none }}</style>
+                            <span class="alert-icon span-icone-ajuste"><i class="ni ni-email-83"></i></span>
+                            <span class="alert-text">Você não tem mensagens</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+        </div>
+        <%- include modal/message-modal.ejs %>

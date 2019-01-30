@@ -1,7 +1,7 @@
 "use strict";
 
 const passport = require('passport')
-const GoogleStrategy = require('passport-google-oauth20')
+const GoogleStrategy = require('@passport-next/passport-google-oauth2').Strategy
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const gravatar = require('gravatar')
@@ -19,8 +19,8 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_GOOGLE_ID,
     clientSecret: process.env.CLIENT_GOOGLE_SECRET,
-    callbackURL: process.env.GOOGLE_CALLBACK_URL
-}, async (accessToken, refreshToken, profile, done) => {   
+    callbackURL: process.env.GOOGLE_CALLBACK_URL,
+}, async function(accessToken, refreshToken, profile, done) {  
     await User.findOne({ googleId: profile.id }, async function(err, user) {
         if(err) return done(err, user)
         if(user && user.facebookId) {

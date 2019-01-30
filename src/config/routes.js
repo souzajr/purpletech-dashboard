@@ -12,7 +12,7 @@ module.exports = app => {
     /* ============= LOCAL LOGIN ============= */
     app.post('/login', app.src.api.auth.login)
     /* ============= SOCIAL LOGIN / GOOGLE ============= */
-    app.get('/google', passport.authenticate('google', { scope: ['openid', 'profile', 'email'] }))
+    app.get('/google', passport.authenticate('google', { scope: ['profile', 'https://www.googleapis.com/auth/userinfo.email'] }))
     app.get('/OAuth/Google', passport.authenticate('google', { 
         successRedirect: '/OAuth/Google/login',
         failureRedirect: '/OAuth/Google/login'
@@ -144,13 +144,8 @@ module.exports = app => {
     /* ============= MESSAGE  ============= */
     app.route('/message')
         .all(app.src.config.passport.authenticate())
-        .get(function(req, res) {
-            res.render('./dashboard/index', { 
-                user: req.session.user,
-                page: req.url,
-                message: null
-            })
-        })
+        .get(app.src.api.message.viewMessagePage)
+        
     /* ============= INVOICE  ============= */
     app.route('/invoice')
     .all(app.src.config.passport.authenticate())

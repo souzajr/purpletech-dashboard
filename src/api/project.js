@@ -90,20 +90,25 @@ module.exports = app => {
 
     const viewProject = async (req, res) => {
         await Project.findOne({ _id: req.params.id }).then(async project => {
-            let responsible = null
+            await User.findOne({ _id: project._idClient }).then(async client => {
+                client.password = undefined
 
-            if(project._idResponsible) { 
-                responsible = await User.findOne({ _id: project._idResponsible })
-                responsible.password = undefined
-            }
-
-            res.status(200).render('./dashboard/index', {
-                project,
-                responsible,
-                user: req.session.user, 
-                page: '/project',
-                style: 'details',
-                message: null
+                let responsible = null
+    
+                if(project._idResponsible) { 
+                    responsible = await User.findOne({ _id: project._idResponsible })
+                    responsible.password = undefined
+                }
+    
+                res.status(200).render('./dashboard/index', {
+                    project,
+                    responsible,
+                    user: req.session.user, 
+                    client,
+                    page: '/project',
+                    style: 'details',
+                    message: null
+                })
             })
         }).catch(_ => res.status(500).render('500'))
     }

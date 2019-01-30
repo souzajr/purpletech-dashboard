@@ -11,5 +11,6 @@ module.exports = {
         })
         require('../model/userModel')
         require('../model/projectModel')
+        require('../model/messageModel')
     }
 }

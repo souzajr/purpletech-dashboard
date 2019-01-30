@@ -1,0 +1,72 @@
+<div class="modal fade" id="modal-userInfo" tabindex="-1" role="dialog" aria-labelledby="modal-notification" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form id="sendMail" role="form">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="modal-title-default">Cliente</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">x</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <dl class="dl-horizontal">
+                                <dt>Nome</dt>
+                                <dd><%= client.name %></dd>
+                            </dl>
+                        </div>
+                        <div class="col-6">
+                            <dl class="dl-horizontal">
+                                <dt>Email</dt>
+                                <dd><%= client.email %></dd>
+                            </dl>
+                        </div>
+                        <div class="col-6">
+                            <dl class="dl-horizontal">
+                                <dt>Telefone</dt>
+                                <dd><%= client.phone %></dd>
+                            </dl>
+                        </div>
+                        
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label class="form-control-label" for="input-message">Enviar email</label>
+                                <textarea class="form-control form-control-alternative" id="input-message" name="message" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                    <button type="button" class="btn btn-link  ml-auto" data-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+            <script>
+                $(document).ready(function () {
+                    $('#sendMail').on('submit', function (e) {
+                        e.preventDefault()
+
+                        $.ajax({
+                            type: 'POST',
+                            url: '/sendmail',
+                            datatype: 'html',
+                            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                            data: $('#sendMail').serialize(),
+                            success: function () {
+                                alertify.notify('Sucesso!', 'success', 5)
+                                $('#modal-userInfo').modal('hide')
+                            },
+                            error: function (xhr, status, error) {
+                                alertify.notify(JSON.parse(xhr.responseText), 'error', 5)
+                            },
+                        })
+                    })
+                })
+            </script>
+        </div>
+    </div>
+</div>

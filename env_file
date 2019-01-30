@@ -1,11 +1,11 @@
 AMBIENT MODE CONFIG (DEV for development mod or PROD for prododuction mod)
 AMBIENT_MODE=
 
-DOMAINT OF YOUR SERVER (http://localhost + port for development mod or yoursite.com for prododuction mode)
+DOMAIN OF YOUR SERVER (http://localhost + port for development mod or yoursite.com for prododuction mode)
 DOMAIN_NAME=
 
 SERVER CONFIG
-PORT=9000
+PORT=
 
 DB CONFIG
 DB_HOST=
@@ -31,5 +31,5 @@ MAIL_PORT=
 MAIL_SECURE=
 MAIL_AUTH_USER=
 MAIL_AUTH_PASS=
-MAIL FOR RECEIVE NEWS
+EMAIL FOR RECEIVE NEWS
 MAIL_RECEIVER=

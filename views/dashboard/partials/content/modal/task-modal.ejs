@@ -1,0 +1,90 @@
+<div class="modal fade" id="modal-task" tabindex="-1" role="dialog" aria-labelledby="modal-default" style="display: none;"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form action="/task" method="POST" role="form">
+                <input type="hidden" name="projectId" value="<%= project._id %>">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="modal-title-default">Adicionar tarefa</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">x</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="input-group input-group-alternative mb-4">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="ni ni-atom"></i></span>
+                                    </div>
+                                    <input class="form-control form-control-alternative" placeholder="Nome da tarefa"
+                                        name="name" type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group input-group-alternative mb-4">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="ni ni-bullet-list-67"></i></span>
+                                    </div>
+                                    <select name="priority" class="form-control">
+                                        <option disabled selected>Prioridade</option>
+                                        <option>Baixa</option>
+                                        <option>Média</option>
+                                        <option>Alta</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group input-group-alternative mb-4">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="ni ni-bullet-list-67"></i></span>
+                                    </div>
+                                    <select name="status" class="form-control">
+                                        <option disabled selected>Status</option>
+                                        <option>Pendente</option>
+                                        <option>Concluído</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group input-group-alternative mb-4">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="ni ni-bullet-list-67"></i></span>
+                                    </div>
+                                    <select name="milestone" class="form-control">
+                                        <option disabled selected>Milestone</option>
+                                        <option>Planejamento</option>
+                                        <option>Desenvolvimento</option>
+                                        <option>Documentação</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="custom-control custom-control-alternative custom-checkbox mb-3">
+                                <input class="custom-control-input" name="pattern" id="pattern-task" type="checkbox">
+                                <label class="custom-control-label" for="pattern-task">Marcar tarefa como padrão da
+                                    categoria</label>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <textarea class="form-control form-control-alternative" name="description" placeholder="Descrição da tarefa"
+                                rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Adicionar</button>
+                    <button type="button" class="btn btn-link  ml-auto" data-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
