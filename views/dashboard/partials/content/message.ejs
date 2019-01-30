@@ -1,5 +1,5 @@
 <div class="container-fluid mt--8">
-        <!-- Table -->
+        <% if(user.admin) { %>
         <div class="row justify-content-center">
             <% if(message) { %>
             <div class="col">
@@ -64,3 +64,22 @@
             <% } %>
         </div>
         <%- include modal/message-modal.ejs %>
+        <% } else { %>
+        <div class="row justify-content-center">
+            <div class="col-lg-8 card-wrapper">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="col-8">
+                            <h3 class="mb-0">Ops... </h3>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-danger" role="alert">
+                            <span class="alert-icon"><i class="fas fa-exclamation-triangle"></i></span>
+                            <span class="alert-text">Essa página ainda está em construção</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% } %>
