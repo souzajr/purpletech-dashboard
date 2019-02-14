@@ -2,6 +2,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <form id="sendMail" role="form">
+                <input type="hidden" name="userId" value="<%= client._id %>" />
                 <div class="modal-header">
                     <h3 class="modal-title" id="modal-title-default">Cliente</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -13,13 +14,7 @@
                         <div class="col-6">
                             <dl class="dl-horizontal">
                                 <dt>Nome</dt>
-                                <dd><%= client.name %></dd>
-                            </dl>
-                        </div>
-                        <div class="col-6">
-                            <dl class="dl-horizontal">
-                                <dt>Email</dt>
-                                <dd><%= client.email %></dd>
+                                <dd><a href="/users/<%= client._id %>"><%= client.name %></a></dd>
                             </dl>
                         </div>
                         <div class="col-6">
@@ -28,7 +23,12 @@
                                 <dd><%= client.phone %></dd>
                             </dl>
                         </div>
-                        
+                        <div class="col-12">
+                            <dl class="dl-horizontal">
+                                <dt>Email</dt>
+                                <dd><%= client.email %></dd>
+                            </dl>
+                        </div>                        
                     </div>
                     <hr>
                     <div class="row">

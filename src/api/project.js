@@ -121,13 +121,18 @@ module.exports = app => {
                 return res.status(500).render('500')
             } else if (!req.files.length) {
                 return await Project.findOne({ _id: req.params.id }).then(async project => {
-                    res.status(400).render('./dashboard/index', { 
-                        project,
-                        responsible: project._idResponsible || null,
-                        user: req.session.user, 
-                        page: '/project',
-                        style: 'archive',
-                        message: JSON.stringify('Você deve selecionar ao menos uma imagem') 
+                    await User.findOne({ _id: project._idClient }).then(async client => {
+                        client.password = undefined
+
+                        res.status(400).render('./dashboard/index', { 
+                            project,
+                            responsible: project._idResponsible || null,
+                            user: req.session.user, 
+                            client,
+                            page: '/project',
+                            style: 'archive',
+                            message: JSON.stringify('Você deve selecionar ao menos uma imagem') 
+                        })
                     })
                 }).catch(_ => res.status(500).render('500'))
             }
@@ -145,16 +150,21 @@ module.exports = app => {
                     project.file.push({ fileName: req.files[i].filename })
                 }
 
-                await project.save().catch(_ => res.status(500).render('500'))           
+                await project.save().then(async project => {
+                    await User.findOne({ _id: project._idClient }).then(async client => {
+                        client.password = undefined
 
-                res.status(200).render('./dashboard/index', {
-                    project,
-                    responsible: project._idResponsible || null,
-                    user: req.session.user, 
-                    page: '/project',
-                    style: 'archive',
-                    message: JSON.stringify(successMessage)
-                })
+                        res.status(200).render('./dashboard/index', {
+                            project,
+                            responsible: project._idResponsible || null,
+                            user: req.session.user, 
+                            client,
+                            page: '/project',
+                            style: 'archive',
+                            message: JSON.stringify(successMessage)
+                        })
+                    })
+                })    
             }).catch(_ => res.status(500).render('500'))
         })
     }

@@ -6,7 +6,7 @@ const passport = require('passport')
 module.exports = app => {
     /* ============= INDEX ============= */
     app.get('/', function(req, res) {
-        res.render('login', { message: null })
+        res.status(200).render('login', { message: null })
     })
 
     /* ============= LOCAL LOGIN ============= */
@@ -140,32 +140,41 @@ module.exports = app => {
         .put(admin(app.src.api.user.changeUser))
         .delete(admin(app.src.api.user.removeUser))
 
-
     /* ============= MESSAGE  ============= */
     app.route('/message')
         .all(app.src.config.passport.authenticate())
         .get(app.src.api.message.viewMessagePage)
+        .post(app.src.api.message.userPostMessage)
+    app.route('/message/:id')
+        .all(app.src.config.passport.authenticate())
+        .get(app.src.api.message.viewMessageDetail)
+        .post(app.src.api.message.sendNewMessage)
+        .put(admin(app.src.api.message.changeMessageInfo))
+    app.route('/sendmail')
+        .all(app.src.config.passport.authenticate())
+        .post(admin(app.src.api.message.sendMail))
         
     /* ============= INVOICE  ============= */
     app.route('/invoice')
-    .all(app.src.config.passport.authenticate())
-    .get(function(req, res) {
-        res.render('./dashboard/index', { 
-            user: req.session.user,
-            page: req.url,
-            message: null
+        .all(app.src.config.passport.authenticate())
+        .get(function(req, res) {
+            res.render('./dashboard/index', { 
+                user: req.session.user,
+                page: req.url,
+                message: null
+            })
         })
-    })
+         
     /* ============= SUPPORT  ============= */
     app.route('/support')
-    .all(app.src.config.passport.authenticate())
-    .get(function(req, res) {
-        res.render('./dashboard/index', { 
-            user: req.session.user,
-            page: req.url,
-            message: null
+        .all(app.src.config.passport.authenticate())
+        .get(function(req, res) {
+            res.status(200).render('./dashboard/index', { 
+                user: req.session.user,
+                page: req.url,
+                message: null
+            })
         })
-    })
 
     /* ============= HANDLE ERROR  ============= */
     if(process.env.AMBIENT_MODE == 'PROD') {

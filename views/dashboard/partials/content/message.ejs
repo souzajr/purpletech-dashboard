@@ -1,85 +1,111 @@
 <div class="container-fluid mt--8">
-        <% if(user.admin) { %>
-        <div class="row justify-content-center">
-            <% if(message) { %>
-            <div class="col">
-                <div class="card shadow">
-                    <div class="card-header border-0">
-                        <h3 class="mb-0">Tarefas</h3>
-                    </div>
-                    <div class="table-responsive py-4">
-                        <table class="table table-flush" id="datatable-basic">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th scope="col">Nome</th>
-                                    <th scope="col">Projeto</th>
-                                    <th scope="col">Categoria</th>
-                                    <th scope="col">Prioridade</th>
-                                    <th scope="col">Milestone</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">
-                                        <span class="mb-0 text-sm">
-                                        </span>
-                                    </th>
-                                    <td style="cursor:pointer" onclick="location.href=''">
-                                        Clique para acessar
-                                    </td>
-                                    <td>
-                                    </td>
-                                    <td>
-                                    </td>
-                                    <td>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <% } else { %>
-            <div class="col-lg-8 card-wrapper">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="row align-items-center">
-                            <div class="col-7">
-                                <h3 class="mb-0">Suas mensagens</h3>
-                            </div>
+    <div class="row justify-content-center">
+        <% if(message.length) { %>
+        <div class="col">
+            <div class="card shadow">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col-7">
+                            <h5 class="h3 mb-0">Suas mensagens</h5>
+                        </div>
+                        <% if(!user.admin) { %>
                             <div class="col-5 text-right">
                                 <a class="btn btn-sm btn-danger" style="color:#fff; margin-left: -50px" data-toggle="modal" data-target="#modal-message">Nova mensagem</a>
                             </div>
-                        </div>
+                        <% } %>
                     </div>
-                    <div class="card-body">
-                        <div class="alert alert-success" role="alert">
-                            <style>@media (max-width: 480px) { .span-icone-ajuste { display: none }}</style>
-                            <span class="alert-icon span-icone-ajuste"><i class="ni ni-email-83"></i></span>
-                            <span class="alert-text">Você não tem mensagens</span>
-                        </div>
-                    </div>
+                    <p>Clique na mensagem para ver os detalhes</p>
+                </div>
+                <div class="table-responsive py-4">
+                    <table class="table table-flush" id="datatable-basic">
+                        <thead class="thead-light">
+                            <tr>
+                                <% if(user.admin) { %><th scope="col">Cliente</th><% } %>
+                                <th scope="col">Assunto</th>
+                                <th scope="col">Categoria</th>
+                                <th scope="col">Responsável</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Criado em</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for(let i = 0; i < message.length; i++) { %>
+                                <tr style="cursor:pointer" onclick="location.href='/message/<%= message[i]._idMessage %>'">
+                                    <% if(user.admin) { %>
+                                        <td>
+                                            <%= message[i].user.name %>
+                                        </td>
+                                    <% } %>
+                                    <th scope="row">
+                                        <span class="mb-0 text-sm">
+                                            <%= message[i].subject %>
+                                        </span>
+                                    </th>
+                                    <td>
+                                        <%= message[i].category %>
+                                    </td>
+                                    <td>
+                                        <% if(message[i].responsible) { %>
+                                            <a class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="<%= message[i].responsible.name %>">
+                                                <img alt="Responsável" src="/profilePicture/<%= message[i].responsible._id %>">
+                                            </a>
+                                        <% } else { %>
+                                            Aguardando resposta
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-dot mr-4">
+                                            <% if(message[i].status == 'Pendente') { %>
+                                                <i class="bg-warning"></i>
+                                            <% } else if(message[i].status == 'Em andamento') { %>
+                                                <i class="bg-info"></i>
+                                            <% } else { %>
+                                                <i class="bg-success"></i>
+                                            <% } %>
+                                            <%= message[i].status %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <%= message[i].createdAt %>
+                                    </td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <% } %>
         </div>
-        <%- include modal/message-modal.ejs %>
         <% } else { %>
-        <div class="row justify-content-center">
-            <div class="col-lg-8 card-wrapper">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="col-8">
-                            <h3 class="mb-0">Ops... </h3>
+        <div class="col-lg-8 card-wrapper">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col-7">
+                            <h3 class="mb-0">Suas mensagens</h3>
                         </div>
+                        <% if(!user.admin) { %>
+                            <div class="col-5 text-right">
+                                <a class="btn btn-sm btn-danger" style="color:#fff; margin-left: -50px" data-toggle="modal"
+                                    data-target="#modal-message">Nova mensagem</a>
+                            </div>
+                        <% } %>
                     </div>
-                    <div class="card-body">
-                        <div class="alert alert-danger" role="alert">
-                            <span class="alert-icon"><i class="fas fa-exclamation-triangle"></i></span>
-                            <span class="alert-text">Essa página ainda está em construção</span>
-                        </div>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-success" role="alert">
+                        <style>
+                            @media (max-width: 480px) {
+                                .span-icone-ajuste {
+                                    display: none
+                                }
+                            }
+                        </style>
+                        <span class="alert-icon span-icone-ajuste"><i class="ni ni-email-83"></i></span>
+                        <span class="alert-text">Você não tem mensagens</span>
                     </div>
                 </div>
             </div>
         </div>
         <% } %>
+    </div>    
+    <%- include modal/message-modal.ejs %>

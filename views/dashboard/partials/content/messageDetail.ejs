@@ -1,0 +1,166 @@
+<div class="container-fluid mt--9">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col-7">
+                            <h5 class="h3 mb-0"><%= message.category %> (<%= message.subject %>)</h5>
+                            <p>Status: <%= message.status %>
+                            <% if(!user.admin && message._idResponsible) { %>
+                                <br/>Responsável: <%= responsible.name %>
+                            <% } %>
+                            </p>
+                        </div>
+                        <% if(user.admin) { %>
+                            <div class="col-5 text-right">
+                                <a class="btn btn-sm btn-danger" style="color:#fff; margin-left: -50px" data-toggle="modal" data-target="#modal-messageInfo">Informações</a>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="mb-1" style="height: 400px; overflow: auto;">
+                        <div align="center">
+                            <%= message.message[0].sendedAtDay %>
+                        </div>
+                        <% if(user.admin) { %>
+                            <% for(let i = 0; i < message.message.length; i++) { %>
+                                <% if(i > 0) { %>
+                                    <% if(moment(message.message[i].sendedAtDay).format() > moment(message.message[i - 1].sendedAtDay).format()) { %>
+                                        <br/>
+                                        <div align="center">
+                                            <%= message.message[i].sendedAtDay %>
+                                        </div>
+                                    <% } %>
+                                <% } %>
+                                <% if(message.message[i]._idWhoSend === user._id) { %>
+                                    <div class="media media-comment">
+                                        <div class="media-body">
+                                            <div class="media-comment-text">
+                                                <p class="text-sm lh-160"><%= message.message[i].message %></p>
+                                                <div class="icon-actions float-right">
+                                                    <i class="fas fa-clock mr-1"></i>
+                                                    <span class="text-muted"><%= message.message[i].sendedAtMoment %></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } else { %>
+                                    <div class="media media-comment">
+                                        <img alt="Cliente" class="avatar avatar-lg media-comment-avatar rounded-circle"
+                                        src="<% if(client.profilePicture) { %>/profilePicture/<%= client._id %><% } else { %><%= client.avatar %><% } %>">
+                                        <div class="media-body">
+                                            <div class="media-comment-text">
+                                                <h6 class="h5 mt-0"><%= client.name %></h6>
+                                                <p class="text-sm lh-160"><%= message.message[i].message %></p>
+                                                <div class="icon-actions float-right">
+                                                    <i class="fas fa-clock mr-1"></i>
+                                                    <span class="text-muted"><%= message.message[i].sendedAtMoment %></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %>
+                            <% } %>
+                        <% } else { %>
+                            <% for(let i = 0; i < message.message.length; i++) { %>
+                                <% if(message.message[i]._idWhoSend === user._id) { %>
+                                    <div class="media media-comment">
+                                        <div class="media-body">
+                                            <div class="media-comment-text">
+                                                <p class="text-sm lh-160"><%= message.message[i].message %></p>
+                                                <div class="icon-actions float-right">
+                                                    <i class="fas fa-clock mr-1"></i>
+                                                    <span class="text-muted"><%= message.message[i].sendedAtMoment %></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } else { %>
+                                    <div class="media media-comment">
+                                        <img alt="Responsável" class="avatar avatar-lg media-comment-avatar rounded-circle"
+                                        src="<% if(esponsible.profilePicture) { %>/profilePicture/<%= responsible._id %><% } else { %><%= esponsible.avatar %><% } %>">
+                                        <div class="media-body">
+                                            <div class="media-comment-text">
+                                                <h6 class="h5 mt-0"><%= responsible.name %></h6>
+                                                <p class="text-sm lh-160"><%= message.message[i].message %></p>
+                                                <div class="icon-actions float-right">
+                                                    <i class="fas fa-clock mr-1"></i>
+                                                    <span class="text-muted"><%= message.message[i].sendedAtMoment %></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %>
+                                <% if(i < 1) { %>
+                                    <div class="media-body">
+                                        <div class="media-comment-text">
+                                            <h6 class="h5 mt-0">MENSAGEM AUTOMÁTICA</h6>
+                                            <p class="text-sm lh-160">
+                                                <br/>
+                                                Obrigado por entrar em contato. Responderemos sua mensagem o mais rápido possível.<br/>
+                                                Se preferir, entre em contato via WhatsApp: (19) 9 9536-0651<br/><br/>
+                                                Atenciosamente,<br/>
+                                                Equipe PurpleTech
+                                            </p>
+                                            <div class="icon-actions float-right">
+                                                <i class="fas fa-clock mr-1"></i>
+                                                <span class="text-muted"><%= message.message[0].sendedAtMoment %></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %>
+                            <% } %>
+                        <% } %>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="media align-items-center">
+                        <div class="media-body">
+                            <form id="newMessage" role="form">
+                                <div class="form-group">
+                                    <div class="input-group input-group-merge">
+                                        <textarea class="form-control" style="resize: none;" name="message" placeholder="Escreva sua mensagem" rows="3"
+                                        <% if(user.admin && message._idResponsible !== user._id) { %>disabled<% }%>></textarea>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <button <% if(user.admin && message._idResponsible !== user._id) { %>disabled<% }%> type="submit" class="btn btn-link" data-toggle="tooltip" data-placement="top" title="Enviar mensagem"><i class="far fa-paper-plane fa-2x"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <script>
+                            $(document).ready(function() {
+                                $('#newMessage').on('submit', function(e) {
+                                    e.preventDefault()
+                                    
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: '/message/<%= message._id %>',
+                                        datatype: 'html',
+                                        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                                        data: $('#newMessage').serialize(),
+                                        success: function(result) {
+                                            alertify.notify(result, 'success', 5)
+                                            setTimeout(function() { 
+                                                window.location.reload()
+                                            }, 500)
+                                        },
+                                        error : function(xhr, status, error) {
+                                            alertify.notify(JSON.parse(xhr.responseText), 'error', 5)
+                                        },
+                                    })
+                                })
+                            })
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% if(user.admin) { %>
+        <%- include modal/messageInfo-modal.ejs %>
+    <% } %>

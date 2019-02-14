@@ -68,6 +68,7 @@ module.exports = app => {
         '/viewUser',
         '/newPassword',
         '/message',
+        '/sendmail',
         '/invoice',
         '/support',
         '/task',

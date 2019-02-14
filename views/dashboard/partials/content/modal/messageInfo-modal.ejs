@@ -1,0 +1,119 @@
+<div class="modal fade" id="modal-messageInfo" tabindex="-1" role="dialog" aria-labelledby="modal-default" style="display: none;"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form id="messageInfo" role="form">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="modal-title-default">Informações</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">x</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <dl class="dl-horizontal">
+                                <dt>Nome do cliente</dt>
+                                <dd><a href="/users/<%= client._id %>"><%= client.name %></a></dd>
+                            </dl>
+                        </div>
+                        <div class="col-6">
+                            <dl class="dl-horizontal">
+                                <dt>Telefone</dt>
+                                <dd><%= client.phone %></dd>
+                            </dl>
+                        </div>
+                        <div class="col-12">
+                            <dl class="dl-horizontal">
+                                <dt>Email</dt>
+                                <dd><%= client.email %></dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="form-control-label" for="input-subject">Assunto</label>
+                                <div id="input-subject" class="input-group input-group-alternative mb-4">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                                    </div>
+                                    <input class="form-control form-control-alternative" name="subject" placeholder="Assunto"
+                                        type="text" value="<%= message.subject %>">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="form-control-label" for="input-category">Categoria</label>
+                                <div id="input-category" class="input-group input-group-alternative mb-4">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="ni ni-bullet-list-67"></i></span>
+                                    </div>
+                                    <select name="category" class="form-control">
+                                        <option <% if(message.category === 'Suporte') { %>selected disabled<% } %>>Suporte</option>
+                                        <option <% if(message.category === 'Orçamento') { %>selected disabled<% } %>>Orçamento</option>
+                                        <option <% if(message.category === 'Reclamação') { %>selected disabled<% } %>>Reclamação</option>
+                                        <option <% if(message.category === 'Outro') { %>selected disabled<% } %>>Outro</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="form-control-label" for="input-status">Status</label>
+                                <div id="input-status" class="input-group input-group-alternative mb-4">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="ni ni-bullet-list-67"></i></span>
+                                    </div>
+                                    <select name="status" class="form-control">
+                                        <option <% if(message.status === 'Pendente') { %>selected disabled<% } %>>Pendente</option>
+                                        <option <% if(message.status === 'Em andamento') { %>selected disabled<% } %>>Em andamento</option>
+                                        <option <% if(message.status === 'Concluído') { %>selected disabled<% } %>>Concluído</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-control-label" for="input-responsible">Responsável</label>
+                            <div id="input-responsible" class="custom-control custom-control-alternative custom-checkbox mb-3">
+                                <input class="custom-control-input" name="responsible" id="responsible" type="checkbox"
+                                <% if(message._idResponsible === user._id) { %>checked disabled<% } %>>                                    
+                                <label class="custom-control-label" for="responsible">Tornar-se responsável</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                    <button type="button" class="btn btn-link  ml-auto" data-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+            <script>
+            $(document).ready(function() {
+                $('#messageInfo').on('submit', function(e) {
+                    e.preventDefault()
+                    
+                    $.ajax({
+                        type: 'PUT',
+                        url: '/message/<%= message._id %>',
+                        datatype: 'html',
+                        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                        data: $('#messageInfo').serialize(),
+                        success: function(result) {
+                            alertify.notify(result, 'success', 5)
+                            setTimeout(function() { 
+                                window.location.reload()
+                            }, 500)
+                        },
+                        error : function(xhr, status, error) {
+                            alertify.notify(JSON.parse(xhr.responseText), 'error', 5)
+                        },
+                    })
+                })
+            })
+            </script>
+        </div>
+    </div>
+</div>

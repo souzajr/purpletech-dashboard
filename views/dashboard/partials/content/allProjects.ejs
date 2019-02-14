@@ -1,103 +1,101 @@
 <div class="container-fluid mt--8">
-        <!-- Table -->
         <div class="row justify-content-center">
             <% if(project.length) { %>
-            <div class="col">
-                <div class="card shadow">
-                    <div class="card-header border-0">
-                        <h3 class="mb-0">Projetos</h3>
-                    </div>
-    
-                    <div class="table-responsive py-4">
-                        <table class="table table-flush" id="datatable-basic">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th scope="col">Projeto</th>
-                                    <th scope="col">Cliente</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Plataforma</th>
-                                    <th scope="col">Prazo</th>
-                                    <th scope="col">Categoria</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <% for(let i = project.length - 1; i >= 0; i--) { %>
-                                <tr style="cursor:pointer" onclick="location.href='/project/<%= project[i]._id %>'">
-                                    <th scope="row">
-                                        <span class="mb-0 text-sm">
-                                            <%= project[i].name %></span>
-                                    </th>
-                                    <td>
-                                        <%= client[i] %>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-dot mr-4">
-                                            <% if(project[i].status == 'Aguardando aprovação') { %>
-                                            <i class="bg-warning"></i>
-                                            <% } else if(project[i].status == 'Projeto aprovado') { %>
-                                            <i class="bg-info"></i>
-                                            <% } else if(project[i].status == 'Projeto em desenvolvimento') { %>
-                                            <i class="bg-primary"></i>
-                                            <% } else if(project[i].status == 'Projeto concluído') { %>
-                                            <i class="bg-success"></i>
-                                            <% } else if(project[i].status == 'Projeto pausado') { %>
-                                            <i class="bg-default"></i>
-                                            <% } else { %>
-                                            <i class="bg-danger"></i>
-                                            <% } %>
-                                            <%= project[i].status %>
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div class="avatar-group">
-                                            <% if(project[i].platform.app) { %>
-                                            <a class="avatar avatar-sm rounded-circle" data-toggle="tooltip"
-                                                data-original-title="App">
-                                                <img alt="Image placeholder" src="/views/assets/img/theme/app.png">
-                                            </a>
-                                            <% } %>
-                                            <% if(project[i].platform.web) { %>
-                                            <a class="avatar avatar-sm rounded-circle" data-toggle="tooltip"
-                                                data-original-title="Web">
-                                                <img alt="Image placeholder" src="/views/assets/img/theme/web.png">
-                                            </a>
-                                            <% } %>
-                                            <% if(project[i].platform.desktop) { %>
-                                            <a class="avatar avatar-sm rounded-circle" data-toggle="tooltip"
-                                                data-original-title="Desktop">
-                                                <img alt="Image placeholder" src="/views/assets/img/theme/desktop.png">
-                                            </a>
-                                            <% } %>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <%= project[i].deadline %>
-                                    </td>
-                                    <td>
-                                        <%= project[i].category %>
-                                    </td>
-                                </tr>
-                                <% } %>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <% } else { %>
-            <div class="col-lg-8 card-wrapper">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="col-8">
+                <div class="col">
+                    <div class="card shadow">
+                        <div class="card-header border-0">
                             <h3 class="mb-0">Projetos</h3>
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="alert alert-success" role="alert">
-                            <span class="alert-icon"><i class="ni ni-spaceship"></i></span>
-                            <span class="alert-text">Clique no botão <strong>Novo projeto</strong> para adicionar um novo projeto</span>
+                        <div class="table-responsive py-4">
+                            <table class="table table-flush" id="datatable-basic">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col">Projeto</th>
+                                        <th scope="col">Cliente</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Plataforma</th>
+                                        <th scope="col">Prazo</th>
+                                        <th scope="col">Categoria</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% for(let i = project.length - 1; i >= 0; i--) { %>
+                                        <tr style="cursor:pointer" onclick="location.href='/project/<%= project[i]._id %>'">
+                                            <th scope="row">
+                                                <span class="mb-0 text-sm">
+                                                    <%= project[i].name %></span>
+                                            </th>
+                                            <td>
+                                                <%= client[i] %>
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-dot mr-4">
+                                                    <% if(project[i].status == 'Aguardando aprovação') { %>
+                                                    <i class="bg-warning"></i>
+                                                    <% } else if(project[i].status == 'Projeto aprovado') { %>
+                                                    <i class="bg-info"></i>
+                                                    <% } else if(project[i].status == 'Projeto em desenvolvimento') { %>
+                                                    <i class="bg-primary"></i>
+                                                    <% } else if(project[i].status == 'Projeto concluído') { %>
+                                                    <i class="bg-success"></i>
+                                                    <% } else if(project[i].status == 'Projeto pausado') { %>
+                                                    <i class="bg-default"></i>
+                                                    <% } else { %>
+                                                    <i class="bg-danger"></i>
+                                                    <% } %>
+                                                    <%= project[i].status %>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div class="avatar-group">
+                                                    <% if(project[i].platform.app) { %>
+                                                    <a class="avatar avatar-sm rounded-circle" data-toggle="tooltip"
+                                                        data-original-title="App">
+                                                        <img alt="Image placeholder" src="/views/assets/img/theme/app.png">
+                                                    </a>
+                                                    <% } %>
+                                                    <% if(project[i].platform.web) { %>
+                                                    <a class="avatar avatar-sm rounded-circle" data-toggle="tooltip"
+                                                        data-original-title="Web">
+                                                        <img alt="Image placeholder" src="/views/assets/img/theme/web.png">
+                                                    </a>
+                                                    <% } %>
+                                                    <% if(project[i].platform.desktop) { %>
+                                                    <a class="avatar avatar-sm rounded-circle" data-toggle="tooltip"
+                                                        data-original-title="Desktop">
+                                                        <img alt="Image placeholder" src="/views/assets/img/theme/desktop.png">
+                                                    </a>
+                                                    <% } %>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <%= project[i].deadline %>
+                                            </td>
+                                            <td>
+                                                <%= project[i].category %>
+                                            </td>
+                                        </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-            </div>
+            <% } else { %>
+                <div class="col-lg-8 card-wrapper">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="col-8">
+                                <h3 class="mb-0">Seus projetos </h3>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-success" role="alert">
+                                <span class="alert-icon"><i class="ni ni-spaceship"></i></span>
+                                <span class="alert-text">Ainda sem projetos</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             <% } %>
         </div>

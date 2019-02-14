@@ -1,65 +1,64 @@
 <div class="container-fluid mt--8">
-    <!-- Table -->
     <div class="row justify-content-center">
         <% if(project.length) { %>
-        <div class="col">
-            <div class="card shadow">
-                <div class="card-header border-0">
-                    <h3 class="mb-0">Tarefas</h3>
-                </div>
-                <div class="table-responsive py-4">
-                    <table class="table table-flush" id="datatable-basic">
-                        <thead class="thead-light">
-                            <tr>
-                                <th scope="col">Nome</th>
-                                <th scope="col">Projeto</th>
-                                <th scope="col">Categoria</th>
-                                <th scope="col">Prioridade</th>
-                                <th scope="col">Milestone</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% for(let i = 0; i < task.length; i++) { %>
-                            <tr>
-                                <th scope="row">
-                                    <span class="mb-0 text-sm">
-                                        <%= task[i].name %>
-                                    </span>
-                                </th>
-                                <td style="cursor:pointer" onclick="location.href='/project/<%= task[i]._idProject %>'">
-                                    Clique para acessar
-                                </td>
-                                <td>
-                                    <%= task[i].category %>
-                                </td>
-                                <td>
-                                    <%= task[i].priority %>
-                                </td>
-                                <td>
-                                    <%= task[i].milestone %>
-                                </td>
-                            </tr>
-                            <% } %>
-                        </tbody>
-                    </table>
+            <div class="col">
+                <div class="card shadow">
+                    <div class="card-header border-0">
+                        <h3 class="mb-0">Tarefas</h3>
+                    </div>
+                    <div class="table-responsive py-4">
+                        <table class="table table-flush" id="datatable-basic">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Nome</th>
+                                    <th scope="col">Projeto</th>
+                                    <th scope="col">Categoria</th>
+                                    <th scope="col">Prioridade</th>
+                                    <th scope="col">Milestone</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% for(let i = 0; i < task.length; i++) { %>
+                                    <tr>
+                                        <th scope="row">
+                                            <span class="mb-0 text-sm">
+                                                <%= task[i].name %>
+                                            </span>
+                                        </th>
+                                        <td style="cursor:pointer" onclick="location.href='/project/<%= task[i]._idProject %>'">
+                                            Clique para acessar
+                                        </td>
+                                        <td>
+                                            <%= task[i].category %>
+                                        </td>
+                                        <td>
+                                            <%= task[i].priority %>
+                                        </td>
+                                        <td>
+                                            <%= task[i].milestone %>
+                                        </td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
         <% } else { %>
-        <div class="col-lg-8 card-wrapper">
-            <div class="card">
-                <div class="card-header">
-                    <div class="col-8">
-                        <h3 class="mb-0">Seus projetos </h3>
+            <div class="col-lg-8 card-wrapper">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="col-8">
+                            <h3 class="mb-0">Seus projetos </h3>
+                        </div>
                     </div>
-                </div>
-                <div class="card-body">
-                    <div class="alert alert-success" role="alert">
-                        <span class="alert-icon"><i class="ni ni-spaceship"></i></span>
-                        <span class="alert-text">Ainda sem projetos</span>
+                    <div class="card-body">
+                        <div class="alert alert-success" role="alert">
+                            <span class="alert-icon"><i class="ni ni-spaceship"></i></span>
+                            <span class="alert-text">Ainda sem projetos</span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         <% } %>
     </div>

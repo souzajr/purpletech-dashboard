@@ -46,28 +46,25 @@
 <% } %>
 
 <% if(page == '/project') { %>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.8.1/baguetteBox.min.js"></script>
-<script>
-    baguetteBox.run('.tz-gallery')
-</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.8.1/baguetteBox.min.js"></script>
+    <script>
+        baguetteBox.run('.tz-gallery')
+    </script>
 <% } %>
 
-<% if(page == '/allprojects' || page == '/projectconfig' || page == '/users') { %>
-<script src="/views/assets/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="/views/assets/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $('#datatable-basic').DataTable();
-    })
-</script>
+<% if(user.admin && (page == '/allprojects' || page == '/projectconfig' || page == '/users' || page == '/message')) { %>
+    <script src="/views/assets/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="/views/assets/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#datatable-basic').DataTable();
+        })
+    </script>
 <% } %>
 
 <% if(page == '/budget') { %>
-<script src="/views/assets/vendor/select2/dist/js/select2.min.js"></script>
+    <script src="/views/assets/vendor/select2/dist/js/select2.min.js"></script>
 <% } %>
-
-
-
 
 <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.11.2/build/alertify.min.js"></script>
 <% if(page == '/support') { %>
@@ -147,15 +144,16 @@
             alertify.YoutubeDialog(videoLink).set({frameless:true});
         }
     </script>
-    <% } %>
+<% } %>
+
 <% if(message) { %>
-<script>
-    const msg = JSON.parse('<%- message %>')
-    if (msg !== 'Sucesso!')
-        alertify.notify(msg, 'error', 5)
-    else
-        alertify.notify(msg, 'success', 5)
-</script>
+    <script>
+        const msg = JSON.parse('<%- message %>')
+        if (msg !== 'Sucesso!')
+            alertify.notify(msg, 'error', 5)
+        else
+            alertify.notify(msg, 'success', 5)
+    </script>
 <% } %>
 
 <!-- Argon JS -->

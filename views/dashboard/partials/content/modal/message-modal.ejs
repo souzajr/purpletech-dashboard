@@ -1,41 +1,28 @@
 <div class="modal fade" id="modal-message" tabindex="-1" role="dialog" aria-labelledby="modal-default" style="display: none;"
     aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <form id="budget" role="form">
+            <form id="message" role="form">
                 <div class="modal-header">
-                    <h3 class="modal-title" id="modal-title-default">Novo projeto</h3>
+                    <h3 class="modal-title" id="modal-title-default">Nova mensagem</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">x</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <h4>Informações do projeto</h4>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-6">
                             <div class="form-group">
                                 <div class="input-group input-group-alternative mb-4">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="ni ni-atom"></i></span>
+                                        <span class="input-group-text"><i class="ni ni-email-83"></i></span>
                                     </div>
-                                    <input class="form-control form-control-alternative" name="name" placeholder="Nome do projeto"
+                                    <input class="form-control form-control-alternative" name="subject" placeholder="Assunto"
                                         type="text">
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <div class="input-group input-group-alternative mb-4">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="ni ni-money-coins"></i></span>
-                                    </div>
-                                    <input class="form-control form-control-alternative" name="budget" onkeyup="maskIt(this,event,'###.###.###,##',true,{pre:'R$', pos:''})"
-                                        placeholder="Orçamento" type="text">
-                                    <script src="/views/assets/vendor/mask/money.js"></script>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
+                        <div class="col-6">
                             <div class="form-group">
                                 <div class="input-group input-group-alternative mb-4">
                                     <div class="input-group-prepend">
@@ -43,52 +30,18 @@
                                     </div>
                                     <select name="category" class="form-control">
                                         <option disabled selected>Categoria</option>
-                                        <option>Loja Online</option>
-                                        <option>Blog</option>
-                                        <option>Institucional</option>
-                                        <option>Portal de Notícias</option>
-                                        <option>ERP</option>
+                                        <option>Suporte</option>
+                                        <option>Orçamento</option>
+                                        <option>Reclamação</option>
                                         <option>Outro</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <div class="input-group input-group-alternative mb-4">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
-                                    </div>
-                                    <input class="form-control form-control-alternative datepicker" id="data" name="deadline" placeholder="Prazo" type="text">
-                                </div>
-                            </div>
-                        </div>
                     </div>
-                    <h4>Em quais plataformas você pretende lançar sua aplicação?</h4>
                     <div class="row">
-                        <div class="col-md-4">
-                            <div class="custom-control custom-control-alternative custom-checkbox mb-3">
-                                <input class="custom-control-input" name="web" id="webCheck" type="checkbox">
-                                <label class="custom-control-label" for="webCheck">Site (web)</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="custom-control custom-control-alternative custom-checkbox mb-3">
-                                <input class="custom-control-input" name="app" id="appCheck" type="checkbox">
-                                <label class="custom-control-label" for="appCheck">App (Android/iOS)</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="custom-control custom-control-alternative custom-checkbox mb-3">
-                                <input class="custom-control-input" name="desktop" id="desktopCheck" type="checkbox">
-                                <label class="custom-control-label" for="desktopCheck">Desktop (software)</label>
-                            </div>
-                        </div>
-                    </div>
-                    <h4>Por favor, descreva seu projeto. Quanto mais detalhes, melhor</h4>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <textarea class="form-control form-control-alternative" name="description" placeholder="Descrição do projeto" rows="3"></textarea>
+                        <div class="col-12">
+                            <textarea class="form-control form-control-alternative" name="message" placeholder="Mensagem" rows="4"></textarea>
                         </div>
                     </div>
                 </div>
@@ -97,7 +50,7 @@
                     <button type="button" class="btn btn-link  ml-auto" data-dismiss="modal">Cancelar</button>
                 </div>
             </form>
-            <script src="/views/assets/vendor/ajax/ajax.js"></script>
+            <script src="/views/assets/vendor/ajax/message.js"></script>
         </div>
     </div>
 </div>
