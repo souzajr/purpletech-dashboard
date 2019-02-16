@@ -25,6 +25,7 @@
   "homepage": "https://github.com/souzajr/purpletech-dashboard#readme",
   "dependencies": {
     "@passport-next/passport-google-oauth2": "^1.0.0",
+    "axios": "^0.18.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.3",
     "client-sessions": "^0.8.0",

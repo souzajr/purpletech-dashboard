@@ -6,11 +6,10 @@
                 <div class="card-header border-0">
                     <div class="row align-items-center">
                         <div class="col-8">
-                            <!-- Title -->
                             <h5 class="h3 mb-0">Usuários cadastrados</h5>
                         </div>
                         <div class="col-4 text-right">
-                            <a class="btn btn-sm btn-danger" style="color:#fff" data-toggle="modal" data-target="#modal-createUser">Cadastrar novo usuário</a>
+                            <a class="btn btn-sm btn-danger" style="color:#fff; margin-left: -80px" data-toggle="modal" data-target="#modal-createUser">Cadastrar novo usuário</a>
                         </div>
                     </div>
                 </div>
@@ -20,23 +19,18 @@
                         <thead class="thead-light">
                             <tr>
                                 <th scope="col">Nome</th>
-                                <th scope="col">Cargo</th>
                                 <th scope="col">Telefone</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Projetos</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <% for(let i = users.length - 1; i >= 0; i--) { %>
+                            <% for(let i = 0; i < users.length; i++) { %>
                             <tr style="cursor:pointer" onclick="location.href='/users/<%= users[i]._id %>'">
                                 <th scope="row">
                                     <div class="media align-items-center">
                                         <a class="avatar rounded-circle mr-3">
-                                            <% if(users[i].avatar) { %>
-                                            <img alt="User profile avatar" src="<%= users[i].avatar %>">
-                                            <% } else { %>
-                                                <img alt="User profile avatar" src="/profilePicture/<%= users[i]._id %>">
-                                            <% } %>
+                                            <img alt="<%= users[i].name %>" src="<% if(users[i].avatar) { %><%= users[i].avatar %><% } else { %>/profilePicture/<%= users[i]._id %><% } %>">
                                         </a>
                                         <div class="media-body">
                                             <span class="mb-0 text-sm">
@@ -45,13 +39,6 @@
                                         </div>
                                     </div>
                                 </th>
-                                <td>
-                                    <% if(users[i].admin) { %>
-                                    <p>Administrador</p>
-                                    <% } else { %>
-                                    <p>Normal</p>
-                                    <% } %>
-                                </td>
                                 <td>
                                     <p><%= users[i].phone %></p>
                                 </td>

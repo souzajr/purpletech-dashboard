@@ -1,4 +1,3 @@
-
 "use strict";
 
 const session = require("client-sessions")
@@ -67,13 +66,12 @@ module.exports = app => {
         '/budget',
         '/viewUser',
         '/newPassword',
+        '/newProject',
         '/message',
         '/sendmail',
         '/invoice',
-        '/support',
-        '/task',
-        '/projectconfig'
-    ], function (req, res, next) {
+        '/support'
+    ], (req, res, next) => {
         if (!req.session.user) {
             res.status(401).render('login', { message: JSON.stringify('Por favor, faça o login para acessar') })
         } else {

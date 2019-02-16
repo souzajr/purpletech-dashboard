@@ -28,7 +28,7 @@ module.exports = app => {
 
     /* ============= REGISTER ============= */
     app.get('/register', function(req, res) {
-        res.render('register', { message: null })
+        res.status(200).render('register', { message: null })
     })
     app.post('/register', app.src.api.user.registerNewUser)
 
@@ -47,7 +47,7 @@ module.exports = app => {
 
     /* ============= FORGOT PASSWORD ============= */
     app.get('/forgotpassword', function(req, res) {
-        res.render('forgotpassword', { message: null })
+        res.status(200).render('forgotpassword', { message: null })
     })
     app.post('/forgotpassword', app.src.api.user.recoverPassword)
     app.get('/reset/:token', app.src.api.user.recoverPassword)
@@ -113,22 +113,6 @@ module.exports = app => {
         .all(app.src.config.passport.authenticate())
         .get(app.src.api.project.getProjectFileThumb)      
 
-    /* ============= CREATE & MODIFY PROJECT TASKS ============= */
-    app.route('/task')
-        .all(app.src.config.passport.authenticate())
-        .post(admin(app.src.api.project.createProjectTask))
-        .put(admin(app.src.api.project.changeProjectTask))
-        .delete(admin(app.src.api.project.removeProjectTask))
-    app.route('/task/:id/:task')
-        .all(app.src.config.passport.authenticate())
-        .put(admin(app.src.api.project.changeProjectTaskStatus))
-
-    /* ============= CONFIGURE PROJECT ============= */
-    app.route('/projectconfig')
-        .all(app.src.config.passport.authenticate())
-        .get(admin(app.src.api.project.viewProjectConfig))
-        //.put new task with pattern
-
     /* ============= LIST OF ALL USSER & ADD NEW USER ============= */
     app.route('/users')
         .all(app.src.config.passport.authenticate())
@@ -158,7 +142,7 @@ module.exports = app => {
     app.route('/invoice')
         .all(app.src.config.passport.authenticate())
         .get(function(req, res) {
-            res.render('./dashboard/index', { 
+            res.status(200).render('./dashboard/index', { 
                 user: req.session.user,
                 page: req.url,
                 message: null

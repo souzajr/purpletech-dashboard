@@ -5,6 +5,7 @@ const app = express()
 const consign = require('consign')
 const db = require('./src/config/db')
 const createFolder = require('./src/config/createFolder')
+const axios = require('axios')
 require('dotenv').config()
 
 app.use(express.static(__dirname))

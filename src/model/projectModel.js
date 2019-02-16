@@ -6,17 +6,6 @@ const ProjectHistorySchema = new moongoose.Schema({
     dateTodayChange: String
 })
 
-const TaskSchema = new moongoose.Schema({
-    name: { type: String, required: true },
-    priority: String,
-    status: String,
-    milestone: String,
-    description: String,
-    pattern: Boolean,
-    category: String,
-    _idProject: String
-})
-
 const ProjectSchema = new moongoose.Schema({
     _idClient: { type: String, required: true },
     name: { type: String, required: true },
@@ -32,7 +21,6 @@ const ProjectSchema = new moongoose.Schema({
     concludedAt: String,
     startAt: String,
     endAt: String,
-    task: [TaskSchema],
     file: [{ fileName: String }],
     canceledReason: String
 })

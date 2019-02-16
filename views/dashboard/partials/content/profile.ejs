@@ -169,7 +169,7 @@
                                 data: new FormData($('#profileChangeAvatar')[0]),
                                 success: function(result) {          
                                     alertify.notify(result, 'success', 5)
-                                    setTimeout(function(){ 
+                                    setTimeout(function() { 
                                         window.location.reload()
                                     }, 500)
                                 },

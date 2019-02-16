@@ -1,5 +1,4 @@
 <div class="container-fluid mt--7">
-    <!-- Table -->
     <div class="row justify-content-center">
         <div class="col">
             <div class="card shadow">
@@ -7,7 +6,6 @@
                     <% if(user.admin) { %>
                     <div class="row align-items-center">
                         <div class="col-7">
-                            <!-- Title -->
                             <h5 class="h3 mb-0">Informações do projeto</h5>
                         </div>
                         <div class="col-5 text-right">
@@ -16,7 +14,7 @@
                                 projeto</a>
                         </div>
                     </div>
-                    <% } else { %>
+                    <% } else { %>  
                     <h3 class="mb-0">Informações do projeto</h3>
                     <% } %>
                     <div class="nav-wrapper">
@@ -26,13 +24,6 @@
                                     data-toggle="tab" href="#tabs-details" role="tab" aria-controls="tabs-details"
                                     aria-selected="<% if(style == 'details') { %>true<% } else { %>false<% } %>">
                                     <i class="ni ni-single-copy-04 mr-2"></i>Detalhes
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link mb-sm-3 mb-md-0 <% if(style == 'task') { %>active<% } %>" id="tabs-tasks-tab"
-                                    data-toggle="tab" href="#tabs-tasks" role="tab" aria-controls="tabs-tasks"
-                                    aria-selected="<% if(style == 'task') { %>true<% } else { %>false<% } %>">
-                                    <i class="ni ni-ruler-pencil mr-2"></i>Tarefas
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -230,249 +221,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane fade <% if(style == 'task') { %>show active<% } %>" id="tabs-tasks" role="tabpanel"
-                            aria-labelledby="tabs-tasks-tab">
-                            <% if(user.admin) { %>
-                            <a class="btn btn-sm btn-secondary">Adicionar tarefas padrões</a>
-                            <a class="btn btn-sm btn-info" style="color:#fff" data-toggle="modal" data-target="#modal-task">Adicionar
-                                nova tarefa</a>
-                            <br /><br />
-                            <% } %>
-                            <% if(!project.task.length) { %>
-                            <p class="description">Ainda não há atividades</p>
-                            <% } else { %>
-                            <ul class="list-group list-group-flush" data-toggle="checklist">
-                                <% for(let i = project.task.length - 1; i >= 0; i--) { %>
-                                <li class="checklist-entry list-group-item flex-column align-items-start py-4 px-4">
-                                    <div class="checklist-item checklist-item-success">
-                                        <a href="#" data-toggle="modal" data-target="#modal-task-<%= i %>">
-                                            <div class="checklist-info">
-                                                <h5 class="checklist-title mb-0">
-                                                    <%= project.task[i].name %>
-                                                </h5>
-                                                <small>
-                                                    <% if(project.task[i].description) { %>
-                                                    <%= project.task[i].description %>
-                                                    <% } else { %>
-                                                    Sem Descrição
-                                                    <% } %>
-                                                </small>
-                                            </div>
-                                        </a>
-                                        <div>
-                                            <div>
-                                            <% if(user.admin) { %>
-                                            <form action="/task" method="POST" role="form" id="form-task-delete-<%= i %>">
-                                                <input type="hidden" name="_method" value="DELETE">
-                                                <input type="hidden" name="projectId" value="<%= project._id %>">
-                                                <input type="hidden" name="taskId" value="<%= project.task[i]._id %>">
-                                                <a href="javascript:{}" onclick="document.getElementById('form-task-delete-<%= i %>').submit();"><i class="fas fa-trash-alt"></i></a>
-                                            </form>
-                                            <form id="form-task-status-<%= i %>" role="form">
-                                                <input hidden name="task" value="<%= project.task[i]._id %>">
-                                                <div class="custom-control custom-checkbox custom-checkbox-success">
-                                                    <input class="custom-control-input checkbox-status-<%= i %>" name="task"
-                                                        value="<%= project.task[i]._id %>" id="chk-todo-<%= i %>" type="checkbox"
-                                                        <% if(project.task[i].status==='Concluído' ) { %>checked
-                                                    <% } %>>
-                                                    <label class="custom-control-label" for="chk-todo-<%= i %>"></label>
-                                                </div>
-                                            </form>
-                                            <script>
-                                                $(document).ready(function () {
-                                                $('.checkbox-status-<%= i %>').click(function (e) {
-                                                    $.ajax({
-                                                        type: 'PUT',
-                                                        url: '/task/<%= project._id %>/<%= project.task[i]._id %>',
-                                                        datatype: 'html',
-                                                        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                                                        data: $('#form-task-status-<%= i %>').serialize(),
-                                                        error: function (xhr, status, error) {
-                                                            alertify.notify(JSON.parse(xhr.responseText), 'error', 5)
-                                                        },
-                                                    })
-                                                })
-                                            })
-                                            </script>
-                                            <% } else { %>
-                                            <div class="custom-control custom-checkbox custom-checkbox-success">
-                                                <input class="custom-control-input" id="chk-todo" type="checkbox"
-                                                    disabled <% if(project.task[i].status==='Concluído' ) { %>checked
-                                                <% } %>>
-                                                <label class="custom-control-label" for="chk-todo"></label>
-                                            </div>
-                                            <% } %>
-                                        </div>
-                                    </div>
-                                </li>
-                                <div class="modal fade" id="modal-task-<%= i %>" tabindex="-1" role="dialog"
-                                    aria-labelledby="modal-default" style="display: none;" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                        <% if(user.admin) { %>
-                                        <form id="change-task-form-<%= i %>" role="form">
-                                            <input hidden name="projectId" value="<%= project._id %>">
-                                            <input hidden name="taskId" value="<%= project.task[i]._id %>">
-                                            <% } %>
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h3 class="modal-title" id="modal-title-default">Tarefa
-                                                        <%= project.task[i].name %>
-                                                    </h3>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">x</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <div class="form-group">
-                                                                <label class="form-control-label" for="task-name-<%= i %>">Nome
-                                                                    da tarefa</label>
-                                                                <div class="input-group input-group-alternative mb-4">
-                                                                    <input class="form-control form-control-alternative"
-                                                                        name="name" type="text" id="task-name-<%= i %>"
-                                                                        value="<%= project.task[i].name %>" <%
-                                                                        if(!user.admin) { %>disabled
-                                                                    <% } %>>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label class="form-control-label" for="select-priority-task-<%= i %>">Prioridade</label>
-                                                                <div class="input-group input-group-alternative mb-4">
-                                                                    <% if(!user.admin) { %>
-                                                                    <input class="form-control form-control-alternative"
-                                                                        name="name" type="text" id="select-priority-task-<%= i %>"
-                                                                        value="<% if(project.task[i].priority) { %><%= project.task[i].priority %><% } else { %>Sem prioridade<% } %>"
-                                                                        disabled>
-                                                                    <% } else { %>
-                                                                    <select name="priority" class="form-control" id="select-priority-task-<%= i %>">
-                                                                        <option <% if(project.task[i].priority==='Baixa'
-                                                                            ) { %>selected
-                                                                            <% } %>>Baixa</option>
-                                                                        <option <% if(project.task[i].priority==='Média'
-                                                                            ) { %>selected
-                                                                            <% } %>>Média</option>
-                                                                        <option <% if(project.task[i].priority==='Alta'
-                                                                            ) { %>selected
-                                                                            <% } %>>Alta</option>
-                                                                    </select>
-                                                                    <% } %>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label class="form-control-label" for="select-status-task-<%= i %>">Status</label>
-                                                                <div class="input-group input-group-alternative mb-4">
-                                                                    <% if(!user.admin) { %>
-                                                                    <input class="form-control form-control-alternative"
-                                                                        name="name" type="text" id="select-status-task-<%= i %>"
-                                                                        value="<% if(project.task[i].status) { %><%= project.task[i].status %><% } else { %>Sem status<% } %>"
-                                                                        disabled>
-                                                                    <% } else { %>
-                                                                    <select name="status" class="form-control" id="select-status-task-<%= i %>">
-                                                                        <option <% if(project.task[i].status==='Pendente'
-                                                                            ) { %>selected
-                                                                            <% } %>>Pendente</option>
-                                                                        <option <% if(project.task[i].status==='Concluído'
-                                                                            ) { %>selected
-                                                                            <% } %>>Concluído</option>
-                                                                    </select>
-                                                                    <% } %>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <% if(!user.admin) { %>
-                                                        <div class="col-md-12">
-                                                            <div class="form-group">
-                                                                <label class="form-control-label" for="select-milestone-task-<%= i %>">Milestone</label>
-                                                                <div class="input-group input-group-alternative mb-4">
-                                                                    <input class="form-control form-control-alternative"
-                                                                        name="name" type="text" id="select-milestone-task-<%= i %>"
-                                                                        value="<% if(project.task[i].milestone) { %><%= project.task[i].milestone %><% } else { %>Sem Milestone<% } %>"
-                                                                        disabled>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <% } else { %>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <div class="input-group input-group-alternative mb-4">
-                                                                    <div class="input-group-prepend">
-                                                                        <span class="input-group-text"><i class="ni ni-bullet-list-67"></i></span>
-                                                                    </div>
-                                                                    <select name="milestone" class="form-control" id="select-milestone-task-<%= i %>">
-                                                                        <option <% if(project.task[i].milestone==='Planejamento'
-                                                                            ) { %>selected
-                                                                            <% } %>>Planejamento</option>
-                                                                        <option <% if(project.task[i].milestone==='Desenvolvimento'
-                                                                            ) { %>selected
-                                                                            <% } %>>Desenvolvimento</option>
-                                                                        <option <% if(project.task[i].milestone==='Documentação'
-                                                                            ) { %>selected
-                                                                            <% } %>>Documentação</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="custom-control custom-control-alternative custom-checkbox mb-3">
-                                                                <input class="custom-control-input" name="pattern" id="pattern-task-<%= i %>"
-                                                                    type="checkbox" <% if(project.task[i].pattern) {%>checked
-                                                                <% } %>>
-                                                                <label class="custom-control-label" for="pattern-task-<%= i %>">Marcar
-                                                                    tarefa como padrão da categoria</label>
-                                                            </div>
-                                                        </div>
-                                                        <% } %>
-                                                        <div class="col-md-12">
-                                                            <label class="form-control-label" for="select-description-task-<%= i %>">Descrição</label>
-                                                            <textarea class="form-control form-control-alternative"
-                                                                name="description" <% if(!user.admin) { %>disabled<% } %>
-                                                        rows="3" id="select-description-task-<%= i %>"><%= project.task[i].description %></textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <% if(user.admin) { %><button type="submit" class="btn btn-primary">Alterar
-                                                        tarefa</button>
-                                                    <% } %>
-                                                    <button type="button" class="btn btn-link  ml-auto" data-dismiss="modal">Fechar</button>
-                                                </div>
-                                            </div>
-                                            <% if(user.admin) { %>
-                                        </form>
-                                        <script>
-                                            $(document).ready(function() {
-                                            $('#change-task-form-<%= i %>').on('submit', function(e) {
-                                                e.preventDefault()
-                                                
-                                                $.ajax({
-                                                    type: 'PUT',
-                                                    url: '/task',
-                                                    datatype: 'html',
-                                                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                                                    data: $('#change-task-form-<%= i %>').serialize(),
-                                                    success: function(result) {
-                                                        alertify.notify(result, 'success', 5)
-                                                        $('#modal-task-<%= i %>').modal('hide')
-                                                    },
-                                                    error : function(xhr, status, error) {
-                                                        alertify.notify(JSON.parse(xhr.responseText), 'error', 5)
-                                                    },
-                                                })
-                                            })
-                                        })
-                                        </script>
-                                        <% } %>
-                                    </div>
-                                </div>
-                                <% } %>
-                            </ul>
-                            <% } %>
-                        </div>
                         <div class="tab-pane fade <% if(style == 'archive') { %>show active<% } %>" id="tabs-archive"
                             role="tabpanel" aria-labelledby="tabs-archive-tab">
                             <div class="tz-gallery">
@@ -521,7 +269,6 @@
         </div>
     </div>
     <% if(user.admin) { %>
-        <%- include modal/task-modal.ejs %>
         <%- include modal/userInfo-modal.ejs %>
         <%- include modal/project-modal.ejs %>
     <% } %>

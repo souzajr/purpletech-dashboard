@@ -94,7 +94,6 @@ module.exports = app => {
                 client.password = undefined
 
                 let responsible = null
-    
                 if(project._idResponsible) { 
                     responsible = await User.findOne({ _id: project._idResponsible })
                     responsible.password = undefined
@@ -364,131 +363,6 @@ module.exports = app => {
         }).catch(_ => res.status(500).json(failMessage))        
     }
 
-    const createProjectTask = async (req, res) => {
-        const task = { ...req.body }
-
-        try {
-            existOrError(task.name, 'Digite o nome da tarefa')
-            tooSmall(task.name, 'Digite um nome maior')
-            if(task.description) tooSmall(task.description, 'Digite uma descrição maior')
-        } catch (msg) {
-            return await Project.findOne({ _id: task.projectId }).then(async project => {
-                res.status(400).render('./dashboard/index', { 
-                    project,
-                    responsible: project._idResponsible || null,
-                    user: req.session.user, 
-                    page: '/project',
-                    style: 'task',
-                    message: JSON.stringify(failMessage) 
-                })
-            }).catch(_ => res.status(500).render('500'))
-        }
-
-        if(task.pattern) task.pattern = true
-        else task.pattern = false
-
-        await Project.findOne({ _id: task.projectId }).then(async project => {
-            task._idProject = project._id
-            task.category = project.category
-            project.task.push(task)
-            await project.save()
-
-            res.status(200).render('./dashboard/index', { 
-                project,
-                responsible: project._idResponsible || null,
-                user: req.session.user, 
-                page: '/project',
-                style: 'task',
-                message: JSON.stringify(successMessage) 
-            })
-        }).catch(_ => res.status(500).render('500'))
-    }
-
-    const changeProjectTaskStatus = async (req, res) => {
-        const projectId = req.params.id
-        const taskId = req.params.task
-
-        return await Project.findOne({ _id: projectId }).then(async project => {
-            for(let i = 0; i < project.task.length; i++) {
-                if(project.task[i]._id == taskId) {
-                    if(project.task[i].status === 'Concluído') project.task[i].status = 'Pendente'
-                    else project.task[i].status = 'Concluído'                    
-                    break
-                }
-            }
-
-            await project.save()
-            return res.status(200).end()
-        }).catch(_ => res.status(500).json(failMessage))
-    }
-
-    const changeProjectTask = async (req, res) => {
-        const task = { ...req.body }
-
-        return await Project.findOne({ _id: task.projectId }).then(async project => {
-            for(let i = 0; i < project.task.length; i++) {
-                if(task.taskId == project.task[i]._id) {
-                    if(task.pattern) task.pattern = true
-                    else task.pattern = false
-                    task._idProject = project._id
-                    task.category = project.category
-                    project.task[i] = task
-                    break
-                }
-            }
-
-            await project.save()
-            return res.status(200).json(successMessage)
-        }).catch(_ => res.status(500).json(failMessage))
-    }
-
-    const removeProjectTask = async (req, res) => {
-        const projectId = req.body.projectId
-        const taskId = req.body.taskId
-
-        await Project.findOne({ _id: projectId }).then(async project => {
-            for(let i = 0; i < project.task.length; i++) {
-                if(project.task[i]._id == taskId) {
-                    project.task.splice(i, 1)
-                    break
-                }
-            }
-
-            await project.save() 
-
-            res.status(200).render('./dashboard/index', { 
-                project,
-                responsible: project._idResponsible || null,
-                user: req.session.user, 
-                page: '/project',
-                style: 'task',
-                message: JSON.stringify(successMessage) 
-            })
-        }).catch(_ => res.status(500).render('500'))
-    }
-
-    const viewProjectConfig = async (req, res) => {
-        await Project.find().then(project => {
-            let task = []
-
-            for(let i = 0; i < project.length; i++) {
-                for(let j = 0; j < project[i].task.length; j++) {
-                    if(project[i].task[j].pattern === true) {
-                        task.push(project[i].task[j])
-                    }
-                }
-            }
-
-            res.status(200).render('./dashboard/index', { 
-                project,
-                task,
-                user: req.session.user, 
-                page: req.url,
-                message: null
-            })
-        }).catch(_ => res.status(500).render('500'))
-    }
-
     return { 
         createNewProject, 
         viewProject,
@@ -499,10 +373,5 @@ module.exports = app => {
         viewAllProjects,
         viewBudget,
         createNewProjectAdmin,
-        createProjectTask,
-        changeProjectTaskStatus,
-        changeProjectTask,
-        removeProjectTask,
-        viewProjectConfig
     }
 }
