@@ -25,24 +25,24 @@
   "homepage": "https://github.com/souzajr/purpletech-dashboard#readme",
   "dependencies": {
     "@passport-next/passport-google-oauth2": "^1.0.0",
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "bcrypt-nodejs": "0.0.3",
-    "body-parser": "^1.18.3",
+    "body-parser": "^1.19.0",
     "client-sessions": "^0.8.0",
     "consign": "^0.1.6",
     "cors": "^2.8.5",
-    "cron": "^1.6.0",
+    "cron": "^1.7.1",
     "dotenv": "^6.2.0",
     "ejs": "^2.6.1",
     "email-validator": "^2.0.4",
-    "express": "^4.16.4",
+    "express": "^4.17.1",
     "generate-password": "^1.4.1",
     "gravatar": "^1.8.0",
-    "helmet": "^3.15.1",
-    "jwt-simple": "^0.5.5",
+    "helmet": "^3.18.0",
+    "jwt-simple": "^0.5.6",
     "method-override": "^3.0.0",
     "moment": "^2.24.0",
-    "mongoose": "^5.4.12",
+    "mongoose": "^5.5.15",
     "multer": "^1.4.1",
     "nodemailer": "^4.7.0",
     "passport": "^0.4.0",
@@ -50,11 +50,11 @@
     "passport-jwt": "^4.0.0",
     "password-validator": "^4.1.1",
     "paypal-rest-sdk": "^1.8.1",
-    "pm2": "^3.2.9",
+    "pm2": "^3.5.1",
     "sharp": "^0.21.3"
   },
   "devDependencies": {
     "morgan": "^1.9.1",
-    "nodemon": "^1.18.10"
+    "nodemon": "^1.19.1"
   }
 }

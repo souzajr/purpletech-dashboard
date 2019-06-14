@@ -48,7 +48,7 @@ module.exports = {
                 '<li>Solicitar novos orçamentos</li>' +
                 '<li>Conversar diretamente com os desenvolvedores</li>' +
                 '<li>Pagar suas faturas de maneira comoda e prática</li>' +
-                '<li>Acessar diversos tutoriais que ajudarão na administração do seu prjeto</li>' +
+                '<li>Acessar diversos tutoriais que ajudarão na administração do seu projeto</li>' +
                 '<li><b>E muito mais!</b></li>' +
             '</ul><br/><br/>' +
             'Agradecemos a confiança e preferência. Conte com a PurpleTech para tornar a sua ideia realidade!<br/>' +
