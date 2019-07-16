@@ -60,11 +60,6 @@ module.exports = app => {
         res.redirect('/')
     })
 
-    /* ============= VALIDATE USER  ============= */
-    app.route('/validate')
-        .all(app.src.config.passport.authenticate())
-        .get(app.src.api.auth.validateToken)
-
     /* ============= DASHBOARD  ============= */
     app.route('/dashboard')
         .all(app.src.config.passport.authenticate())

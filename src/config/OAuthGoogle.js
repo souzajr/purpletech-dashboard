@@ -6,6 +6,10 @@ const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const gravatar = require('gravatar')
 const axios = require('axios')
+const download = require('image-downloader') 
+const crypto = require('crypto')
+const fs = require('fs')
+const sharp = require('sharp')
 const moment = require('moment')
 moment.locale('pt-br')
 
@@ -21,55 +25,100 @@ passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_GOOGLE_ID,
     clientSecret: process.env.CLIENT_GOOGLE_SECRET,
     callbackURL: process.env.GOOGLE_CALLBACK_URL,
-}, async (accessToken, refreshToken, profile, done) => {  
-    await User.findOne({ googleId: profile.id }, async function(err, user) {
-        if(err) return done(err, user)
-        if(user && user.facebookId) {
-            user = 'Você já está cadastrado com sua conta no Facebook'
-            return done(err, user)
+}, (accessToken, refreshToken, profile, done) => {
+    User.findOne({ googleId: profile.id }, async function(err, user) {
+        if(!profile.emails[0].value) {
+            return done(err, 'A sua conta do Google deve ter um Email')
         }
-        if(!user && !profile.emails[0].value) {
-            user = 'A sua conta do Google deve ter um Email'
-            return done(err, user)
-        }
+
         if(!user) {
             const userFromDB = await User.findOne({ email: profile.emails[0].value })
-            .catch(err => done(err, user))   
+            .catch(err => new Error(err)) 
+            if(userFromDB instanceof Error) {
+                return done(err, 'Algo deu errado')
+            }
+            
             if(userFromDB) {
-                user = 'Esse Email já está registrado'
-                return done(err, user)
+                return done(err, 'Esse Email já está registrado')
             }
 
-            let avatar
             if(profile.photos[0].value) {
-                await axios.get(profile.photos[0].value)
-                .then(_ => avatar = profile.photos[0].value)
-                .catch(_ => avatar = gravatar.url(profile.emails[0].value, {
-                    s: '200',
-                    r: 'x',
-                    d: 'retro'
-                }, true))
-            } else {
-                avatar = gravatar.url(profile.emails[0].value, {
-                    s: '200',
-                    r: 'x',
-                    d: 'retro'
-                }, true)
-            }
+                axios.get(profile.photos[0].value).then(_ => {
+                    const fileName = crypto.randomBytes(10).toString('hex') + Date.now() + '.jpg'
+                    const options = {
+                        url: profile.photos[0].value,
+                        dest: './public/upload/' + fileName
+                    }
 
-            await new User({
-                name: profile.displayName,
-                email: profile.emails[0].value,
-                phone: 'Sem telefone',
-                admin: false,  
-                avatar,
-                firstAccess: true,
-                firstProject: true,
-                noPassword: true,
-                createdAt: moment().format('L'),
-                googleId: profile.id
-            }).save().then(user => done(err, user))            
-            .catch(err => done(err, user))   
-        } else return done(err, user)
+                    download.image(options).then(_ => {
+                        sharp.cache(false)
+                        sharp('./public/upload/' + fileName).resize({
+                            width: 200,
+                            height: 200,
+                            fit: sharp.fit.cover,
+                            position: sharp.strategy.entropy
+                        }).toFile('./public/upload/profile/' + fileName)
+                        .then(_ => {
+                            fs.unlinkSync('./public/upload/' + fileName)
+
+                            new User({
+                                name: profile.displayName,
+                                email: profile.emails[0].value,
+                                phone: 'Sem telefone',
+                                admin: false,  
+                                profilePicture: fileName,
+                                firstAccess: true,
+                                firstProject: true,
+                                noPassword: true,
+                                createdAt: moment().format('L - LTS'),
+                                googleId: profile.id
+                            }).save().then(user => done(err, user))
+                            .catch(err => done(err, user))
+                        })
+                    })
+                }).catch(_ => {
+                    new User({
+                        name: profile.displayName,
+                        email: profile.emails[0].value,
+                        phone: 'Sem telefone',
+                        admin: false,  
+                        avatar: gravatar.url(profile.emails[0].value, {
+                            s: '200',
+                            r: 'x',
+                            d: 'retro'
+                        }, true),
+                        firstAccess: true,
+                        firstProject: true,
+                        noPassword: true,
+                        createdAt: moment().format('L - LTS'),
+                        googleId: profile.id
+                    }).save().then(user => done(err, user))
+                    .catch(err => done(err, user))
+                })
+            } else {
+                new User({
+                    name: profile.displayName,
+                    email: profile.emails[0].value,
+                    phone: 'Sem telefone',
+                    admin: false,  
+                    avatar: gravatar.url(profile.emails[0].value, {
+                        s: '200',
+                        r: 'x',
+                        d: 'retro'
+                    }, true),
+                    firstAccess: true,
+                    firstProject: true,
+                    noPassword: true,
+                    createdAt: moment().format('L - LTS'),
+                    googleId: profile.id
+                }).save().then(user => done(err, user))
+                .catch(err => done(err, user))
+            }
+        } else {
+            if(user.facebookId)
+                return done(err, 'Você já está cadastrado com sua conta no Facebook')
+            
+            done(err, user)
+        }
     })
 }))

@@ -45,12 +45,12 @@ module.exports = app => {
 
         try {
             existOrError(project.name, 'Por favor, digite o nome do projeto')
+            tooSmall(project.name, 'Digite um nome de projeto maior')
+            tooBig(project.name, 'Digite um nome de projeto menor')
             existOrError(project.budget, 'Por favor, digite o orçamento do projeto')            
             existOrError(project.category, 'Por favor, escolha a categoria do projeto')
             existOrError(project.deadline, 'Por favor, escolha o prazo do projeto')
             existOrError(project.description, 'Por favor, digite a descrição do projeto')
-            tooSmall(project.name, 'Digite um nome de projeto maior')
-            tooBig(project.name, 'Digite um nome de projeto menor')
             tooSmall(project.description, 'Digite uma descrição de projeto maior')
         } catch (msg) {
             return res.status(400).json(msg)
@@ -73,14 +73,16 @@ module.exports = app => {
             desktop = true
         project.platform = { web, app, desktop }
 
-        await User.findOne({ _id: req.session.user._id }).then(async user => {
-            await Project.create(project).then(async project => {
+        User.findOne({ _id: req.session.user._id }).then(user => {
+            if(project.phone) user.phone = project.phone
+
+            Project.create(project).then(project => {
                 user._idProject.push(project._id)
                 if(user.firstProject == true) user.firstProject = false
                 mail.projectCreated(user.email, user.name, project._id)                    
                 mail.projectNotice(user.name, project._id)
 
-                await user.save().then(_ =>  res.status(200).json({
+                user.save().then(_ =>  res.status(200).json({
                     'msg': successMessage,
                     'id': project._id
                 }))

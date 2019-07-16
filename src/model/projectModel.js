@@ -1,12 +1,12 @@
-const moongoose = require('mongoose')
+const mongoose = require('mongoose')
 
-const ProjectHistorySchema = new moongoose.Schema({
+const ProjectHistorySchema = new mongoose.Schema({
     dataChange: String,
     dateChange: String,
     dateTodayChange: String
 })
 
-const ProjectSchema = new moongoose.Schema({
+const ProjectSchema = new mongoose.Schema({
     _idClient: { type: String, required: true },
     name: { type: String, required: true },
     budget: { type: String, required: true },
@@ -25,4 +25,4 @@ const ProjectSchema = new moongoose.Schema({
     canceledReason: String
 })
 
-moongoose.model('Project', ProjectSchema)
+mongoose.model('Project', ProjectSchema)
