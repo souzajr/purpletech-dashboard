@@ -10,7 +10,14 @@ const methodOverride = require('method-override')
 
 module.exports = app => {
     app.use(helmet({ dnsPrefetchControl: { allow: true }}))
-    if(process.env.AMBIENT_MODE == 'PROD') { 
+    if(process.env.AMBIENT_MODE === 'PROD') { 
+        const express_enforces_ssl = require('express-enforces-ssl')
+        app.enable('trust proxy')
+        app.use(express_enforces_ssl())
+        app.use(helmet.hsts({
+            maxAge: 31536000,
+            includeSubDomains: false
+        }))
         app.use(session({
             cookieName: 'session',
             encryptionAlgorithm: 'aes256',
@@ -21,7 +28,7 @@ module.exports = app => {
             cookie: {
                 path: '/',
                 httpOnly: true,
-                secure: false,
+                secureProxy: true,
                 ephemeral: false
             }
         })) 

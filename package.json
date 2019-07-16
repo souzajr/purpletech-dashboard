@@ -36,6 +36,7 @@
     "ejs": "^2.6.2",
     "email-validator": "^2.0.4",
     "express": "^4.17.1",
+    "express-enforces-ssl": "^1.1.0",
     "generate-password": "^1.4.2",
     "gravatar": "^1.8.0",
     "helmet": "^3.18.0",
