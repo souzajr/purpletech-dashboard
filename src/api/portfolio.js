@@ -27,7 +27,7 @@ module.exports = app => {
       secretAccessKey: process.env.AWS_IAM_USER_SECRET,
       Bucket: process.env.AWS_BUCKET_NAME
     })
-    console.log('teste 1')
+
     const fileFilter = (req, file, cb) => {
       const ext = path.extname(file.originalname).toLowerCase()
       if (ext !== '.jpg' && ext !== '.jpeg' && ext !== '.png') {
@@ -37,7 +37,6 @@ module.exports = app => {
       cb(null, true)
     }
 
-    console.log('teste 2')
     const multerS3Config = multerS3({
       s3,
       bucket: process.env.AWS_BUCKET_NAME,
@@ -49,29 +48,23 @@ module.exports = app => {
       }
     })
 
-    console.log('teste 3')
     const upload = multer({
       storage: multerS3Config,
       fileFilter: fileFilter,
       limits: {
-        fileSize: 1024 * 1024 * 5 // 5MB
+        fileSize: 1024 * 1024 * 15 // 15MB
       }
     }).any()
 
-    console.log('teste 4')
     upload(req, res, function (err) {
       if (err instanceof multer.MulterError) {
-        console.log('teste ERRO 1')
         return res.status(400).json(failMessage)
       } else if (err) {
-        console.log('teste ERRO 2')
         return res.status(400).json(failMessage)
       } else if (!req.files.length) {
-        console.log('teste ERRO 3')
         return res.status(400).json('Selecione pelo menos um arquivo')
       }
 
-      console.log('teste 5')
       new Portfolio({
         name: req.body.name,
         url: req.body.url,
@@ -80,10 +73,7 @@ module.exports = app => {
         createdAt: moment().format('L - LTS')
       }).save()
       .then(() => res.status(200).json(successMessage))
-      .catch(err => {
-        console.log(err)
-        res.status(500).json(failMessage)
-      })
+      .catch(err => res.status(500).json(failMessage))
     })
   }
 
