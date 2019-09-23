@@ -90,9 +90,9 @@ module.exports = app => {
         }).catch(_ => res.status(500).json(failMessage))
     }
 
-    const viewProject = async (req, res) => {
-        await Project.findOne({ _id: req.params.id }).then(async project => {
-            await User.findOne({ _id: project._idClient }).then(async client => {
+    const viewProject = (req, res) => {
+        Project.findOne({ _id: req.params.id }).then(project => {
+            User.findOne({ _id: project._idClient }).then(async client => {
                 client.password = undefined
 
                 let responsible = null

@@ -237,5 +237,22 @@ module.exports = {
         }
 
         transporter.sendMail(mailOptions) 
+    },
+
+    sendMessage(message) {
+        const mailOptions = {
+            from: message.name + ' <' + message.email + '>',
+            to: process.env.MAIL_RECEIVER,
+            subject: 'Você recebeu uma nova mensagem! 📩📩',
+            html: '<b>Recebemos uma nova mensagem!</b><br/><br/>' +
+            'Nome: ' + message.name + '<br/>' +
+            'Email: ' + message.email + '<br/>' +
+            'Telefone: ' + '<a href="https://wa.me/55' + message.phone + '">' + message.phone + '</a><br/>' +
+            'Mensagem: ' + message.message + '<br/><br/>' +
+            '<b>PurpleTech</b><br/>https://purpletech.com.br'
+            
+        }
+
+        transporter.sendMail(mailOptions) 
     }
 }

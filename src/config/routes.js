@@ -108,7 +108,7 @@ module.exports = app => {
         .all(app.src.config.passport.authenticate())
         .get(app.src.api.project.getProjectFileThumb)      
 
-    /* ============= LIST OF ALL USSER & ADD NEW USER ============= */
+    /* ============= LIST OF ALL USER & ADD NEW USER ============= */
     app.route('/users')
         .all(app.src.config.passport.authenticate())
         .get(admin(app.src.api.user.viewAllUsers))
@@ -154,6 +154,17 @@ module.exports = app => {
                 message: null
             })
         })
+    
+    //#region PORTFOLIO
+        app.route('/portfolio')  
+            .all(app.src.config.passport.authenticate()) 
+            .get(admin(app.src.api.portfolio.viewPortfolio))
+            .post(admin(app.src.api.portfolio.postNewPotfolio))
+    
+        app.get('/getPortfolio', app.src.api.portfolio.getPortfolio)
+    //#endregion
+    
+    app.post('/sendMessage', app.src.api.user.sendMessage)
 
     /* ============= HANDLE ERROR  ============= */
     if(process.env.AMBIENT_MODE == 'PROD') {

@@ -59,37 +59,44 @@
             </div>
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link <% if (page == '/dashboard') {%>active<% } %>" href="<% if (page == '/dashboard') {%>#!<% } else { %>/dashboard<% } %>">
+                    <a class="nav-link <% if (page === '/dashboard') {%>active<% } %>" href="<% if (page === '/dashboard') {%>#!<% } else { %>/dashboard<% } %>">
                         <i class="ni ni-planet text-purple"></i> <% if(user.admin) { %>Dashboard<% } else { %>Início<% } %>
                     </a>
                 </li>
                 <% if(user.admin) { %>
                     <li class="nav-item">
-                        <a class="nav-link <% if (page == '/allprojects') {%>active<% } %>" href="<% if (page == '/allprojects') {%>#!<% } else { %>/allprojects<% } %>">
+                        <a class="nav-link <% if (page === '/allprojects') {%>active<% } %>" href="<% if (page === '/allprojects') {%>#!<% } else { %>/allprojects<% } %>">
                             <i class="ni ni-spaceship text-info"></i> Projetos
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <% if (page == '/users') {%>active<% } %>" href="<% if (page == '/users') {%>#!<% } else { %>/users<% } %>">
+                        <a class="nav-link <% if (page === '/users') {%>active<% } %>" href="<% if (page === '/users') {%>#!<% } else { %>/users<% } %>">
                             <i class="fas fa-users text-default"></i> Usuários
                         </a>
                     </li>
                 <% } %>
                 <li class="nav-item">
-                    <a class="nav-link <% if (page == '/message') {%>active<% } %>" href="<% if (page == '/message') {%>#!<% } else { %>/message<% } %>">
+                    <a class="nav-link <% if (page === '/message') {%>active<% } %>" href="<% if (page === '/message') {%>#!<% } else { %>/message<% } %>">
                         <i class="fas fa-envelope text-orange"></i> Mensagens
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link <% if (page == '/invoice') {%>active<% } %>" href="<% if (page == '/invoice') {%>#!<% } else { %>/invoice<% } %>">
+                    <a class="nav-link <% if (page === '/invoice') {%>active<% } %>" href="<% if (page === '/invoice') {%>#!<% } else { %>/invoice<% } %>">
                         <i class="fas fa-file-invoice-dollar text-blue"></i> Faturas
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link <% if (page == '/support') {%>active<% } %>" href="<% if (page == '/support') {%>#!<% } else { %>/support<% } %>">
+                    <a class="nav-link <% if (page === '/support') {%>active<% } %>" href="<% if (page === '/support') {%>#!<% } else { %>/support<% } %>">
                         <i class="fas fa-question-circle text-red"></i></i> Suporte
                     </a>
                 </li>
+                <% if(user.admin) { %>
+                    <li class="nav-item">
+                        <a class="nav-link <% if (page === '/portfolio') {%>active<% } %>" href="<% if (page === '/portfolio') {%>#!<% } else { %>/portfolio<% } %>">
+                            <i class="ni ni-settings text-black"></i></i> Portfólio
+                        </a>
+                    </li>
+                <% } %>
             </ul>
             <hr class="my-3">
             <% if(!user.admin) { %>

@@ -1,0 +1,47 @@
+<div class="container-fluid mt--8">
+  <div class="row justify-content-center">
+    <div class="col">
+      <div class="card shadow">
+        <form id="add-portfolio" role="form">
+          <div class="card-header">
+            <h3 class="mb-0">Adicionar novo item do portfólio</h3>
+          </div>
+          <div class="card-body">
+            <h4>Informações do item</h4>
+            <input name="name" placeholder="Nome do item">
+            <input name="url" placeholder="URL do item"><br/>
+            <textarea name="description" placeholder="Descrição do item"></textarea><br/>
+            <input type="file" name="file" multiple accept=".jpg, .png, .jpeg"><br/>
+            <button type="submit">Enviar</button>
+          </div>
+        </form>
+        <script>
+          $(document).ready(function () {
+            $('#add-portfolio').on('submit', function (e) {
+              e.preventDefault()
+
+              $.ajax({
+                type: 'POST',
+                url: '/portfolio',
+                enctype: 'multipart/form-data',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: new FormData($('#add-portfolio')[0]),
+                success: function (result) {
+                  alertify.notify(result, 'success', 5)
+                  setTimeout(function () {
+                    window.location.reload()
+                  }, 500)
+                },
+                error: function (xhr, status, error) {
+                  alertify.notify(JSON.parse(xhr.responseText), 'error', 5)
+                },
+              })
+            })
+          })
+        </script>
+      </div>
+    </div>
+  </div>
+</div>

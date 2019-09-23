@@ -24,7 +24,8 @@ module.exports = (app) => {
     }
     
     const strategy = new Strategy(params, (payload, done) => {
-        User.findOne({ _id: payload.id }).then(user => done(null, user ? true : false))
+        User.findOne({ _id: payload.id })
+        .then(user => done(null, user ? true : false))
         .catch(err => done(err, false))
     })
     

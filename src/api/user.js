@@ -505,6 +505,31 @@ module.exports = app => {
         res.redirect('/')
     }
 
+    const sendMessage = (req, res) => {
+        const message = { ...req.body }
+
+        try {
+            existOrError(message.name, 'Digite seu nome')
+            existOrError(message.phone, 'Digite seu telefone')
+            existOrError(message.email, 'Digite seu Email')
+            validEmailOrError(message.email, 'Email inválido')
+            existOrError(message.message, 'Digite sua mensagem')
+            tooSmall(message.message, 'Mensagem muito curta, digite uma mensagem maior')
+        } catch(msg) {
+            return res.status(400).json(msg)
+        }
+
+        message.phone = message.phone
+            .replace('(', '')
+            .replace(')', '')
+            .replace(' ', '')
+            .replace('-', '')
+            .replace('_', '')
+
+        mail.sendMessage(message)
+        res.status(200).json(successMessage)
+    }
+
     return {
         registerNewUser,
         changeProfile,
@@ -521,6 +546,7 @@ module.exports = app => {
         registerNewUserAdmin,
         viewNewPassword,
         createNewPassword,
-        viewNewProjectFirstAccess
+        viewNewProjectFirstAccess,
+        sendMessage
     }
 }

@@ -1,23 +1,25 @@
-<% if(page == '/dashboard') { %>
+<% if(page === '/dashboard') { %>
     <%- include content/dashboard.ejs %>
-<% } else if(page == '/profile') { %>
+<% } else if(page === '/profile') { %>
     <%- include content/profile.ejs %>
-<% } else if(page == '/project') { %>
+<% } else if(page === '/project') { %>
     <%- include content/project.ejs %>
-<% } else if(page == '/allprojects') { %>
+<% } else if(page === '/allprojects') { %>
     <%- include content/allProjects.ejs %>
-<% } else if(page == '/users') { %>
+<% } else if(page === '/users') { %>
     <%- include content/users.ejs %>
-<% } else if(page == '/budget') { %>
+<% } else if(page === '/budget') { %>
     <%- include content/budget.ejs %>
-<% } else if(page == '/viewUser') { %>
+<% } else if(page === '/viewUser') { %>
     <%- include content/viewUser.ejs %>
-<% } else if(page == '/message') { %>
+<% } else if(page === '/message') { %>
     <%- include content/message.ejs %>
-<% } else if(page == '/message-detail') { %>
+<% } else if(page === '/message-detail') { %>
     <%- include content/messageDetail.ejs %>
-<% } else if(page == '/invoice') { %>
+<% } else if(page === '/invoice') { %>
     <%- include content/underConstruction.ejs %>
-<% } else if(page == '/support') { %>
+<% } else if(page === '/support') { %>
     <%- include content/support.ejs %>
-<% } %>
+<% } else if(page === '/portfolio') { %>
+    <%- include content/portfolio.ejs %>
+<% } %>  
