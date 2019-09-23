@@ -1,7 +1,6 @@
 "use strict";
 
 const mongoose = require('mongoose')
-const User = mongoose.model('User')
 const Portfolio = mongoose.model('Portfolio')
 const path = require('path')
 const multer = require('multer')
