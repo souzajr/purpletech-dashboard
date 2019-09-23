@@ -46,12 +46,11 @@ module.exports = app => {
                 ephemeral: true
             }
         })) 
-        
-        app.use(morgan('dev'))
     }
     app.use(passport.initialize())
     app.use(passport.session())  
-    app.set('view engine', 'ejs') 
+    app.set('view engine', 'ejs')        
+    app.use(morgan('dev')) 
     app.use(express.urlencoded({ extended: true })) 
     app.use(express.json())      
     app.use(methodOverride(function (req, res) {
