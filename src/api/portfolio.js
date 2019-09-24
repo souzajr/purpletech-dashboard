@@ -80,9 +80,8 @@ module.exports = app => {
   const getPortfolio = (req, res) => {
     Portfolio.find()
       .sort({ '_id' : -1 })
-      .then(portfolio => {
-        res.status(200).json(portfolio)
-    })
+      .lean()
+      .then(portfolio => res.status(200).json(portfolio))
   }
 
   return {
