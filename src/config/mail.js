@@ -63,7 +63,7 @@ module.exports = {
     projectNotice(name, project) {
         const mailOptions = {
             from: 'PurpleTech <'+process.env.MAIL_AUTH_USER+'>',
-            to: process.env.MAIL_RECEIVER,
+            to: process.env.MAIL_AUTH_USER,
             subject: 'Oba, mais um projeto! 🤑🤑',
             html: '<b>Parabéns! Um novo projeto foi criado por ' + name + '</b><br/><br/>' +
             'Confira o projeto no link abaixo:<br/>' +
@@ -194,7 +194,7 @@ module.exports = {
     newMessageNotice(message) {
         const mailOptions = {
             from: 'PurpleTech <'+process.env.MAIL_AUTH_USER+'>',
-            to: process.env.MAIL_RECEIVER,
+            to: process.env.MAIL_AUTH_USER,
             subject: 'Você recebeu uma nova mensagem! 📩📩',
             html: '<b>Recebemos uma nova mensagem!</b><br/><br/>' +
             'Confira a mensagem no link abaixo:<br/>' +
@@ -242,7 +242,7 @@ module.exports = {
     sendMessage(message) {
         const mailOptions = {
             from: message.name + ' <' + message.email + '>',
-            to: process.env.MAIL_RECEIVER,
+            to: process.env.MAIL_AUTH_USER,
             subject: 'Você recebeu uma nova mensagem! 📩📩',
             html: '<b>Recebemos uma nova mensagem!</b><br/><br/>' +
             'Nome: ' + message.name + '<br/>' +
