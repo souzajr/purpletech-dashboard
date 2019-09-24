@@ -82,6 +82,7 @@ module.exports = app => {
       .sort({ '_id' : -1 })
       .lean()
       .then(portfolio => res.status(200).json(portfolio))
+      .catch(() => res.status(500).json(failMessage))
   }
 
   return {
