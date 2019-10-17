@@ -73,7 +73,7 @@ module.exports = app => {
         createdAt: moment().format('L - LTS')
       }).save()
       .then(() => res.status(200).json(successMessage))
-      .catch(err => res.status(500).json(failMessage))
+      .catch(() => res.status(500).json(failMessage))
     })
   }
 
