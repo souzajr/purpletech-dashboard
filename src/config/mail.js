@@ -23,8 +23,7 @@ module.exports = {
             'Se você não solicitou isso, ignore este Email e sua senha permanecerá inalterada.<br/>' +
             'Em caso de dúvidas, entre em contato através do nosso WhatsApp: ' +
             '<a target="_blank" href="https://wa.me/5519995360651">(19) 9 9536-0651</a><br/><br/>' +
-            '<b>Atenciosamente,<br/>PurpleTech</b><br/>https://purpletech.com.br<br/>' +
-            'Não responda este Email, em caso de dúvidas envie um Email para contato@purpletech.com.br'
+            '<b>Atenciosamente,<br/>PurpleTech</b><br/>https://purpletech.com.br'
         } 
 
         transporter.sendMail(mailOptions)
@@ -39,8 +38,7 @@ module.exports = {
             'Se você não fez essa alteração, por favor entre em contato com o suporte.' +
             'Em caso de dúvidas, entre em contato através do nosso WhatsApp: ' +
             '<a target="_blank" href="https://wa.me/5519995360651">(19) 9 9536-0651</a><br/><br/>' +
-            '<b>Atenciosamente,<br/>PurpleTech</b><br/>https://purpletech.com.br<br/>' +
-            'Não responda este Email, em caso de dúvidas envie um Email para contato@purpletech.com.br'
+            '<b>Atenciosamente,<br/>PurpleTech</b><br/>https://purpletech.com.br'
         } 
         transporter.sendMail(mailOptions)
     },
@@ -63,8 +61,7 @@ module.exports = {
             'Agradecemos a confiança e preferência. Conte com a PurpleTech para tornar a sua ideia realidade!<br/>' +
             'Em caso de dúvidas, entre em contato através do nosso WhatsApp: ' +
             '<a target="_blank" href="https://wa.me/5519995360651">(19) 9 9536-0651</a><br/><br/>' +
-            '<b>Atenciosamente,<br/>PurpleTech</b><br/>https://purpletech.com.br<br/>' +
-            'Não responda este Email, em caso de dúvidas envie um Email para contato@purpletech.com.br'
+            '<b>Atenciosamente,<br/>PurpleTech</b><br/>https://purpletech.com.br'
         }
 
         transporter.sendMail(mailOptions) 
@@ -95,8 +92,7 @@ module.exports = {
             process.env.DOMAIN_NAME + '/project/' + project + '<br/>' +
             'Em caso de dúvidas, entre em contato através do nosso WhatsApp: ' +
             '<a target="_blank" href="https://wa.me/5519995360651">(19) 9 9536-0651</a><br/><br/>' +
-            '<b>Atenciosamente,<br/>PurpleTech</b><br/>https://purpletech.com.br<br/>' +
-            'Não responda este Email, em caso de dúvidas envie um Email para contato@purpletech.com.br'
+            '<b>Atenciosamente,<br/>PurpleTech</b><br/>https://purpletech.com.br'
         }
 
         transporter.sendMail(mailOptions) 
@@ -111,8 +107,7 @@ module.exports = {
             'Isso significa que agora o seu projeto será estudado e analisado para que possamos começar o desenvolvimento.<br/>' +
             'Em caso de dúvidas, entre em contato através do nosso WhatsApp: ' +
             '<a target="_blank" href="https://wa.me/5519995360651">(19) 9 9536-0651</a><br/><br/>' +
-            '<b>Atenciosamente,<br/>PurpleTech</b><br/>https://purpletech.com.br<br/>' +
-            'Não responda este Email, em caso de dúvidas envie um Email para contato@purpletech.com.br'
+            '<b>Atenciosamente,<br/>PurpleTech</b><br/>https://purpletech.com.br'
         }
 
         transporter.sendMail(mailOptions) 
@@ -127,8 +122,7 @@ module.exports = {
             'Agora é a hora de colocarmos a mão na massa e transformarmos a sua ideia em realidade.<br/>' +
             'Em caso de dúvidas, entre em contato através do nosso WhatsApp: ' +
             '<a target="_blank" href="https://wa.me/5519995360651">(19) 9 9536-0651</a><br/><br/>' +
-            '<b>Atenciosamente,<br/>PurpleTech</b><br/>https://purpletech.com.br<br/>' +
-            'Não responda este Email, em caso de dúvidas envie um Email para contato@purpletech.com.br'
+            '<b>Atenciosamente,<br/>PurpleTech</b><br/>https://purpletech.com.br'
         }
 
         transporter.sendMail(mailOptions) 
@@ -147,8 +141,7 @@ module.exports = {
             'Para acessar os tutoriais, basta clicar no link: ' + process.env.DOMAIN_NAME + '/support<br/>' +
             'Em caso de dúvidas, entre em contato através do nosso WhatsApp: ' +
             '<a target="_blank" href="https://wa.me/5519995360651">(19) 9 9536-0651</a><br/><br/>' +
-            '<b>Atenciosamente,<br/>PurpleTech</b><br/>https://purpletech.com.br<br/>' +
-            'Não responda este Email, em caso de dúvidas envie um Email para contato@purpletech.com.br'
+            '<b>Atenciosamente,<br/>PurpleTech</b><br/>https://purpletech.com.br'
         }
 
         transporter.sendMail(mailOptions) 
@@ -162,8 +155,7 @@ module.exports = {
             html: '<b>Olá, ' + name + '. Seu projeto foi colocado em espera.</b><br/><br/>' +
             'Em caso de dúvidas, entre em contato através do nosso WhatsApp: ' +
             '<a target="_blank" href="https://wa.me/5519995360651">(19) 9 9536-0651</a><br/><br/>' +
-            '<b>Atenciosamente,<br/>PurpleTech</b><br/>https://purpletech.com.br<br/>' +
-            'Não responda este Email, em caso de dúvidas envie um Email para contato@purpletech.com.br'
+            '<b>Atenciosamente,<br/>PurpleTech</b><br/>https://purpletech.com.br'
         }
 
         transporter.sendMail(mailOptions) 
@@ -180,8 +172,7 @@ module.exports = {
             'Analisaremos todos os detalhes com bastante cuidado para que isso não volte a se repetir.<br/><br/>' +
             'Em caso de dúvidas, entre em contato através do nosso WhatsApp: ' +
             '<a target="_blank" href="https://wa.me/5519995360651">(19) 9 9536-0651</a><br/><br/>' +
-            '<b>Atenciosamente,<br/>PurpleTech</b><br/>https://purpletech.com.br<br/>' +
-            'Não responda este Email, em caso de dúvidas envie um Email para contato@purpletech.com.br'
+            '<b>Atenciosamente,<br/>PurpleTech</b><br/>https://purpletech.com.br'
         }
 
         transporter.sendMail(mailOptions)
@@ -201,8 +192,7 @@ module.exports = {
             '<br/>Senha: ' + password + '</b><br/><br/>' +
             'Em caso de dúvidas, entre em contato através do nosso WhatsApp: ' +
             '<a target="_blank" href="https://wa.me/5519995360651">(19) 9 9536-0651</a><br/><br/>' +
-            '<b>Atenciosamente,<br/>PurpleTech</b><br/>https://purpletech.com.br<br/>' +
-            'Não responda este Email, em caso de dúvidas envie um Email para contato@purpletech.com.br'
+            '<b>Atenciosamente,<br/>PurpleTech</b><br/>https://purpletech.com.br'
         }
 
         transporter.sendMail(mailOptions)
@@ -232,8 +222,7 @@ module.exports = {
             process.env.DOMAIN_NAME + '/message/' + message + '<br/><br/>' +
             'Em caso de dúvidas, entre em contato através do nosso WhatsApp: ' +
             '<a target="_blank" href="https://wa.me/5519995360651">(19) 9 9536-0651</a><br/><br/>' +
-            '<b>Atenciosamente,<br/>PurpleTech</b><br/>https://purpletech.com.br<br/>' +
-            'Não responda este Email, em caso de dúvidas envie um Email para contato@purpletech.com.br'
+            '<b>Atenciosamente,<br/>PurpleTech</b><br/>https://purpletech.com.br'
         }
 
         transporter.sendMail(mailOptions) 
@@ -251,8 +240,7 @@ module.exports = {
             '</b><br/>==========================<br/><br/>' +
             'Em caso de dúvidas, entre em contato através do nosso WhatsApp: ' +
             '<a target="_blank" href="https://wa.me/5519995360651">(19) 9 9536-0651</a><br/><br/>' +
-            '<b>Atenciosamente,<br/>PurpleTech</b><br/>https://purpletech.com.br<br/>' +
-            'Não responda este Email, em caso de dúvidas envie um Email para contato@purpletech.com.br'
+            '<b>Atenciosamente,<br/>PurpleTech</b><br/>https://purpletech.com.br'
         }
 
         transporter.sendMail(mailOptions) 
