@@ -526,11 +526,7 @@ module.exports = app => {
             .replace('-', '')
             .replace('_', '')
 
-        try {
-            await mail.sendMessage(message)
-        } catch(err) {
-            console.log(err)
-        }
+        mail.sendMessage(message)
         res.status(200).json(successMessage)
     }
 
