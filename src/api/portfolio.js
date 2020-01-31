@@ -77,12 +77,13 @@ module.exports = app => {
     })
   }
 
-  const getPortfolio = (req, res) => {
-    Portfolio.find()
-      .sort({ '_id' : -1 })
-      .lean()
-      .then(portfolio => res.status(200).json(portfolio))
-      .catch(() => res.status(500).json(failMessage))
+  const getPortfolio = async (req, res) => {
+    try {
+      const portfolio = await Portfolio.find().sort({ _id: -1 })
+      return res.status(200).json(portfolio)
+    } catch(err) {
+      return res.status(500).json(err)
+    }
   }
 
   return {
