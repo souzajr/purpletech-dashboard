@@ -79,7 +79,7 @@ module.exports = app => {
 
   const getPortfolio = async (req, res) => {
     try {
-      const portfolio = await Portfolio.find().sort({ _id: -1 })
+      const portfolio = await Portfolio.find().sort({ _id: -1 }).lean()
       return res.status(200).json(portfolio)
     } catch(err) {
       return res.status(500).json(err)

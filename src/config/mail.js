@@ -8,12 +8,13 @@ const transporter = nodemailer.createTransport({
         user: process.env.MAIL_AUTH_USER,
         pass: process.env.MAIL_AUTH_PASS
     }
+    
 })
 
 module.exports = { 
     recoveryMail(email, token) {
         const mailOptions = {
-            from: 'PurpleTech <' + process.env.MAIL_AUTH_USER + '>',
+            from: 'PurpleTech <' + process.env.MAIL_SEND_FROM + '>',
             to: email,
             subject: 'Recuperação de senha 🔒⛔',
             html: 'Você está recebendo este Email pois solicitou a redefinição da senha da sua conta.<br/><br/>' +
@@ -31,7 +32,7 @@ module.exports = {
 
     alertOfChange(email) {
         const mailOptions = {
-            from: 'PurpleTech <' + process.env.MAIL_AUTH_USER + '>',
+            from: 'PurpleTech <' + process.env.MAIL_SEND_FROM + '>',
             to: email,
             subject: 'Alteração de senha 🔒⛔',
             html: 'Uma alteração de senha acabou de ser feita no site ' + process.env.DOMAIN_NAME + '<br/><br/>' +
@@ -46,7 +47,7 @@ module.exports = {
 
     newAccount(email, name) {
         const mailOptions = {
-            from: 'PurpleTech <' + process.env.MAIL_AUTH_USER + '>',
+            from: 'PurpleTech <' + process.env.MAIL_SEND_FROM + '>',
             to: email,
             subject: 'Sua conta foi criada com sucesso! 🚀🤩',
             html: '<b>Uhuuuul! ' + name + ', sua conta foi criada com sucesso!</b><br/><br/>' +
@@ -71,7 +72,7 @@ module.exports = {
 
     projectNotice(name, project) {
         const mailOptions = {
-            from: 'PurpleTech <' + process.env.MAIL_AUTH_USER + '>',
+            from: 'PurpleTech <' + process.env.MAIL_SEND_FROM + '>',
             to: process.env.MAIL_AUTH_USER,
             subject: 'Oba, mais um projeto! 🤑🤑',
             html: '<b>Parabéns! Um novo projeto foi criado por ' + name + '</b><br/><br/>' +
@@ -85,7 +86,7 @@ module.exports = {
 
     projectCreated(email, name, project) {
         const mailOptions = {
-            from: 'PurpleTech <' + process.env.MAIL_AUTH_USER + '>',
+            from: 'PurpleTech <' + process.env.MAIL_SEND_FROM + '>',
             to: email,
             subject: 'Projeto criado com sucesso! 💖😍',
             html: '<b>Parabéns ' + name + ', você deu o primeiro passo para o sucesso da sua ideia!</b><br/><br/>' +
@@ -103,7 +104,7 @@ module.exports = {
 
     projectApproved(email, name) {
         const mailOptions = {
-            from: 'PurpleTech <' + process.env.MAIL_AUTH_USER + '>',
+            from: 'PurpleTech <' + process.env.MAIL_SEND_FROM + '>',
             to: email,
             subject: 'Seu projeto foi aprovado! 🤩🤩',
             html: '<b>Olá, ' + name + '. É com muito prazer que anunciamos que seu projeto foi aprovado!</b><br/><br/>'+
@@ -119,7 +120,7 @@ module.exports = {
 
     projectDevelopment(email, name) {
         const mailOptions = {
-            from: 'PurpleTech <' + process.env.MAIL_AUTH_USER + '>',
+            from: 'PurpleTech <' + process.env.MAIL_SEND_FROM + '>',
             to: email,
             subject: 'Seu projeto está em desenvolvimento! 🔥🚀',
             html: '<b>Olá, ' + name + '. Seu projeto está em fase de desenvolvimento!</b><br/><br/>'+
@@ -136,7 +137,7 @@ module.exports = {
     projectCompleted(email, name) {
         console.log(email, name)
         const mailOptions = {
-            from: 'PurpleTech <' + process.env.MAIL_AUTH_USER + '>',
+            from: 'PurpleTech <' + process.env.MAIL_SEND_FROM + '>',
             to: email,
             subject: 'Seu projeto foi concluído! 🌟😍',
             html: '<b>Olá, ' + name + '. Seu projeto foi concluído com sucesso!</b><br/><br/>'+
@@ -155,7 +156,7 @@ module.exports = {
 
     projectPaused(email, name) {
         const mailOptions = {
-            from: 'PurpleTech <' + process.env.MAIL_AUTH_USER + '>',
+            from: 'PurpleTech <' + process.env.MAIL_SEND_FROM + '>',
             to: email,
             subject: 'Seu projeto foi pausado! ⏸⛔',
             html: '<b>Olá, ' + name + '. Seu projeto foi colocado em espera.</b><br/><br/>' +
@@ -170,7 +171,7 @@ module.exports = {
 
     projectCanceled(email, name) {
         const mailOptions = {
-            from: 'PurpleTech <' + process.env.MAIL_AUTH_USER + '>',
+            from: 'PurpleTech <' + process.env.MAIL_SEND_FROM + '>',
             to: email,
             subject: 'Seu projeto foi cancelado! 😥😔',
             html: '<b>Olá, ' + name + '. Infelizmente, seu projeto foi cancelado.</b><br/><br/>' +
@@ -188,7 +189,7 @@ module.exports = {
 
     userCreated(email, name, password) {
         const mailOptions = {
-            from: 'PurpleTech <' + process.env.MAIL_AUTH_USER + '>',
+            from: 'PurpleTech <' + process.env.MAIL_SEND_FROM + '>',
             to: email,
             subject: 'Uma conta foi criada para você 🤩🌟',
             html: '<b>Olá, ' + name + '! Uma conta em nosso painel foi criada para que você possa acompanhar o andamento do seu projeto.</b><br/><br/>' +
@@ -209,7 +210,7 @@ module.exports = {
 
     newMessageNotice(message) {
         const mailOptions = {
-            from: 'PurpleTech <' + process.env.MAIL_AUTH_USER + '>',
+            from: 'PurpleTech <' + process.env.MAIL_SEND_FROM + '>',
             to: process.env.MAIL_AUTH_USER,
             subject: 'Você recebeu uma nova mensagem! 📩📩',
             html: '<b>Recebemos uma nova mensagem!</b><br/><br/>' +
@@ -223,7 +224,7 @@ module.exports = {
 
     newMessageNoticeUser(message, email, name) {
         const mailOptions = {
-            from: 'PurpleTech <' + process.env.MAIL_AUTH_USER + '>',
+            from: 'PurpleTech <' + process.env.MAIL_SEND_FROM + '>',
             to: email,
             subject: 'Você recebeu uma nova mensagem! 📩📩',
             html: '<b>Olá, ' + name + '. Você recebeu uma nova mensagem.</b><br/><br/>' +
@@ -240,7 +241,7 @@ module.exports = {
 
     sendMailUser(email, name, message) {
         const mailOptions = {
-            from: 'PurpleTech <' + process.env.MAIL_AUTH_USER + '>',
+            from: 'PurpleTech <' + process.env.MAIL_SEND_FROM + '>',
             to: email,
             subject: 'Você recebeu uma nova mensagem! 📩📩',
             html: '<b>Olá, ' + name + '. Você recebeu uma nova mensagem.</b><br/><br/>' +
@@ -259,8 +260,8 @@ module.exports = {
 
     sendMessage(message) {
         const mailOptions = {
-            from: message.name + ' <' + process.env.MAIL_AUTH_USER + '>',
-            to: process.env.MAIL_RECEIVER,
+            from: message.name + ' <' + process.env.MAIL_SEND_FROM + '>',
+            to: process.env.MAIL_AUTH_USER,
             subject: 'Você recebeu uma nova mensagem! 📩📩',
             html: '<b>Recebemos uma nova mensagem!</b><br/><br/>' +
             'Nome: ' + message.name + '<br/>' +

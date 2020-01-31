@@ -505,7 +505,7 @@ module.exports = app => {
         res.redirect('/')
     }
 
-    const sendMessage = (req, res) => {
+    const sendMessage = async (req, res) => {
         const message = { ...req.body }
 
         try {
@@ -526,7 +526,11 @@ module.exports = app => {
             .replace('-', '')
             .replace('_', '')
 
-        mail.sendMessage(message)
+        try {
+            await mail.sendMessage(message)
+        } catch(err) {
+            console.log(err)
+        }
         res.status(200).json(successMessage)
     }
 
