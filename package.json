@@ -26,7 +26,7 @@
   "dependencies": {
     "@passport-next/passport-google-oauth2": "^1.0.0",
     "aws-sdk": "^2.706.0",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.19.0",
     "client-sessions": "^0.8.0",
