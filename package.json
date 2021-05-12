@@ -48,7 +48,7 @@
     "mongoose": "^5.9.20",
     "multer": "^1.4.2",
     "multer-s3": "^2.9.0",
-    "nodemailer": "^4.7.0",
+    "nodemailer": "^6.4.16",
     "passport": "^0.4.1",
     "passport-facebook": "^3.0.0",
     "passport-jwt": "^4.0.0",
