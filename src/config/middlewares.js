@@ -3,15 +3,12 @@
 const session = require("client-sessions")
 const passport = require('passport')
 const express = require('express')
-const cors = require('cors')
 const morgan = require('morgan')
 const helmet = require('helmet')
 const methodOverride = require('method-override')
 
 module.exports = app => {
     app.use(helmet())
-    app.use(cors())
-    app.options('*', cors())
     if(process.env.AMBIENT_MODE === 'PROD') { 
         const express_enforces_ssl = require('express-enforces-ssl')
         app.enable('trust proxy')

@@ -1,7 +1,13 @@
 "use strict";
 
 const express = require('express')
+const cors = require('cors')
+
 const app = express()
+
+app.use(cors())
+app.options('*', cors())
+
 const consign = require('consign')
 const db = require('./src/config/db')
 const createFolder = require('./src/config/createFolder')
