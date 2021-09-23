@@ -164,6 +164,17 @@ module.exports = app => {
         app.get('/getPortfolio', app.src.api.portfolio.getPortfolio)
     //#endregion
     
+    //#region TESTE API
+        app.route('/v1/user')
+            .get(app.src.api.test.viewUsers)
+            .post(app.src.api.test.addUser)
+
+        app.route('/v1/user/:id')
+            .get(app.src.api.test.viewUser)
+            .put(app.src.api.test.changeUser)
+            .delete(app.src.api.test.removeUser)
+    //#endregion
+    
     app.post('/sendMessage', app.src.api.user.sendMessage)
 
     /* ============= HANDLE ERROR  ============= */

@@ -15,5 +15,6 @@ module.exports = {
         require('../model/projectModel')
         require('../model/messageModel')
         require('../model/portfolioModel')
+        require('../model/userTestModel')
     }
 }
